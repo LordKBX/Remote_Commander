@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y $(ProjectDir)$(OutDir)Extention_WinAudio.dll $(SolutionDir)Server\Extentions\&#xD;&#xA;ECHO F|xcopy /Y C:\Users\KevBo\.nuget\packages\netcoreaudio\1.4.0\lib\netstandard2.0\NetCoreAudio.dll $(SolutionDir)Server\Extentions\_NetCoreAudio.dll" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="NetCoreAudio" Version="1.4.0" />
+  </ItemGroup>
+
+</Project>

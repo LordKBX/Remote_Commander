@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Extention_WinVolControl</AssemblyName>
+    <RootNamespace>Extention_WinVolControl</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y $(ProjectDir)$(OutDir)Extention_WinVolControl.dll $(SolutionDir)Server\Extentions\" />
+  </Target>
+
+</Project>

@@ -1,0 +1,5 @@
+Weather (Line)
+==============
+
+Designer: Fatkhul Karim (https://www.iconfinder.com/fatkhulkarim)
+License: Creative Commons (Attribution 3.0 Unported) (http://creativecommons.org/licenses/by/3.0/)

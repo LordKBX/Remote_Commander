@@ -1,0 +1,203 @@
+
+{
+	"sections": [
+		{
+			"name": "Sound",
+			"macros":
+			{
+				"MuteSound":
+				{
+					"description": "Couper/Restaurer la sortie audio",
+					"actions": [
+						{
+							"type": "MuteSound"
+						}
+					]
+				},
+				"VolUp":
+				{
+					"description": "Augmenter l volume e sortie audio",
+					"actions": [
+						{
+							"type": "VolUp",
+							"step": 5
+						}
+					]
+				},
+				"VolDown":
+				{
+					"description": "Diminuer l volume e sortie audio",
+					"actions": [
+						{
+							"type": "VolDown",
+							"step": 5
+						}
+					]
+				},
+				"MediaPause":
+				{
+					"description": "Play/pause le media dans le mediaplayer ouvert",
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "MEDIA_PLAY_PAUSE",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				},
+				"MediaPrev":
+				{
+					"description": "Passer à l'élément précédent de la liste de lecture du mediaplayer ouvert",
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "MEDIA_PREV_TRACK",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				},
+				"MediaNext":
+				{
+					"description": "Passer à l'élément suivant de la liste de lecture du mediaplayer ouvert",
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "MEDIA_NEXT_TRACK",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "_Custom",
+			"macros":
+			{
+				"OpenNote":
+				{
+					"actions": [
+						{
+							"type": "Execute",
+							"executable": "notepad",
+							"params": ""
+						}
+					]
+				},
+				"TestKey":
+				{
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "a",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				},
+				"TestKeyMaj":
+				{
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "A",
+							"ctrl": false,
+							"alt": false,
+							"maj": true,
+							"win": false
+						}
+					]
+				},
+				"TestKeyWin":
+				{
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "A",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": true
+						}
+					]
+				},
+				"TestKeyCtrl":
+				{
+					"description": "CTRL+A  CTRL+A  CTRL+A  CTRL+A",
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"key": "A",
+							"ctrl": true,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				},
+				"TestKeyWinOnly":
+				{
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": true
+						}
+					]
+				},
+				"TestExperiment":
+				{
+					"actions": [
+						{
+							"type": "KeyBoardInput",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": true
+						},
+						{
+							"type": "Sleep",
+							"delay": 500
+						},
+						{
+							"type": "KeyBoardInput",
+							"key": "w",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						},
+						{
+							"type": "KeyBoardInput",
+							"key": "i",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						},
+						{
+							"type": "KeyBoardInput",
+							"key": "n",
+							"ctrl": false,
+							"alt": false,
+							"maj": false,
+							"win": false
+						}
+					]
+				}
+			}
+		}
+	]
+}

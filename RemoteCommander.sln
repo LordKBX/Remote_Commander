@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{7E61F343-0F76-42A6-A740-0BFF25B709CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extention_WinKeyboard", "Extention_WinKeyboard\Extention_WinKeyboard.csproj", "{ADDE1E04-545C-4DD4-BC70-97F4D67E0FE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extention_WinVolControl", "Extention_WinVolControl\Extention_WinVolControl.csproj", "{9D11CC1B-E20E-4394-836F-EE7728E468C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extention_WinAudio", "Extention_WinAudio\Extention_WinAudio.csproj", "{DA5B63D6-1614-4C49-8405-A4FD32095745}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator_Win", "Configurator_Win\Configurator_Win.csproj", "{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extention_WinTrayIcon", "Extention_WinExec\Extention_WinTrayIcon.csproj", "{45AE8BB4-E8EC-41CA-AAB9-70614C2AAA40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E61F343-0F76-42A6-A740-0BFF25B709CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E61F343-0F76-42A6-A740-0BFF25B709CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E61F343-0F76-42A6-A740-0BFF25B709CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E61F343-0F76-42A6-A740-0BFF25B709CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADDE1E04-545C-4DD4-BC70-97F4D67E0FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADDE1E04-545C-4DD4-BC70-97F4D67E0FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADDE1E04-545C-4DD4-BC70-97F4D67E0FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADDE1E04-545C-4DD4-BC70-97F4D67E0FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D11CC1B-E20E-4394-836F-EE7728E468C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D11CC1B-E20E-4394-836F-EE7728E468C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D11CC1B-E20E-4394-836F-EE7728E468C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D11CC1B-E20E-4394-836F-EE7728E468C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA5B63D6-1614-4C49-8405-A4FD32095745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA5B63D6-1614-4C49-8405-A4FD32095745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA5B63D6-1614-4C49-8405-A4FD32095745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA5B63D6-1614-4C49-8405-A4FD32095745}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45AE8BB4-E8EC-41CA-AAB9-70614C2AAA40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45AE8BB4-E8EC-41CA-AAB9-70614C2AAA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45AE8BB4-E8EC-41CA-AAB9-70614C2AAA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45AE8BB4-E8EC-41CA-AAB9-70614C2AAA40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2FDC4925-7C2D-40E8-9B18-DD831AE05969}
+	EndGlobalSection
+EndGlobal

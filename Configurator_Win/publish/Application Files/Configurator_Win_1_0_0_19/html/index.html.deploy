@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta charset="utf-8" />
+    <title>Page Modification Grille</title>
+    <style>
+        * {
+            margin: 0;
+            border: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+        }
+
+        body {
+            background: #808080;
+        }
+
+        #receiver {
+            padding: 2px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            overflow-x: hidden;
+            margin: 2px;
+            border: 0;
+            display: inline-block;
+            background: #666666;
+            color: #ffffff;
+            text-align: center;
+            float: left;
+        }
+
+            .btn.sel {
+                margin: 0px;
+                border: #ff0000 2px solid;
+            }
+        .btn span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+        }
+    </style>
+    <script src="./json.js"></script>
+    <script src="./jquery-1.12.4.min.js"></script>
+    <script src="./jquery-ui.min.js"></script>
+    <script src="./styleManipulator.js"></script>
+</head>
+<body>
+    <div id="receiver"></div>
+    <script>
+        var tab = null;
+        var winWidth = $(window).width(),
+            winHeight = $(window).height();
+        var resizeTimeout = null;
+
+        $(window).resize(function () {
+            //New height and width
+            var winNewWidth = $(window).width(),
+                winNewHeight = $(window).height();
+
+            // compare the new height and width with old one
+            if (winWidth != winNewWidth || winHeight != winNewHeight) {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function () { loadGrid(); }, 10);
+            }
+            //Update the width and height
+            winWidth = winNewWidth;
+            winHeight = winNewHeight;
+        });
+
+        function injectData(data) {
+            try
+            {
+                tab = JSON.parse(data);
+                loadGrid();
+                window.external.notify("AAA");
+            }
+            catch (error)
+            {
+                document.getElementById('receiver').innerText = JSON.stringify(error);
+            }
+        }
+        function loadGrid() {
+            try {
+                document.getElementById('receiver').innerHTML = '';
+                rmAllStyle();
+                if (navigator.userAgent.search('Triden') != -1) {
+                    dest = 'styles_js';
+                    if (document.getElementById(dest)) { document.getElementById(dest).parentNode.removeChild(document.getElementById(dest)); }
+                    sc = document.createElement('style'); sc.setAttribute('id', dest); sc.innerHTML = tab.style; document.getElementsByTagName('head')[0].appendChild(sc);
+                }
+                else {
+                    var styleLines = tab.style.split("\n");
+                    for (index in styleLines) { addNewStyle(styleLines[index]); }
+                }
+                for (index in tab.buttons) {
+                    addButton(tab.buttons[index]);
+                }
+                $('#receiver').sortable({
+                    stop: function (event, ui) {
+                        window.external.notify("SORT STOP EVENT");
+                        list = document.getElementById('receiver').childNodes;
+                        newOrder = [];
+                        for (index in list) {
+                            try {
+                                newOrder.push(list[index].getAttribute('index'));
+                            }
+                            catch(error){
+                            }
+                        }
+                        window.external.UpdateButtonsOrder(newOrder.join(';'));
+                    }
+                });
+            }
+            catch (error) {
+                document.getElementById('receiver').innerText = JSON.stringify(error);
+            }
+        }
+        function displayInfosBtn(id) {
+            window.external.UpdateBouttonInfo(id);
+        }
+        function UnselectAll() {
+            $('#receiver .btn').removeClass('sel');
+        }
+        function updateParam(param, value) {
+            tab[param] = value;
+            window.external.notify("param >> " + param + ", value >> " + value);
+            if (param == "width") { loadGrid(); }
+        }
+        function updateButton(id, param, value) {
+            for (index in tab.buttons) {
+                if (tab.buttons[index].id == id) {
+                    tab.buttons[index][param] = value;
+                }
+            }
+            loadGrid();
+        }
+        function addButton(button) {
+            var cols = parseInt(tab.width, 10);
+            var casew = (($(window).width() - 4) / cols) - 8;
+            if (casew * (tab.buttons.length / cols) > parseInt($(window).height())) { casew = casew - 4; }
+            btn = document.createElement('div');
+            btn.setAttribute('index', button.id);
+            btn.className = "btn";
+            btn.onclick = function (ev) {
+                window.external.notify("click >> " + this.getAttribute('index'));
+                displayInfosBtn(this.getAttribute('index'));
+                UnselectAll();
+                $(this).addClass('sel');
+            };
+            var w = parseInt(button.width, 10);
+            var h = parseInt(button.height, 10);
+            btn.style.width = ((casew * w) + ((w > 1) ? (2 * w) : 0)) + "px";
+            btn.style.minWidth = ((casew * w) + ((w > 1) ? (2 * w) : 0)) + "px";
+            btn.style.height = ((casew * h) + ((h > 1) ? (2 * h) : 0)) + "px";
+            btn.style.minHeight = ((casew * h) + ((h > 1) ? (2 * h) : 0)) + "px";
+            btn.style.lineHeight = ((casew * h) + ((h > 1) ? (2 * h) : 0)) + "px";
+            span = document.createElement('span');
+            span.innerText = button.name;
+            btn.appendChild(span);
+            document.getElementById('receiver').appendChild(btn);
+        }
+        function newButton() {
+            neo = {
+                "id": Date.now(),
+                "name": "New Button",
+                "width": 1,
+                "height": 1,
+                "icon": "",
+                "sound": "",
+                "style": "",
+                "macro": ""
+            };
+            tab.buttons.push(neo);
+            addButton(neo);
+            window.external.AddBouttonInfo(JSON.stringify(neo));
+        }
+
+        function delButton(id) {
+            for (index in tab.buttons) {
+                if (tab.buttons[index].id == id) {
+                    tab.buttons.splice(index, 1);
+                    $('.btn[index="' + id + '"]').remove();
+                    break;
+                }
+            }
+        }
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B0ED834A-85EA-4FBB-9E92-0C002DDB58D7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Configurator_Win</RootNamespace>
+    <AssemblyName>Configurator_Win</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Remote Commander - Configurator</ProductName>
+    <PublisherName>LordKBX Workshop</PublisherName>
+    <ApplicationRevision>20</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7DB7468D5DEC27D0DDDC428E20780A548ACBB880</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Configurator_Win_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Alba.CsCss, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Alba.CsCss.1.0.1.0\lib\net35\Alba.CsCss.dll</HintPath>
+    </Reference>
+    <Reference Include="MetadataExtractor.StrongName, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b66b5ccaf776c301, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetadataExtractor.StrongName.2.1.0\lib\net45\MetadataExtractor.StrongName.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DataVisualization.Design" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.DynamicData.Design" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Entity.Design" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions.Design" />
+    <Reference Include="System.Web.RegularExpressions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="XmpCore.StrongName, Version=5.1.3.0, Culture=neutral, PublicKeyToken=961f4f366277b80e, processorArchitecture=MSIL">
+      <HintPath>..\packages\XmpCore.StrongName.5.1.3\lib\net35\XmpCore.StrongName.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1\GridsControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1\JSCallbacks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1\MenuButtons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1\InterfaceEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImagesManager\ImagesManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImagesManager\ImagesManager.Designer.cs">
+      <DependentUpon>ImagesManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosManager\ActionEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosManager\ActionEditor.Designer.cs">
+      <DependentUpon>ActionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosManager\InputBox1.cs" />
+    <Compile Include="MacrosManager\KeyboardScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosManager\KeyboardScan.Designer.cs">
+      <DependentUpon>KeyboardScan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosManager\MacroEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosManager\MacroEditor.Designer.cs">
+      <DependentUpon>MacroEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosManager\MacrosManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosManager\MacrosManager.Designer.cs">
+      <DependentUpon>MacrosManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundsManager\Player.cs" />
+    <Compile Include="SoundsManager\SoundsManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SoundsManager\SoundsManager.Designer.cs">
+      <DependentUpon>SoundsManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SoundsManager\SoundsManagerClicks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StyleEditor\ButtonStyleEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StyleEditor\ButtonStyleEditor.Designer.cs">
+      <DependentUpon>ButtonStyleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StyleEditor\GlobalStyleEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StyleEditor\GlobalStyleEditor.Designer.cs">
+      <DependentUpon>GlobalStyleEditor.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Form1\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImagesManager\ImagesManager.resx">
+      <DependentUpon>ImagesManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosManager\ActionEditor.resx">
+      <DependentUpon>ActionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosManager\KeyboardScan.resx">
+      <DependentUpon>KeyboardScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosManager\MacroEditor.resx">
+      <DependentUpon>MacroEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosManager\MacrosManager.resx">
+      <DependentUpon>MacrosManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="SoundsManager\SoundsManager.resx">
+      <DependentUpon>SoundsManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StyleEditor\ButtonStyleEditor.resx">
+      <DependentUpon>ButtonStyleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StyleEditor\GlobalStyleEditor.resx">
+      <DependentUpon>GlobalStyleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Configurator_Win_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="html\tab.html" />
+    <Content Include="html\index.html" />
+    <Content Include="html\jquery-1.12.4.min.js" />
+    <Content Include="html\jquery-ui.min.js" />
+    <Content Include="html\json.js" />
+    <Content Include="html\styleManipulator.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 et x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

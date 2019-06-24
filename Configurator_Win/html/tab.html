@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta charset="utf-8" />
+    <title>Page Modification Grille</title>
+    <style>
+        * {
+            margin: 0;
+            border: 0;
+            padding: 0;
+            line-height:0;
+        }
+
+        html, body {
+        }
+
+        body {
+            background: #ffffff;
+            width:215px;
+        }
+
+        .control-tab {
+            overflow: hidden;
+            display: inline-block;
+            width: 100px;
+            height: 44px;
+            line-height: 56px;
+            font-size: 12px;
+            text-align: center;
+            border: #000 1px solid;
+            color: #ffffff;
+            background-color: transparent;
+            /*border-bottom: 0;*/
+        }
+
+        .control-tab[stype="square"]{ border-radius:0px;  }
+
+            .control-tab[stype="tabulate"] {
+                border-radius: 0px;
+                border-top-left-radius: 150px 600px;
+                border-top-right-radius: 150px 600px;
+            }
+
+        .control-tab[stype="rounded"] { border-radius: 15px 15px 0px 0px; }
+
+            .control-tab .sub1 {
+                height: 44px;
+                line-height: 44px;
+                background: #999999;
+                color: #ffffff;
+            }
+            .control-tab .sub2 {
+                height: 44px;
+                line-height: 44px;
+                background-size: auto 100%;
+                background-repeat: no-repeat;
+                background-position: top center;
+            }
+            .control-tab[activ="0"] .sub1 {
+                opacity: 0.6;
+            }
+
+            .control-tab[activ="1"] {
+                margin-left: 5px;
+            }
+        .control-tab span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+        }
+            .control-tab[activ="0"] span {
+                display: inline-block;
+                vertical-align: middle;
+                line-height: normal;
+            }
+        .control-tab div {
+        }
+        .control-tab-line {
+            border-top: #000000 1px solid;
+            line-height: 20px;
+        }
+    </style>
+    <script src="./json.js"></script>
+    <script src="./jquery-1.12.4.min.js"></script>
+    <script src="./jquery-ui.min.js"></script>
+    <script src="./styleManipulator.js"></script>
+</head>
+<body>
+    <div id="receiver" class="control-tab" activ="1"><div class="sub1"><div class="sub2"><span>Tab Actif</span></div></div></div>
+    <div id="receiver" class="control-tab" activ="0"><div class="sub1"><div class="sub2"><span>Tab inactif</span></div></div></div>
+    <div class="control-tab-line">
+        &lt;= actif &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>inactif =&gt;</span>
+    </div>
+    <script>
+        var backColor = null;
+        var foreColor = null;
+        var folder = null;
+
+        function loadData(bc, fc, fl, tx, tabstyle) {
+            rmAllStyle();
+            try {
+                var style = ".control-tab{background-color:transparent;}\n.control-tab .sub1{background-color:" + bc + ";color:" + fc + ";}\n.control-tab .sub2{background-image:url('" + fl + "');}";
+                if (navigator.userAgent.search('Triden') != -1) {
+                    dest = 'styles_js';
+                    if (document.getElementById(dest)) { document.getElementById(dest).parentNode.removeChild(document.getElementById(dest)); }
+                    sc = document.createElement('style'); sc.setAttribute('id', dest); sc.innerHTML = style; document.getElementsByTagName('head')[0].appendChild(sc);
+                }
+                else {
+                    var styleLines = style.split("\n");
+                    for (index in styleLines) { addNewStyle(styleLines[index]); }
+                }
+                $('.control-tab span').text(tx);
+                $('.control-tab').attr('stype', tabstyle);
+                $('.control-tab-line span').text(tabstyle);
+            }
+            catch (error) { }
+        }
+    </script>
+</body>
+</html>
