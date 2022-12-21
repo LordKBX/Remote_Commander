@@ -1,0 +1,95 @@
+
+{
+	"grids": [
+		{
+			"id": "jhgdfvk",
+			"name": "Main",
+			"width": 4,
+			"icon": "",
+			"style": ".control-tab{}\n.control-tab-style{square}\n.control-grid{background-color:Maroon;}\n.control-grid-button{background-color:#0080C0;color:#004080;border-radius:10px;border-style:outset;}",
+			"buttons": [
+				{
+					"id": "B",
+					"name": "",
+					"width": 2.0,
+					"height": 2.0,
+					"icon": "Media/2949817.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MuteSound"
+				},
+				{
+					"id": "K",
+					"name": "",
+					"width": 2.0,
+					"height": 2.0,
+					"icon": "Media-Yellow/pause.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaPause"
+				},
+				{
+					"id": "D",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media/2949818.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/VolDown"
+				},
+				{
+					"id": "C",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "Media/2949816.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/VolUp"
+				},
+				{
+					"id": "L",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media-Yellow/play_back.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaPrev"
+				},
+				{
+					"id": "M",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media-Yellow/play_next.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaNext"
+				},
+				{
+					"id": "J",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "logos/246000.png",
+					"style": "",
+					"sound": "",
+					"macro": "_Custom/TestKeyWinOnly"
+				},
+				{
+					"id": "H",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "Human o2/24894.png",
+					"style": "",
+					"sound": "",
+					"macro": "_Custom/TestKeyWin"
+				}
+			]
+		}
+	],
+	"password": "test"
+}

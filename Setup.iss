@@ -5,7 +5,7 @@
 #define MyAppNameService "Remote Commander Service" 
 #define MyAppPublisher "LordKBX Workshop"
 #define MyAppExeName "RemoteCommanderServer.exe"
-#define MyAppVersion "1.0.0.2"
+#define MyAppVersion "1.1.0.0"
 #define MyAppVerName "Chilly Ant"
 
 [Setup]
@@ -22,7 +22,7 @@ DisableProgramGroupPage=yes
 ; The [Icons] "quicklaunchicon" entry uses {userappdata} but its [Tasks] entry has a proper IsAdminInstallMode Check.
 UsedUserAreasWarning=no
 ; Remove the following line to run in administrative install mode (install for all users.)
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
 OutputBaseFilename={#MyAppName}_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
@@ -44,7 +44,7 @@ Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcorea
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.runtimeconfig.dev.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\grids.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\grids_default.json"; DestDir: "{app}"; DestName: "grids.json"; Flags: ignoreversion
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\macros.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Images\*"; DestDir: "{app}\Images"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Sounds\*"; DestDir: "{app}\Sounds"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -52,7 +52,8 @@ Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Extentions\*"; DestD
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Configurator_Win\bin\Release\*"; DestDir: "{app}\Configurator"; Flags: ignoreversion recursesubdirs createallsubdirs     
 Source: "C:\Users\KevBo\source\repos\RemoteCommander\Configurator_Win\html\*"; DestDir: "{app}\Configurator\html"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+[Registry]
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: String; ValueName: "{app}\RemoteCommanderServer.exe"; ValueData: "RUNASADMIN"; Flags: uninsdeletekeyifempty uninsdeletevalue; MinVersion: 0,6.1
 
 [Icons]
 ;Name: "{sd}\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\{#MyAppExeName} - start service"; Filename: "{app}\RemoteCommanderServer.exe" 
@@ -63,9 +64,9 @@ Name: "{autoprograms}\{#MyAppName}\Configurator"; Filename: "{app}\Configurator\
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
-Filename: "{app}\RemoteCommanderServer.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppNameService, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\RemoteCommanderServer.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppNameService, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 Filename: "{app}\Configurator\Configurator_Win.exe"; Description: "Configurator"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun] 
-Filename: "{sd}\Windows\System32\taskkill.exe"; StatusMsg: "check and kill service"; Parameters: "/IM RemoteCommanderServer.exe /F"; Flags: shellexec waituntilterminated  
-Filename: "{sd}\Windows\System32\taskkill.exe"; StatusMsg: "check and kill service"; Parameters: "/IM Configurator_Win.exe /F"; Flags: shellexec waituntilterminated
+Filename: "{sd}\Windows\System32\taskkill.exe"; StatusMsg: "check and kill service"; Parameters: "/IM RemoteCommanderServer.exe /F"; Flags: shellexec waituntilterminated runascurrentuser  
+Filename: "{sd}\Windows\System32\taskkill.exe"; StatusMsg: "check and kill service"; Parameters: "/IM Configurator_Win.exe /F"; Flags: shellexec waituntilterminated runascurrentuser

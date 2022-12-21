@@ -53,9 +53,9 @@ namespace Server
                 objThread.Priority = ThreadPriority.AboveNormal;
                 objThread.Start(command + "<<>>" + options);
             }
-            catch (ThreadStartException objException) { }
-            catch (ThreadAbortException objException) { }
-            catch (Exception objException) { }
+            catch (ThreadStartException) { }
+            catch (ThreadAbortException) { }
+            catch (Exception) { }
         }
 
         public void KillAll() {

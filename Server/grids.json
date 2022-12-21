@@ -1,1 +1,183 @@
-{"grids":[{"id":"jhgdfvk","name":"GENERAL","width":4,"icon":"","style":".control-tab{}\n.control-tab-style{square}\n.control-grid{background-color:Maroon;}\n.control-grid-button{background-color:#0080C0;color:#004080;border-radius:10px;border-style:outset;}","buttons":[{"id":"B","name":"","width":2.0,"height":2.0,"icon":"Media/2949817 - audio media media player music mute video player.png","style":"","sound":"","macro":"Sound/MuteSound"},{"id":"K","name":"","width":2.0,"height":2.0,"icon":"Media-Yellow/2949910 - audio media media player music pause video player.png","style":"","sound":"","macro":"Sound/MediaPause"},{"id":"D","name":"","width":1.0,"height":1.0,"icon":"Media/2949818 - audio media media player music video player volume.png","style":"","sound":"","macro":"Sound/VolDown"},{"id":"C","name":"","width":1,"height":1,"icon":"Media/2949816 - audio media media player music video player volume.png","style":"","sound":"","macro":"Sound/VolUp"},{"id":"L","name":"","width":1,"height":1,"icon":"Media-Yellow/2949908 - audio backward media media player music skip video player.png","style":"","sound":"","macro":"Sound/MediaPrev"},{"id":"M","name":"","width":1.0,"height":1.0,"icon":"Media-Yellow/2949909 - audio forward media media player music skip video player.png","style":"","sound":"","macro":"Sound/MediaNext"},{"id":"E","name":"KOpenNote","width":1,"height":1,"icon":"","style":"","sound":"","macro":"_Custom/OpenNote"},{"id":"J","name":"WIN ONLY","width":1,"height":1,"icon":"","style":"","sound":"","macro":"_Custom/TestKeyWinOnly"},{"id":"F","name":"A min","width":1,"height":1,"icon":"","style":"","sound":"","macro":"_Custom/TestKey"},{"id":"G","name":"A MAJ","width":1,"height":1,"icon":"","style":"","sound":"","macro":"_Custom/TestKeyMaj"},{"id":"H","name":"WIN + A","width":1,"height":1,"icon":"","style":"","sound":"","macro":"_Custom/TestKeyWin"},{"id":"I","name":"","width":1,"height":1,"icon":"success/4288598 - analysis analytics chart data pie.png","style":"","sound":"","macro":"_Custom/TestKeyCtrl"}]},{"id":"-2147483648","name":"NEW TAB","width":4,"icon":"","style":"","buttons":[{"id":"A","name":"1","width":1.0,"height":1.0,"icon":"","style":"","sound":"beep/beep-3.wav","macro":"_Custom/TestKeyWinOnly"},{"id":1561303866224,"name":"2","width":1,"height":1,"icon":"","sound":"beep/beep-4.wav","style":"","macro":""},{"id":1561303874442,"name":"3","width":1,"height":1,"icon":"","sound":"beep/beep-5.wav","style":"","macro":""},{"id":1561303886464,"name":"4","width":1,"height":1,"icon":"","sound":"beep/beep-6.wav","style":"","macro":""},{"id":1561303902910,"name":"5","width":1,"height":1,"icon":"","sound":"miscs/brushing_carpet_1.wav","style":"","macro":""},{"id":1561303913928,"name":"6","width":1,"height":1,"icon":"","sound":"shorts/can-open-2.wav","style":"","macro":""}]}]}
+
+{
+	"grids": [
+		{
+			"id": "jhgdfvk",
+			"name": "Main",
+			"width": 4,
+			"icon": "",
+			"style": ".control-tab{}\n.control-tab-style{square}\n.control-grid{background-color:Maroon;}\n.control-grid-button{background-color:#0080C0;color:#004080;border-radius:10px;border-style:outset;}",
+			"buttons": [
+				{
+					"id": "B",
+					"name": "",
+					"width": 2.0,
+					"height": 2.0,
+					"icon": "Media/2949817.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MuteSound"
+				},
+				{
+					"id": "K",
+					"name": "",
+					"width": 2.0,
+					"height": 2.0,
+					"icon": "Media-Yellow/pause.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaPause"
+				},
+				{
+					"id": "D",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media/2949818.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/VolDown"
+				},
+				{
+					"id": "C",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "Media/2949816.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/VolUp"
+				},
+				{
+					"id": "L",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media-Yellow/play_back.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaPrev"
+				},
+				{
+					"id": "M",
+					"name": "",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "Media-Yellow/play_next.png",
+					"style": "",
+					"sound": "",
+					"macro": "Sound/MediaNext"
+				},
+				{
+					"id": "J",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "logos/246000.png",
+					"style": "",
+					"sound": "",
+					"macro": "_Custom/TestKeyWinOnly"
+				},
+				{
+					"id": "H",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "Human o2/24894.png",
+					"style": "",
+					"sound": "",
+					"macro": "_Custom/TestKeyWin"
+				}
+			]
+		},
+		{
+			"id": "-2147483648",
+			"name": "Sounds",
+			"width": 4,
+			"icon": "",
+			"style": "",
+			"buttons": [
+				{
+					"id": "A",
+					"name": "1",
+					"width": 1.0,
+					"height": 1.0,
+					"icon": "",
+					"style": "",
+					"sound": "beep/beep-3.wav",
+					"macro": "_Custom/TestKeyWinOnly"
+				},
+				{
+					"id": 1561303866224,
+					"name": "2",
+					"width": 1,
+					"height": 1,
+					"icon": "",
+					"sound": "beep/beep-4.wav",
+					"style": "",
+					"macro": ""
+				},
+				{
+					"id": 1561303874442,
+					"name": "3",
+					"width": 1,
+					"height": 1,
+					"icon": "",
+					"sound": "beep/beep-5.wav",
+					"style": "",
+					"macro": ""
+				},
+				{
+					"id": 1561303886464,
+					"name": "4",
+					"width": 1,
+					"height": 1,
+					"icon": "",
+					"sound": "beep/beep-6.wav",
+					"style": "",
+					"macro": ""
+				},
+				{
+					"id": 1561303902910,
+					"name": "5",
+					"width": 1,
+					"height": 1,
+					"icon": "",
+					"sound": "miscs/brushing_carpet_1.wav",
+					"style": "",
+					"macro": ""
+				},
+				{
+					"id": 1561303913928,
+					"name": "6",
+					"width": 1,
+					"height": 1,
+					"icon": "",
+					"sound": "shorts/can-open-2.wav",
+					"style": "",
+					"macro": ""
+				}
+			]
+		},
+		{
+			"id": "1561996746951,17",
+			"name": "Apps",
+			"width": 4,
+			"icon": "",
+			"style": "",
+			"buttons": [
+				{
+					"id": "A",
+					"name": "",
+					"width": 1,
+					"height": 1,
+					"icon": "Human o2/25160.png",
+					"style": "",
+					"sound": "",
+					"macro": "_Custom/Steam"
+				}
+			]
+		}
+	],
+	"password": "VIRUS"
+}

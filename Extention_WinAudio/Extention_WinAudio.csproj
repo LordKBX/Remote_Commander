@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -9,7 +9,12 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="NetCoreAudio" Version="1.4.0" />
+    <PackageReference Include="Accord.Audio" Version="3.8.0" />
+    <PackageReference Include="Accord.DirectSound" Version="3.8.0" />
+    <PackageReference Include="Accord.IO" Version="3.8.0" />
+    <PackageReference Include="Accord.Video.FFMPEG" Version="3.8.0" />
+    <PackageReference Include="NetCoreAudio" Version="1.6.3" />
+    <PackageReference Include="VisioForge.DotNet.Core.TRIAL" Version="15.1.5" />
   </ItemGroup>
 
 </Project>

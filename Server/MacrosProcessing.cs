@@ -95,14 +95,14 @@ namespace Server
                     PlaySound(a);
                 }
             }
-            catch (Exception error) { }
+            catch (Exception) { }
 
             List<JToken> actions = Macro["actions"].ToList<JToken>();
             foreach (JToken action in actions)
             {
                 Debug.WriteLine(JsonConvert.SerializeObject(Macro));
                 string type = "";
-                try { type = action["type"].Value<string>(); } catch (Exception error) { }
+                try { type = action["type"].Value<string>(); } catch (Exception) { }
                 Console.WriteLine("type = " + type);
                 if (type == "PlaySound") { PlaySound(action); }
                 if (type == "Execute") { ExecuteCommand(exe, action); }
@@ -112,14 +112,14 @@ namespace Server
                     JToken tok = action.Value<JToken>();
                     Program.ParseSoundInfo(type, ref newsock, sender, tok);
                 }
-                if (type == "Sleep") { try { Thread.Sleep(action["delay"].Value<int>()); } catch (Exception error) { } }
+                if (type == "Sleep") { try { Thread.Sleep(action["delay"].Value<int>()); } catch (Exception) { } }
             }
         }
 
         private static void PlaySound(object ob) {
             JToken ob2 = (JToken)ob;
             string url = "";
-            try { url = ob2["url"].Value<string>(); } catch (Exception error) { }
+            try { url = ob2["url"].Value<string>(); } catch (Exception) { }
             Debug.WriteLine("url = " + url);
 
             Dictionary<string, object> plug = Server.Program.PluginGet("Audio");
@@ -134,16 +134,16 @@ namespace Server
                 Debug.WriteLine("m.Invoke(instance, new object[] { url });");
                 m.Invoke(instance, new object[] { url });
             }
-            catch (Exception error) { }
+            catch (Exception) { }
         }
 
         private static void ExecuteCommand(Execute exe, JToken ob2) {
             string executable = "";
-            try { executable = ob2["executable"].Value<string>(); } catch (Exception error) { }
+            try { executable = ob2["executable"].Value<string>(); } catch (Exception) { }
             if (executable.StartsWith(".\\") == true) { executable.Replace(".\\", AppDomain.CurrentDomain.BaseDirectory); }
             //Console.WriteLine("executable = " + executable);
             string eparams = "";
-            try { eparams = ob2["params"].Value<string>(); } catch (Exception error) { }
+            try { eparams = ob2["params"].Value<string>(); } catch (Exception) { }
             //Console.WriteLine("params = " + eparams);
             exe.ExecuteCommandAsync(executable, eparams);
         }
@@ -154,12 +154,12 @@ namespace Server
             bool alt = false;
             bool maj = false;
             bool win = false;
-            try { key = ob2["key"].Value<string>(); } catch (Exception error) { }
+            try { key = ob2["key"].Value<string>(); } catch (Exception) { }
             
-            try { ctrl = ob2["ctrl"].Value<bool>(); } catch (Exception error) { }
-            try { alt = ob2["alt"].Value<bool>(); } catch (Exception error) { }
-            try { maj = ob2["maj"].Value<bool>(); } catch (Exception error) { }
-            try { win = ob2["win"].Value<bool>(); } catch (Exception error) { }
+            try { ctrl = ob2["ctrl"].Value<bool>(); } catch (Exception) { }
+            try { alt = ob2["alt"].Value<bool>(); } catch (Exception) { }
+            try { maj = ob2["maj"].Value<bool>(); } catch (Exception) { }
+            try { win = ob2["win"].Value<bool>(); } catch (Exception) { }
             
             Console.WriteLine("key = " + key);
             try
@@ -196,7 +196,7 @@ namespace Server
                         m.Invoke(instance, new object[] { ch, alt, ctrl, maj, win });
                     }
                 }
-            } catch (Exception error) { }
+            } catch (Exception) { }
         }
     }
 }

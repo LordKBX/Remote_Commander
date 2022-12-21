@@ -51,7 +51,9 @@ namespace Configurator_Win.MacrosManager
             if (e.KeyValue == VK_LALT) { parent.SetKeyboardActionAlt(true); }
             if (e.KeyValue == VK_LMAJ) { parent.SetKeyboardActionMaj(true); }
             if (e.KeyValue == VK_LWIN) { parent.SetKeyboardActionWin(true); }
-            Debug.WriteLine("Key Down: "+ e.KeyValue);
+            Debug.WriteLine("Key KeyValue: " + e.KeyValue);
+            Debug.WriteLine("Key KeyData: " + e.KeyData);
+            Debug.WriteLine("Key KeyCode: " + e.KeyCode);
         }
 
         private void KeyboardScan_KeyUp(object sender, KeyEventArgs e)

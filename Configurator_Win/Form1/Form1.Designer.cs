@@ -98,6 +98,7 @@
             this.gestionImagestoolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionSondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionMacrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modifierMotDePasseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.GRID_MAIN.SuspendLayout();
             this.tabControler.SuspendLayout();
@@ -999,7 +1000,8 @@
             this.fichierToolStripMenuItem,
             this.gestionImagestoolStripMenuItem2,
             this.gestionSondsToolStripMenuItem,
-            this.gestionMacrosToolStripMenuItem});
+            this.gestionMacrosToolStripMenuItem,
+            this.modifierMotDePasseToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(584, 24);
@@ -1055,6 +1057,13 @@
             this.gestionMacrosToolStripMenuItem.Size = new System.Drawing.Size(101, 20);
             this.gestionMacrosToolStripMenuItem.Text = "Gestion &Macros";
             this.gestionMacrosToolStripMenuItem.Click += new System.EventHandler(this.gestionMacrosToolStripMenuItem_Click);
+            // 
+            // modifierMotDePasseToolStripMenuItem
+            // 
+            this.modifierMotDePasseToolStripMenuItem.Name = "modifierMotDePasseToolStripMenuItem";
+            this.modifierMotDePasseToolStripMenuItem.Size = new System.Drawing.Size(137, 20);
+            this.modifierMotDePasseToolStripMenuItem.Text = "Modifier mot de passe";
+            this.modifierMotDePasseToolStripMenuItem.Click += new System.EventHandler(this.modifierMotDePasseToolStripMenuItem_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -1203,6 +1212,7 @@
         private System.Windows.Forms.Button RG13_clear;
         private System.Windows.Forms.Button RG14_clear;
         private System.Windows.Forms.Button RG15_clear;
+        private System.Windows.Forms.ToolStripMenuItem modifierMotDePasseToolStripMenuItem;
     }
 }
 

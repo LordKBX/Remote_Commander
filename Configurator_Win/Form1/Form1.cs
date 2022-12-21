@@ -141,6 +141,16 @@ namespace Configurator_Win
             else if (styleGlobal != null) { pos1.X = this.Location.X + this.Width - 10; styleGlobal.Location = pos1; }
             else if (styleButton != null) { pos1.X = this.Location.X + this.Width - 10; styleButton.Location = pos1; }
         }
+
+        private void modifierMotDePasseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string rez = GridsList["password"].Value<string>();
+            DialogResult input = Configurator_Win.MacrosManager.InputBox1.ShowInputDialog("Saisie du mot de passe service", ref rez, false);
+            if (input == DialogResult.OK)
+            {
+                GridsList["password"] = rez;
+            }
+        }
     }
 
 }

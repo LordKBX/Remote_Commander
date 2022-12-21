@@ -15,7 +15,7 @@ namespace Configurator_Win.MacrosManager
 {
     class InputBox1
     {
-        public static DialogResult ShowInputDialog(string Title, ref string input)
+        public static DialogResult ShowInputDialog(string Title, ref string input, bool epurate = true)
         {
             System.Drawing.Size size = new System.Drawing.Size(200, 70);
             Form inputBox = new Form();
@@ -32,7 +32,7 @@ namespace Configurator_Win.MacrosManager
             textBox.Size = new System.Drawing.Size(size.Width - 10, 23);
             textBox.Location = new System.Drawing.Point(5, 5);
             textBox.Text = input;
-            textBox.TextChanged += TextBox_TextChanged;
+            if (epurate == true) { textBox.TextChanged += TextBox_TextChanged; }
             inputBox.Controls.Add(textBox);
 
             Button okButton = new Button();
