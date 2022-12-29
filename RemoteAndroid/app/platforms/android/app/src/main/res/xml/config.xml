@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.lordkbx.worshop.remote.android" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="Datagram">
+        <param name="android-package" value="in.girish.datagram.Datagram" />
+    </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
@@ -49,4 +52,5 @@
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="allowFileAccessFromFileURLs" value="true" />
     <preference name="loadUrlTimeoutValue" value="700000" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
 </widget>

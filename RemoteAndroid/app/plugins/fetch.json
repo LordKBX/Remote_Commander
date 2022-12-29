@@ -21,9 +21,7 @@
       "id": "cordova-plugin-file@7.0.0"
     },
     "is_top_level": true,
-    "variables": {
-      "ANDROIDX_WEBKIT_VERSION": "1.4.0"
-    }
+    "variables": {}
   },
   "cordova-plugin-nativestorage": {
     "source": {
@@ -87,6 +85,14 @@
       "id": "es6-promise-plugin@^4.1.0"
     },
     "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-plugin-datagram4": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-datagram4"
+    },
+    "is_top_level": true,
     "variables": {}
   }
 }

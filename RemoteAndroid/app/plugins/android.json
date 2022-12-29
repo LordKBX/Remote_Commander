@@ -10,6 +10,9 @@
     "cordova-plugin-console": {
       "PACKAGE_NAME": "com.lordkbx.worshop.remote.android"
     },
+    "cordova-plugin-datagram4": {
+      "PACKAGE_NAME": "com.lordkbx.worshop.remote.android"
+    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.lordkbx.worshop.remote.android"
     },

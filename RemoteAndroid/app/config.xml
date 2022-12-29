@@ -17,6 +17,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <preference name="loadUrlTimeoutValue" value="700000" />
+		<preference name="AndroidPersistentFileLocation" value="Compatibility" />
     </platform>
     <preference name="allowFileAccessFromFileURLs" value="true" />
     <allow-navigation href="ws://192.168.1.*" />

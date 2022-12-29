@@ -1,6 +1,11 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
+      "id": "cordova-plugin-datagram4.datagram",
+      "file": "plugins/cordova-plugin-datagram4/www/datagram.js",
+      "pluginId": "cordova-plugin-datagram4"
+    },
+    {
       "id": "cordova-plugin-device.device",
       "file": "plugins/cordova-plugin-device/www/device.js",
       "pluginId": "cordova-plugin-device",
@@ -264,6 +269,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
   ];
   module.exports.metadata = {
     "cordova-plugin-console": "1.1.0",
+    "cordova-plugin-datagram4": "1.0.2",
     "cordova-plugin-device": "2.1.0",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "7.0.0",

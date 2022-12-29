@@ -2,27 +2,5 @@
 */obj/*
 */RemoteAndroid/*
 */RemoteAndroid/**
-/RemoteAndroid/app/config.xml
-/RemoteAndroid/app/package-lock.json
-/RemoteAndroid/app/platforms/android/android.json
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/cordova_plugins.js
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/css/app.css
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/index.html
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/js/index.js
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/js/jquery.min.js
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/js/main.js
-/RemoteAndroid/app/platforms/android/app/src/main/assets/www/mode.txt
-/RemoteAndroid/app/platforms/android/app/src/main/res/xml/config.xml
-/RemoteAndroid/app/platforms/android/platform_www/cordova_plugins.js
-/RemoteAndroid/app/plugins/android.json
-/RemoteAndroid/app/plugins/fetch.json
-/RemoteAndroid/app/www/css/app.css
-/RemoteAndroid/app/www/index.html
-/RemoteAndroid/app/www/js/index.js
-/RemoteAndroid/app/www/js/jquery.min.js
-/RemoteAndroid/app/www/js/main.js
-/RemoteAndroid/app/www/mode.txt
-/RemoteAndroid/services/windows/define_debug.bat
-/RemoteAndroid/services/windows/emulator phone.lnk
-/RemoteAndroid/services/windows/emulator tablet.lnk
-/RemoteAndroid/services/windows/run debug_only.bat
+/RemoteAndroid/app/*
+/RemoteAndroid/services/*

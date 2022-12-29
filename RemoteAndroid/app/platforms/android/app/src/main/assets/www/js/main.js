@@ -25,19 +25,37 @@ app =
 	Params: {},
 	Serverkey: null,
 	servPort: 25000,
-	servAddr: "192.168.1.64",
+	servAddr: "192.168.1.20",
+	servPass: "",
+	servPassSaved: false,
+	reconnectTry: 0,
+	manualyClosed: false,
 	waitRegister: false,
 	waitLog: false,
 	lastPing: 0,
 	timerPing: null,
 	storedGrids: null,
 	storedActiveGrid: 1,
-	listImages: {},
+	listImages: [],
+	listImagesObjects: [],
 	listImagesToGet: [],
+	PasswordDialog: null,
+	purgeFileName(path){ return path.replace(new RegExp('\\/', 'g'), '__').replace(new RegExp('\\\\', 'g'), '__').replace(new RegExp(' ', 'g'), '-');},
+	isCachedImg(ref){
+		for(var i=0; i<app.listImages.length; i++){ if(app.listImages[i].name == ref){ return true; } }
+		return false;
+		},
+	getCachedImg(ref){
+		for(var i=0; i<app.listImages.length; i++){ if(app.listImages[i].name == ref){ return app.listImages[i]; } }
+		return null;
+		},
 	init: function ()
 	{
 		var options = { name: 'config.db', location: 'default' };
-		if (device.platform == "Android") { options.androidDatabaseProvider = 'system'; }
+		if (device.platform == "Android") { 
+			options.androidDatabaseProvider = 'system'; 
+			document.querySelector('.app').style.paddingTop = '20px';
+			}
 		if (device.platform == "iOS") { options.location = 'Library'; }
 		app.db = window.sqlitePlugin.openDatabase(
 			options,
@@ -57,20 +75,22 @@ app =
 							tx.executeSql("INSERT INTO 'PARAMS'('NAME','VALUE') VALUES('style','white')");
 							tx.executeSql("INSERT INTO 'PARAMS'('NAME','VALUE') VALUES('last_purge','0')");
 						}
-						tx.executeSql("PRAGMA table_info('SERVERS')", [], function (tx, res)
+						tx.executeSql("PRAGMA table_info('SERVERSv2')", [], function (tx, res)
 						{
 							if (res.rows.length === 0)
 							{
-								console.log('CREA TABLE SERVERS');
-								tx.executeSql("CREATE TABLE 'SERVERS' (" +
+								console.log('CREA TABLE SERVERSv2');
+								tx.executeSql("CREATE TABLE 'SERVERSv2' (" +
 									"'NAME' TEXT PRIMARY KEY NOT NULL, " +
 									"'IP' TEXT NOT NULL, " +
 									"'PORT' TEXT NOT NULL, " +
+									"'PASS' TEXT NOT NULL, " +
+									"'SAVEDPASS' INTEGER DEFAULT 0, " +
 									"'REC_TIME' TEXT NOT NULL, " +
 									"'LAST_USE' TEXT NOT NULL" +
 									")");
-								//tx.executeSql("INSERT INTO 'SERVERS'('NAME','IP','PORT','REC_TIME','LAST_USE') VALUES('TEST EKATON','192.168.1.174','25000','0','0')");
-								//tx.executeSql("INSERT INTO 'SERVERS'('NAME','IP','PORT','REC_TIME','LAST_USE') VALUES('TEST HOME','192.168.1.64','25000','0','0')");
+								//tx.executeSql("INSERT INTO 'SERVERSv2'('NAME','IP','PORT','REC_TIME','LAST_USE', 'PASS', 'SAVEDPASS') VALUES('TEST EKATON','192.168.1.174','25000','0','0','',0)");
+								//tx.executeSql("INSERT INTO 'SERVERSv2'('NAME','IP','PORT','REC_TIME','LAST_USE', 'PASS', 'SAVEDPASS') VALUES('TEST HOME','192.168.1.64','25000','0','0','',0)");
 							}
 							tx.executeSql("PRAGMA table_info('CACHE')", [], function (tx, res)
 							{
@@ -84,6 +104,7 @@ app =
 										")");
 								}
 								//tx.executeSql("DELETE FROM 'CACHE';");
+								//cleanDir(cordova.file.cacheDirectory, function(ret){});
 							}, 
 							function (e) { console.log("ERROR TEST DB 4:", e); }
 							);
@@ -93,7 +114,7 @@ app =
 									{
 										for (i = 0; i < res.rows.length; i++) { app.Params[res.rows.item(i).NAME] = res.rows.item(i).VALUE; }
 									}
-									app.init_P2();
+									setTimeout(app.init_P2, 200);
 								}
 							);
 						}, 
@@ -111,43 +132,45 @@ app =
 	},
 	init_P2: function ()
 	{
-		Crytography.Init();
+		console.log("init_P2");
+		try{ Crytography.Init(); } catch(err){ console.error(err); }
 		app.Serverkey = null;
 		app.timerImages = setInterval(app.getImages, 100);
-		$('#PannelHomeList').html('');
 		$('#side_menu').bind('click', function(e){
 			$('#side_menu').css('left','-250px');
+		});
+		app.PasswordDialog = $( "#dialog-form" ).dialog({
+			autoOpen: false,
+			height: 300,
+			width: 350,
+			modal: true,
+			buttons: {
+				Ok: function() {
+					app.servPass = $("#password").val().replace(new RegExp(" ", "g"), "");
+					app.servPassSaved = $("#saved")[0].checked;
+					if (app.servPass === "") { return; }
+
+					obl =
+					{
+						"function": "Login",
+						"password": app.servPass
+					};
+					app.SendToServerEncoded(JSON.stringify(obl));
+					app.PasswordDialog.dialog( "close" );
+				}
+			},
+			close: function() {
+				$("#password").val('');
+				$("#saved")[0].checked = false;
+				}
 		});
 
 		//$('#PannelHomeIP').val(app.servAddr);
 		//$('#PannelHomePORT').val(app.servPort);
+		app.listServers();
 		app.db.transaction(
 			function (tx)
 			{
-				tx.executeSql("SELECT NAME,IP,PORT FROM SERVERS", [], function (tx, res)
-				{
-					if (res.rows.length !== 0)
-					{
-						for (i = 0; i < res.rows.length; i++)
-						{
-							doc = document.createElement('div');
-							doc.setAttribute('class', 'QABlock');
-							st = 'Name: ' + res.rows.item(i).NAME + '<br>';
-							st = st + 'Address: ' + res.rows.item(i).IP + '<br>';
-							st = st + 'Port: ' + res.rows.item(i).PORT;
-							p = document.createElement('p');
-							p.innerHTML = st;
-							btn = document.createElement('button');
-							btn.setAttribute('onclick', "app.TestServer('" + res.rows.item(i).IP + "'," + res.rows.item(i).PORT + ");");
-							btn.innerHTML = "Connect";
-							doc.appendChild(p);
-							doc.appendChild(btn);
-							$('#PannelHomeList').append(doc);
-						}
-						console.log(res.rows);
-					}
-				}
-				);
 				tx.executeSql("SELECT 'NAME','VALUE','LAST_UPDATE' FROM 'CACHE'", [], function (tx, res)
 				{
 					if (res.rows.length !== 0)
@@ -156,14 +179,15 @@ app =
 						for (i = 0; i < res.rows.length; i++)
 						{
 							if(reftime < res.rows.item(i).LAST_UPDATE){
-								app.listImages[res.rows.item(i).NAME] = {
+								app.listImages.push({
+									name: unescape(res.rows.item(i).NAME),
 									data: res.rows.item(i).VALUE,
 									last_update: res.rows.item(i).LAST_UPDATE
-								};
+								});
 							}
 						}
 						console.log(res.rows);
-						tx.executeSql("DELETE FROM 'CACHE' WHERE LAST_UPDATE < ?", [reftime]);
+						//tx.executeSql("DELETE FROM 'CACHE' WHERE LAST_UPDATE < ?", [reftime]);
 						//tx.executeSql("DELETE FROM 'CACHE'", []);
 					}
 				}
@@ -181,165 +205,191 @@ app =
 			}
 		);
 		app.gotoHome();
-		datagram = cordova.require("cordova-plugin-datagram4.datagram");
-		app.socket = datagram.createSocket("udp4");
-
-		app.socket.bind(0, function (data)
-			{
-			console.log("bind \n" + data);
-			if (data !== null) { location.reload(); }
-			}
-		);
-
-		app.socket.on("message", 
-			function (data, info)
-			{
-				try
-				{
-					tdata = JSON.parse(data);
-					//console.log(tdata);
-					if (tdata["type"] !== undefined)
-					{
-						if (tdata["type"] == "encoded")
-						{
-							decrypted = Crytography.Decrypt(tdata["data"], Crytography.GetPublicKeyString());
-							//console.log(decrypted);
-							try
-							{
-								tdata = JSON.parse(decrypted);
-							}
-							catch (error)
-							{}
-						}
-						if (tdata["type"] == "error")
-						{
-							console.error(tdata);
-							//if(tdata["cause"] == "not_loged"){ alert("Invalid session"); }
-						}
-					}
-					if (tdata["function"] !== undefined)
-					{
-						if (tdata["function"] == "GetInfo")
-						{
-							console.log("TEST OK !");
-							app.Serverkey = tdata["PublicKey"];
-							if (app.waitLog == true)
-							{
-								if (app.waitRegister == true)
-								{
-									name = "";
-									while (name === "")
-									{
-										name = prompt("Please enter the host name", "My PC").replace(new RegExp(" ", "g"), "");
-									}
-
-									app.db.transaction(
-									function (tx)
-										{
-											tx.executeSql("SELECT NAME,IP,PORT FROM SERVERS WHERE NAME = ? OR IP = ?", [name, info.address], function (tx, res)
-											{
-												if (res.rows.length !== 0)
-												{
-													st = "";
-													if (res.rows.item(i).NAME == name)
-													{
-														st = "Host Name already recorded";
-													}
-													if (res.rows.item(i).IP == info.address)
-													{
-														st = "Host Address already recorded";
-													}
-													alert("Error: " + st);
-												}
-												else
-												{
-													tx.executeSql("INSERT INTO SERVERS(NAME,IP,PORT,REC_TIME,LAST_USE) VALUES(?,?,?,?,?)", [name, info.address, info.port, 0, 0], function (tx, res)  {}
-													);
-												}
-											}
-											);
-										}
-									);
-								}
-
-								app.waitRegister = false;
-								app.waitLog = false;
-								app.servPort = info.port;
-								app.servAddr = info.address;
-								app.lastPing = Date.now();
-
-								password = "";
-								while (password === "")
-								{
-									password = prompt("Please enter the host password", "").replace(new RegExp(" ", "g"), "");
-								}
-
-								obl =
-								{
-									"function": "Login",
-									"password": password
-								};
-								app.SendToServerEncoded(info.address, info.port, JSON.stringify(obl));
-								//
-							}
-						}
-						if (tdata["function"] == "Login")
-						{
-							if(tdata["status"] == "OK"){ console.log("Session OK"); app.gotoControls(); }
-							else{ alert("invalid login"); }
-						}
-						if (tdata["function"] == "Ping")
-						{
-							app.lastPing = Date.now();
-							app.SendToServerEncoded(app.servAddr, app.servPort, '{"function":"Pong"}');
-						}
-						if (tdata["function"] == "SendGrids")
-						{
-							app.storedGrids = tdata["grids"];
-							app.storedActiveGrid = 1;
-							app.drawGrids();
-						}
-						if (tdata["function"] == "RetGetImage")
-						{
-							if (tdata["result"] != "ERROR")
-							{
-								$('.control-grid-button[image="' + tdata["reference"] + '"]').css('background-image', "url('" + tdata["result"] + "')");
-								var ins = Date.now();
-								if(app.listImages[tdata["reference"]] === undefined){
-									try{
-										app.db.transaction(
-											function (tx)
-											{
-												tx.executeSql(
-													"INSERT INTO 'CACHE'('NAME','VALUE','LAST_UPDATE') VALUES(?,?,?)",
-													[tdata["reference"], tdata["result"], ins],
-													function (tx, res)  {},
-													function (e) { console.log("ERROR DB 2:", e); }
-												);
-											},
-											function (e) { console.error(tdata["reference"] + " => ERROR DB 1:", e); }
-										);
-										app.listImages[tdata["reference"]] = {
-											data: tdata["result"],
-											last_update: ins
-										};
-									}
-									catch(error){}
-								}
-							}
-						}
-					}
-				}
-				catch (error)
-				{
-					console.log(data);
-					console.log(info);
-					console.error(error);
-				}
-			}
-		);
 
 		app.timerPing = setInterval(app.loopDetectDisconnected, 5000);
+	},
+	listServers: function(){
+		$('#PannelHomeList').html('');
+		app.db.transaction(
+			function (tx)
+			{
+				tx.executeSql("SELECT NAME,IP,PORT,PASS,SAVEDPASS FROM SERVERSv2", [], function (tx, res)
+				{
+					if (res.rows.length !== 0)
+					{
+						for (i = 0; i < res.rows.length; i++)
+						{
+							doc = document.createElement('div');
+							doc.setAttribute('class', 'QABlock');
+							st = 'Name: ' + res.rows.item(i).NAME + '<br>';
+							st = st + 'Address: ' + res.rows.item(i).IP + '<br>';
+							st = st + 'Port: ' + res.rows.item(i).PORT;
+							p = document.createElement('p');
+							p.innerHTML = st;
+							btn = document.createElement('button');
+							btn.setAttribute('onclick', "app.TestServer('" + res.rows.item(i).IP + "'," + res.rows.item(i).PORT + ", '"+res.rows.item(i).PASS+"');");
+							btn.innerHTML = "Connect";
+							doc.appendChild(p);
+							doc.appendChild(btn);
+							$('#PannelHomeList').append(doc);
+						}
+						console.log(res.rows);
+					}
+				}
+				);
+			}
+		);
+	},
+	sockectOnMessage: function (event){
+		try
+		{
+			if(event.data == ''){return;}
+			console.log(event);
+			data = event.data;
+			to = event.origin.split('/')[2].split(':');
+			console.log(to);
+			host = to[0];
+			port = to[1];
+			tdata = JSON.parse(data);
+			//console.log(tdata);
+			if (tdata["type"] !== undefined)
+			{
+				if (tdata["type"] == "encoded")
+				{
+					decrypted = Crytography.Decrypt(tdata["data"], Crytography.GetPublicKeyString());
+					//console.log(decrypted);
+					try
+					{
+						tdata = JSON.parse(decrypted);
+					}
+					catch (error)
+					{}
+				}
+				if (tdata["type"] == "error")
+				{
+					console.error(tdata);
+					//if(tdata["cause"] == "not_loged"){ alert("Invalid session"); }
+				}
+			}
+			if (tdata["function"] !== undefined)
+			{
+				if (tdata["function"] == "GetInfo")
+				{
+					console.log("TEST OK !");
+					app.Serverkey = tdata["PublicKey"];
+					if (app.waitLog == true)
+					{
+						if (app.waitRegister == true)
+						{
+							name = "";
+							while (name === "")
+							{
+								name = prompt("Please enter the host name", "My PC").replace(new RegExp(" ", "g"), "");
+							}
+
+							app.db.transaction(
+							function (tx)
+								{
+									tx.executeSql("SELECT NAME,IP,PORT FROM SERVERSv2 WHERE NAME = ? OR IP = ?", [name, host], function (tx, res)
+									{
+										if (res.rows.length !== 0)
+										{
+											st = "";
+											if (res.rows.item(i).NAME == name)
+											{
+												st = "Host Name already recorded";
+											}
+											if (res.rows.item(i).IP == event.target.url)
+											{
+												st = "Host Address already recorded";
+											}
+											alert("Error: " + st);
+										}
+										else
+										{
+											tx.executeSql("INSERT INTO SERVERSv2(NAME,IP,PORT,REC_TIME,LAST_USE,PASS, SAVEDPASS) VALUES(?,?,?,?,?,?,?)", [name, host, port, 0, 0, app.servPass, (app.servPassSaved)?1:0], function (tx, res)  { app.listServers(); });
+										}
+									}
+									);
+								}
+							);
+						}
+
+						app.waitRegister = false;
+						app.waitLog = false;
+						app.servPort = port;
+						app.servAddr = host;
+						app.lastPing = Date.now();
+						
+						$('#password').val(app.servPass);
+						app.PasswordDialog.dialog( "open" );
+					}
+				}
+				if (tdata["function"] == "Login")
+				{
+					if(tdata["status"] == "OK"){ console.log("Session OK"); app.gotoControls(); }
+					else{ alert("invalid login"); }
+				}
+				if (tdata["function"] == "Pong")
+				{
+					app.lastPing = Date.now();
+					app.SendToServerEncoded('{"function":"Pong"}');
+				}
+				if (tdata["function"] == "SendGrids")
+				{
+					app.storedGrids = tdata["grids"];
+					app.storedActiveGrid = 1;
+					app.drawGrids();
+				}
+				if (tdata["function"] == "RetGetImage")
+				{
+					if (tdata["result"] != "ERROR")
+					{
+						console.log("RetGetImage");
+						tabi = tdata["result"].split(',');
+						tt = tabi[0].split(';')[0].replace("data:", "");
+						fpath = app.purgeFileName(tdata["reference"]);
+						//console.log(tabi[1], tt);
+						console.log(cordova.file.cacheDirectory, fpath);
+						var ins = Date.now();
+						if(app.isCachedImg(fpath) == false){
+							try{
+								savebase64AsFile(cordova.file.cacheDirectory, fpath, tabi[1], tt, function(retSave){
+									console.log("retSave", retSave);
+									window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + retSave, function success(fileEntry) {
+										app.listImages.push({
+											name: retSave,
+											data: fileEntry.toInternalURL(),
+											last_update: ins
+										});
+										console.log('cdvfile URI: ' + fileEntry.toInternalURL());
+										app.listImagesObjects.push(new Image());
+										app.listImagesObjects[app.listImagesObjects.length - 1].onload = function(){ 
+											console.log("img loaded");
+											try{
+												$('.control-grid-button[image="' + retSave + '"]')[0].style.backgroundImage="url('" + this.src + "')";
+												}
+											catch(err){ console.error(err); console.log(this.src); }
+											
+											}
+										app.listImagesObjects[app.listImagesObjects.length - 1].src = fileEntry.toInternalURL();
+									});
+								});
+							}
+							catch(error){
+								console.error(error);
+								}
+						}
+					}
+				}
+			}
+		}
+		catch (err)
+		{
+			console.log(data.slice(0, 100)+"...");
+			console.log(event.target);
+			console.error(err);
+		}
 	},
 	dispose: function ()
 	{
@@ -350,7 +400,7 @@ app =
 	decrypt: function ()  {},
 	TestAndRegister: function ()
 	{
-		console.log("TestAndRegister");
+		console.log(">> TestAndRegister");
 		app.waitLog = true;
 		app.waitRegister = true;
 		addr = $('#PannelHomeIP').val();
@@ -359,33 +409,59 @@ app =
 	},
 	TestServer: function (addr, port)
 	{
-		console.log("TestServer");
+		console.log(">> TestServer");
 		app.waitLog = true;
 		app.waitRegister = false;
 		app.GetServerInfos(addr, port);
 	},
 	GetServerInfos: function (addr, port)
 	{
-		console.log("GetServerInfos");
+		app.lastHost = addr;
+		app.lastPort = port;
+		app.reconnectTry = 0;
+		app.socket = new WebSocket("wss://"+addr+":"+port+"/Service");
+		app.socket.onopen = app.sockectOnOpen;
+		app.socket.onmessage = app.sockectOnMessage;
+		app.socket.onclose = app.sockectOnClose;
+	},
+	sockectOnOpen: function(e){
+		app.manualyClosed = false;
+		console.log("Connection established"); 
+		console.log(">> GetServerInfos");
+		app.reconnectTry = 0;
 		obl =
 		{
 			"function": "GetInfo",
 			"keyPU": Crytography.GetPublicKeyString(),
 			"time": Date.now
 		};
-		app.socket.send(JSON.stringify(obl), addr, port);
-		console.log("GetServerInfos");
+		app.socket.send(JSON.stringify(obl));
 	},
-	SendToServerEncoded: function (addr, port, st)
+	sockectOnClose: function(event){
+		console.log("Connection ended");
+		app.reconnectTry = app.reconnectTry + 1;
+		if(app.manualyClosed == false && app.reconnectTry <= 3){
+			app.socket = null;
+			app.socket = new WebSocket("wss://"+app.lastHost+':'+app.lastPort);
+			app.socket.onopen = app.sockectOnOpen;
+			app.socket.onmessage = app.sockectOnMessage;
+			app.socket.onclose = app.sockectOnClose;
+			app.socket.onerror = app.sockectOnError;
+		}
+	},
+	sockectOnError: function(error) {
+		console.log(`[error]`, error);
+	},
+	SendToServerEncoded: function (st)
 	{
 		//st = JSON.stringify(modata);
-		console.log(st);
+		//console.log(st);
 		mob =
 		{
 			type: "encoded",
 			data: Crytography.Encrypt(st, app.Serverkey)
 		};
-		app.socket.send(JSON.stringify(mob), addr, port);
+		app.socket.send(JSON.stringify(mob));
 	},
 	gotoHome: function ()
 	{
@@ -401,10 +477,11 @@ app =
 		$("#PannelHome").css("display", "none");
 		$("#PannelControl").css("display", "block");
 		$("#toolbar_text").text("CONTROLS");
-		app.SendToServerEncoded(app.servAddr, app.servPort, "{\"function\":\"GetGrids\"}");
+		app.SendToServerEncoded("{\"function\":\"GetGrids\"}");
 	},
 	loopDetectDisconnected: function ()
 	{
+		try{ app.SendToServerEncoded('{"function":"Ping"}'); } catch(err){}
 		if (app.lastPing + 25000 <= Date.now())
 		{
 			app.gotoHome();
@@ -460,7 +537,9 @@ app =
 				tab.innerText = tdata[index]["name"];
 				$("#ControlsListTabs").append(tab);
 
-				caseWidth = ww / tdata[index]["width"];
+				caseWidth = (ww / tdata[index]["width"]) - 8;
+				
+			
 				grid = document.createElement('div');
 				grid.setAttribute('class', 'control-grid');
 				grid.setAttribute('style', gs);
@@ -468,18 +547,18 @@ app =
 				grid.setAttribute('tid', escape(tdata[index]["name"]));
 				for (indexB in tdata[index]["buttons"])
 				{
+					bcostyle = "";
 					button = document.createElement('div');
 					button.setAttribute('class', 'control-grid-button');
 					button.setAttribute('bid', escape(tdata[index]["name"]) + '_' + tdata[index]["buttons"][indexB]["id"]);
 					button.setAttribute('onclick', 'app.executeMacro("' + tdata[index]["buttons"][indexB]["macro"] + '", "' + tdata[index]["buttons"][indexB]["sound"] + '");');
 					if (tdata[index]["buttons"][indexB]["icon"] != "")
 					{
-						button.setAttribute('image', tdata[index]["buttons"][indexB]["icon"]);
+						button.setAttribute('image', app.purgeFileName(tdata[index]["buttons"][indexB]["icon"]));
 						app.getImageUpdateList(tdata[index]["buttons"][indexB]["icon"]);
-						//setTimeout("app.SendToServerEncoded(app.servAddr, app.servPort, '"+JSON.stringify(mobj)+"');", 100);
+						bcostyle = bcostyle + "background-repeat: no-repeat; background-size: 95%; background-position: center;";
 					}
 
-					bcostyle = "";
 					try
 					{
 						dfg = tdata[index]["buttons"][indexB]["style"].replace(new RegExp(" ", "g"), "").split(";");
@@ -487,18 +566,22 @@ app =
 						{
 							if (dfg[hj].search(new RegExp("^color:", "i")) != -1)
 							{
-								bcostyle = "border-color:" + dfg[hj].replace("color:", "") + ";";
+								bcostyle = bcostyle + "border-color:" + dfg[hj].replace("color:", "") + ";";
 								break;
 							}
 						}
 					}
 					catch (err)
 					{}
+					var w = parseInt(tdata[index]["buttons"][indexB]["width"], 10) * caseWidth; 
+					w = w + (4 * (parseInt(tdata[index]["buttons"][indexB]["width"], 10) - 1)) + (4*(parseInt(tdata[index]["buttons"][indexB]["width"], 10) - 1));
+					var h = parseInt(tdata[index]["buttons"][indexB]["height"], 10) * caseWidth; 
+					h = h + (4 * (parseInt(tdata[index]["buttons"][indexB]["height"], 10) - 1)) + (4*(parseInt(tdata[index]["buttons"][indexB]["height"], 10) - 1));
 
 					button.setAttribute('style', bs +
-						'width:' + ((caseWidth * tdata[index]["buttons"][indexB]["width"]) - 4) + 'px;' +
-						'height:' + ((caseWidth * tdata[index]["buttons"][indexB]["height"]) - 4) + 'px;' +
-						'line-height:' + ((caseWidth * tdata[index]["buttons"][indexB]["height"]) + (tdata[index]["buttons"][indexB]["height"] * 12)) + 'px;' +
+						'width:' + w + 'px;' +
+						'height:' + h + 'px;' +
+						'line-height:' + (h + (tdata[index]["buttons"][indexB]["height"] * 12)) + 'px;' +
 						tdata[index]["buttons"][indexB]["style"] + bcostyle);
 					span = document.createElement('div');
 					span.innerText = tdata[index]["buttons"][indexB]["name"];
@@ -520,7 +603,7 @@ app =
 			macro: name,
 			sound: sname
 		};
-		app.socket.send(JSON.stringify(ob), app.servAddr, app.servPort);
+		app.socket.send(JSON.stringify(ob));
 	},
 	ExchangeTab: function (tid)
 	{
@@ -545,9 +628,12 @@ app =
 		app.listImagesToGet = [];
 		list3 = [];
 		for (id in list) {
-			if(app.listImages[list[id]] === undefined){ list3.push(list[id]); }
-			else{ $('.control-grid-button[image="' + list[id] + '"]').css('background-image', "url('" + app.listImages[list[id]].data + "')"); }
+			imgp = app.getCachedImg(list[id]);
+			if(imgp == null){ list3.push(list[id]); }
+			else{  $('.control-grid-button[image="' + list[id] + '"]')[0].style.backgroundImage="url('" + imgp.data + "')"; }
 			}
-		if(list3.length > 0) { app.SendToServerEncoded(app.servAddr, app.servPort, '{"function":"GetImages","references":' + JSON.stringify(list3) + '}'); }
+		if(list3.length > 0) { app.SendToServerEncoded('{"function":"GetImages","references":' + JSON.stringify(list3) + '}'); }
 	}
 };
+
+app.init();

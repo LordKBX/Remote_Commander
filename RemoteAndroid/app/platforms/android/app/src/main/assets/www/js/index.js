@@ -154,9 +154,11 @@ function writeFile(fileEntry, dataObj, callback) {
 
 function onErrorFunc(evt){ console.error(evt); }
 
+function sureBDbgPath(path){ return path.replace(new RegExp('\\/', 'g'), '__').replace(new RegExp('\\\\', 'g'), '__'); }
+
 function dbgPath(path){
 	if(path[0] == '/'){ path = path.replace('/', ''); }
-	if(appMode == 'debug'){ return path.replace(new RegExp('/', 'g'), '__').replace(new RegExp('\\\\', 'g'), '__'); }
+	if(appMode == 'debug'){ return sureBDbgPath(path); }
 	else{ return path; }
 }
 
@@ -174,13 +176,13 @@ function DirectReadDataFile(path, callback, callback2){
 	function(error){  console.error(error); if(callback2 !== undefined){ callback2(); } });
 }
 
-function WriteDataFile(path, data, callback){
+function WriteDataFile(path, data, callback, dir){
 	path = path.replace('/', '');
 	tpath = path.split('/');
 	lpath = '';
 	if(tpath.length > 1){ for(i=0; i<tpath.length-1; i++){ lpath = tpath[i] + '/'; } }
 	
-	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
+	window.resolveLocalFileSystemURL(cordova.file.dataDirectory ||dir, function (dirEntry) {
 		subWriteDataFile(cordova.file.dataDirectory, cordova.file.dataDirectory+path,  data, dirEntry, callback);
 	}, 
 	function(error){  console.error(error); });
@@ -234,7 +236,7 @@ function savebase64AsFile(folderpath,filename,content,contentType, callback){
     
     window.resolveLocalFileSystemURL(folderpath, function(dir) {
         //console.log("Access to the directory granted succesfully");
-		dir.getFile(filename, {create:true}, function(file) {
+		dir.getFile(filename, { create:true, exclusive: false }, function(file) {
             //console.log("File created succesfully.");
             file.createWriter(function(fileWriter) {
                 //console.log("Writing content to file");
@@ -264,106 +266,46 @@ function onDeviceReady() {
 					debugHost = host;
 					console.log(host, port);
 					socket = new WebSocket("wss://"+host+':'+port,13);
-					socket.onopen = function(e) {
-						console.log("Connection established");
-					};
-					
-					socket.onmessage = function(event) {
-						//console.log(`[message] Data received from server:`, event.data.substring(0, 100)+((event.data.length>100)?'...':''));
-						if(event.data == 'READY'){
-							socket.send("List");
-						}
-						else if(event.data.indexOf('List:') === 0){
-							try{
-								data = JSON.parse(event.data.replace('List:', ''));
-								console.log(data);
-								nbFiles = data.length;
-								for(i=0; i<data.length; i++){
-									socket.send("Load:"+data[i]);
-								}
-							}
-							catch(error){}
-						}
-						else if(event.data.indexOf('Load:') === 0){
-							contentTypeArray={
-								'png':'image/png', 
-								'jpg':'image/jpeg', 
-								'jpeg':'image/jpeg', 
-								'gif':'image/gif', 
-								'bmp':'image/bmp', 
-								'webp':'image/webp'
-							};
-							
-							tdata = event.data.split(':');
-							
-							ext = tdata[1].toLowerCase().split('.');
-							ext = ext[ext.length - 1];
-							contentType = (contentTypeArray[ext] === undefined)?'text/plain':contentTypeArray[ext];
-							
-							dataf = tdata[2];
-							
-							//console.log(tdata);
-							if(tdata.length >= 4){
-								pagination = tdata[2].split('|');
-								if(dataTab[tdata[1]] === undefined){ dataTab[tdata[1]] = []; }
-								if(parseInt(pagination[0]) == 1){ dataTab[tdata[1]] = []; }
-								dataTab[tdata[1]][parseInt(pagination[0])-1] = tdata[3];
-								if(parseInt(pagination[0]) == parseInt(pagination[1])){
-									dataf = dataTab[tdata[1]].join('');
-								}
-								else{ return; }
-							}
-							
-							savebase64AsFile(
-								cordova.file.dataDirectory+'tmp/',
-								dbgPath(tdata[1]),
-								dataf,
-								contentType, 
-								function(ret){
-									loadedFiles = loadedFiles + 1;
-									console.log('File loaded '+loadedFiles+'/'+nbFiles+' ('+ret+')');
-									if(loadedFiles == nbFiles){
-										if(location.href.indexOf(cordova.file.dataDirectory) !== 0){ 
-											listDir(cordova.file.dataDirectory, function(e){});
-											listDir(cordova.file.dataDirectory + 'tmp', function(e){});
-											if(navigator.userAgent.indexOf('Android') != -1)
-												{location.href = cordova.file.dataDirectory + 'tmp/index.html';}
-											// else { location.href = cordova.file.applicationDirectory + 'www/index.html'; }
-										}
-										loadDebug();
-									}
-								}
-							);
-						}
-						else if(event.data.indexOf('change|') === 0){
-							location.reload();
-						}
-						else if(event.data.indexOf('add|') === 0){
-							location.reload();
-							
-						}
-						else if(event.data.indexOf('unlink|') === 0){
-							location.reload();
-							
-						}
-					};
-					
-					socket.onclose = function(event) {
-						if (event.wasClean) {
-							console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-							} else {
-							// e.g. server process killed or network down
-							// event.code is usually 1006 in this case
-							console.log('[close] Connection died');
-						}
-					};
-					
-					socket.onerror = function(error) {
-						console.log(`[error]`, error);
-					};
+					socket.onopen = sockectOnOpen;
+					socket.onmessage = sockectOnMessage;
+					socket.onclose = sockectOnClose;
+					socket.onerror = sockectOnError;
 				}
 				else{
 					appMode = 'release';
+					
+					lnk = document.createElement('link');
+					lnk.setAttribute('rel', 'stylesheet');
+					lnk.setAttribute('type', 'text/css');
+					lnk.setAttribute('media', 'all');
+					lnk.setAttribute('href', 'css/app.css');
+					document.getElementsByTagName('head')[0].appendChild(lnk);
+					
+					lnk = document.createElement('link');
+					lnk.setAttribute('rel', 'stylesheet');
+					lnk.setAttribute('type', 'text/css');
+					lnk.setAttribute('media', 'all');
+					lnk.setAttribute('href', 'css/jquery-ui.css');
+					document.getElementsByTagName('head')[0].appendChild(lnk);
+					
+					lnk = document.createElement('link');
+					lnk.setAttribute('rel', 'stylesheet');
+					lnk.setAttribute('type', 'text/css');
+					lnk.setAttribute('media', 'all');
+					lnk.setAttribute('href', 'css/jquery-ui.structure.css');
+					document.getElementsByTagName('head')[0].appendChild(lnk);
+					
+					lnk = document.createElement('link');
+					lnk.setAttribute('rel', 'stylesheet');
+					lnk.setAttribute('type', 'text/css');
+					lnk.setAttribute('media', 'all');
+					lnk.setAttribute('href', 'css/jquery-ui.theme.css');
+					document.getElementsByTagName('head')[0].appendChild(lnk);
+					
+					script = document.createElement('script');
+					script.setAttribute('type', 'text/javascript');
+					script.setAttribute('src', 'js/jquery-ui.js');
+					document.body.appendChild(script);
 					
 					script = document.createElement('script');
 					script.setAttribute('type', 'text/javascript');
@@ -386,28 +328,183 @@ function onDeviceReady() {
 	}, onErrorFunc);
 }
 
+function sockectOnOpen(e){
+	console.log("Connection established");
+}
+function sockectOnClose(event){
+	if (event.wasClean) {
+		console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+		} else {
+		// e.g. server process killed or network down
+		// event.code is usually 1006 in this case
+		console.log('[close] Connection died');
+	}
+	
+	socket = new WebSocket("wss://"+host+':'+port,13);
+	socket.onopen = sockectOnOpen;
+	socket.onmessage = sockectOnMessage;
+	socket.onclose = sockectOnClose;
+	socket.onerror = sockectOnError;
+}
+function sockectOnError(error) {
+	console.log(`[error]`, error);
+}
+
+function sockectOnMessage(event) {
+	//console.log(`[message] Data received from server:`, event.data.substring(0, 100)+((event.data.length>100)?'...':''));
+	if(event.data == 'READY'){
+		socket.send("List");
+	}
+	else if(event.data.indexOf('List:') === 0){
+		try{
+			data = JSON.parse(event.data.replace('List:', ''));
+			console.log(data);
+			nbFiles = data.length;
+			for(i=0; i<data.length; i++){
+				socket.send("Load:"+data[i]);
+			}
+		}
+		catch(error){}
+	}
+	else if(event.data.indexOf('Load:') === 0){
+		contentTypeArray={
+			'png':'image/png', 
+			'jpg':'image/jpeg', 
+			'jpeg':'image/jpeg', 
+			'gif':'image/gif', 
+			'bmp':'image/bmp', 
+			'webp':'image/webp'
+		};
+		
+		tdata = event.data.split(':');
+		
+		ext = tdata[1].toLowerCase().split('.');
+		ext = ext[ext.length - 1];
+		contentType = (contentTypeArray[ext] === undefined)?'text/plain':contentTypeArray[ext];
+		
+		dataf = tdata[2];
+		
+		//console.log(tdata);
+		if(tdata.length >= 4){
+			pagination = tdata[2].split('|');
+			if(dataTab[tdata[1]] === undefined){ dataTab[tdata[1]] = []; }
+			if(parseInt(pagination[0]) == 1){ dataTab[tdata[1]] = []; }
+			dataTab[tdata[1]][parseInt(pagination[0])-1] = tdata[3];
+			if(parseInt(pagination[0]) == parseInt(pagination[1])){
+				dataf = dataTab[tdata[1]].join('');
+			}
+			else{ return; }
+		}
+		
+		savebase64AsFile(
+			cordova.file.cacheDirectory,
+			dbgPath(tdata[1]),
+			dataf,
+			contentType, 
+			function(ret){
+				loadedFiles = loadedFiles + 1;
+				console.log('File loaded '+loadedFiles+'/'+nbFiles+' ('+ret+')');
+				if(loadedFiles == nbFiles){
+					if(location.href.indexOf(cordova.file.cacheDirectory) !== 0){ 
+						listDir(cordova.file.cacheDirectory, function(e){});
+						if(navigator.userAgent.indexOf('Android') != -1)
+							{
+								window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + 'index.html', function success(fileEntry) {
+									console.log("got file: " + fileEntry.fullPath);
+									console.log('cdvfile URI: ' + fileEntry.toInternalURL());
+									$.get(fileEntry.toInternalURL())
+										.done(function(ret){
+											doc = document.implementation.createHTMLDocument('title');
+											doc.documentElement.innerHTML = ret;
+											//console.log(doc);
+											//console.log(doc.querySelector(".app"));
+											document.querySelector(".app").innerHTML=doc.querySelector(".app").innerHTML;
+											});
+									//document.getElementById(".app").innerHTML='<object type="type/html" data="'+fileEntry.toInternalURL()+'" ></object>';
+									//location.href = fileEntry.toInternalURL();
+								});
+							}
+						// else { location.href = cordova.file.applicationDirectory + 'www/index.html'; }
+					}
+					loadDebug();
+				}
+			}
+		);
+	}
+	else if(event.data.indexOf('change|') === 0){
+		location.reload();
+	}
+	else if(event.data.indexOf('add|') === 0){
+		location.reload();
+		
+	}
+	else if(event.data.indexOf('unlink|') === 0){
+		location.reload();
+		
+	}
+}
+
 function loadDebug(){
 	console.log("loadDebug();");
 	setTimeout("document.querySelector('.app').setAttribute('debug', 'true');", 500);
 	document.head.querySelectorAll('base')[0].remove();
 	
-	base = document.createElement('base');
-	//base.setAttribute('href', cordova.file.dataDirectory);
-	base.setAttribute('href', cordova.file.applicationDirectory+'www/');
-	document.head.appendChild(base);
 	
-	script = document.createElement('script');
-	script.setAttribute('type', 'text/javascript');
-	script.setAttribute('src', cordova.file.applicationDirectory+'www/js/base64.min.js');
-	document.body.appendChild(script);
-	
-	script = document.createElement('script');
-	script.setAttribute('type', 'text/javascript');
-	script.setAttribute('src', cordova.file.applicationDirectory+'www/js/crypto.js');
-	document.body.appendChild(script);
-	
-	script = document.createElement('script');
-	script.setAttribute('type', 'text/javascript');
-	script.setAttribute('src', cordova.file.applicationDirectory+'www/js/main.js');
-	document.body.appendChild(script);
+	window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function success(fileEntry) {
+		console.log("got file: " + fileEntry.fullPath);
+		console.log('cdvfile URI: ' + fileEntry.toInternalURL());
+		
+		base = document.createElement('base');
+		//base.setAttribute('href', cordova.file.dataDirectory);
+		base.setAttribute('href', fileEntry.toInternalURL());
+		document.head.appendChild(base);
+		
+		lnk = document.createElement('link');
+		lnk.setAttribute('rel', 'stylesheet');
+		lnk.setAttribute('type', 'text/css');
+		lnk.setAttribute('media', 'all');
+		lnk.setAttribute('href', 'css__jquery-ui.css');
+		document.getElementsByTagName('head')[0].appendChild(lnk);
+		
+		lnk = document.createElement('link');
+		lnk.setAttribute('rel', 'stylesheet');
+		lnk.setAttribute('type', 'text/css');
+		lnk.setAttribute('media', 'all');
+		lnk.setAttribute('href', 'css__jquery-ui.structure.css');
+		document.getElementsByTagName('head')[0].appendChild(lnk);
+		
+		lnk = document.createElement('link');
+		lnk.setAttribute('rel', 'stylesheet');
+		lnk.setAttribute('type', 'text/css');
+		lnk.setAttribute('media', 'all');
+		lnk.setAttribute('href', 'css__jquery-ui.theme.css');
+		document.getElementsByTagName('head')[0].appendChild(lnk);
+		
+		lnk = document.createElement('link');
+		lnk.setAttribute('rel', 'stylesheet');
+		lnk.setAttribute('type', 'text/css');
+		lnk.setAttribute('media', 'all');
+		lnk.setAttribute('href', 'css__app.css');
+		document.getElementsByTagName('head')[0].appendChild(lnk);
+		
+		script = document.createElement('script');
+		script.setAttribute('type', 'text/javascript');
+		script.setAttribute('src', fileEntry.toInternalURL()+'js__jquery-ui.js');
+		document.body.appendChild(script);
+		
+		script = document.createElement('script');
+		script.setAttribute('type', 'text/javascript');
+		script.setAttribute('src', fileEntry.toInternalURL()+'js__base64.min.js');
+		document.body.appendChild(script);
+		
+		script = document.createElement('script');
+		script.setAttribute('type', 'text/javascript');
+		script.setAttribute('src', fileEntry.toInternalURL()+'js__crypto.js');
+		document.body.appendChild(script);
+		
+		script = document.createElement('script');
+		script.setAttribute('type', 'text/javascript');
+		script.setAttribute('src', fileEntry.toInternalURL()+'js__main.js');
+		document.body.appendChild(script);
+	});
 }

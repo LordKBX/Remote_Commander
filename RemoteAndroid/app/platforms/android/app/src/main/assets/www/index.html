@@ -11,6 +11,9 @@
         <meta name="msapplication-tap-highlight" content="no">
 		<meta name="color-scheme" content="light dark">
         <meta name="theme-color" content="#ffffff">
+		<!-- add to homescreen for ios -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<title>Hello World</title>
 
         <script type="text/javascript">
@@ -43,11 +46,11 @@
 						<tbody>
 							<tr>
 								<td>HOST</td>
-								<td><input type="text" id="PannelHomeIP" placeholder="ex: 192.168.1.11 or www.mysite.com"></td>
+								<td><input type="text" id="PannelHomeIP" placeholder="ex: 192.168.1.11 or www.mysite.com" value=""></td>
 							</tr>
 							<tr>
 								<td>PORT</td>
-								<td><input type="number" id="PannelHomePORT" placeholder="ex: 25000(default port)"></td>
+								<td><input type="number" id="PannelHomePORT" placeholder="ex: 25000(default port)" value=""></td>
 							</tr>
 							<tr>
 								<td colspan="2">
@@ -77,11 +80,24 @@
 				GRIDS
 				</div>
 			</div>
-        </div>
 
+			<div id="dialog-form" title="Please enter the host password" style="display:none;">
+				<label for="password">Password</label>
+				<div style="height:5px;"></div>
+				<input type="text" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" style="font-size:20px; line-heigth: 30px; padding:5px; width:calc(100% - 0.5em);">
+				<br/><br/>
+				<table>
+					<tr>
+						<td><input type="checkbox" name="saved" id="saved" value="1" class="text ui-widget-content ui-corner-all" style="vertical-align:middle;display:block;"></td>
+						<td>
+							<label for="saved" style="vertical-align:middle;display:block;">Save Password ?</label>
+						</td>
+					</tr>
+				</table>
+			</div>
+        </div>
         <script type="text/javascript" src="js/base64.min.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
-										
