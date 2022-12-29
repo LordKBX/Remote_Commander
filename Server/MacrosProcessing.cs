@@ -19,8 +19,9 @@ namespace Server
 {
     class MacrosProcessing
     {        
-        public static void Run(Execute exe, JObject MacroList, string CalledMacro, string CalledSound, UdpClient newsock, IPEndPoint sender) {
-            Debug.WriteLine("MacrosProcessing.Run: " + CalledMacro + " " + CalledSound);
+        public static void Run(JObject MacroList, string CalledMacro, string CalledSound, WebSocketService service) {
+            Console.WriteLine("MacrosProcessing.Run: " + CalledMacro + " x " + CalledSound);
+            Debug.WriteLine("MacrosProcessing.Run: " + CalledMacro + " x " + CalledSound);
             if (CalledMacro != "")
             {
                 Debug.WriteLine("IN MACRO");
@@ -41,10 +42,8 @@ namespace Server
                             string st = JsonConvert.SerializeObject(ob2);
                             //Debug.WriteLine("macro data = " + st);
                             Dictionary<string, object> options = new Dictionary<string, object>() {
-                            { "exe", exe },
                             { "macro", ob2 },
-                            { "newsock", newsock },
-                            { "sender", sender }
+                            { "service", service }
                         };
                             if (st.Contains("Sleep") == true && st.Contains("delay") == true)
                             {
@@ -71,6 +70,9 @@ namespace Server
                     JObject options = new JObject();
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true) { CalledSound = CalledSound.Replace("/", "\\"); }
                     options["url"] = Program.soundDir + CalledSound;
+
+                    Console.WriteLine("Play sound: " + CalledSound);
+                    Debug.WriteLine("Play sound: " + CalledSound);
                     PlaySound(options);
                 }
             }
@@ -79,10 +81,8 @@ namespace Server
         private static void RunPart2(object tab) {
             Debug.WriteLine("RunPart2()");
             Dictionary<string, object> values = (Dictionary<string, object>)tab;
-            Execute exe = (Execute)values["exe"];
             JObject Macro = (JObject)values["macro"];
-            UdpClient newsock = (UdpClient)values["newsock"];
-            IPEndPoint sender = (IPEndPoint)values["sender"];
+            WebSocketService service = (WebSocketService)values["service"];
 
             try
             {
@@ -105,12 +105,12 @@ namespace Server
                 try { type = action["type"].Value<string>(); } catch (Exception) { }
                 Console.WriteLine("type = " + type);
                 if (type == "PlaySound") { PlaySound(action); }
-                if (type == "Execute") { ExecuteCommand(exe, action); }
+                if (type == "Execute") { ExecuteCommand(action); }
                 if (type == "KeyBoardInput") { ExecuteKeyboardInput(action); }
                 if (type == "GetSoundInfo" || type == "MuteSound" || type == "VolUp" || type == "VolDown")
                 {
                     JToken tok = action.Value<JToken>();
-                    Program.ParseSoundInfo(type, ref newsock, sender, tok);
+                    Program.ParseSoundInfo(type, service, tok);
                 }
                 if (type == "Sleep") { try { Thread.Sleep(action["delay"].Value<int>()); } catch (Exception) { } }
             }
@@ -120,24 +120,10 @@ namespace Server
             JToken ob2 = (JToken)ob;
             string url = "";
             try { url = ob2["url"].Value<string>(); } catch (Exception) { }
-            Debug.WriteLine("url = " + url);
-
-            Dictionary<string, object> plug = Server.Program.PluginGet("Audio");
-            if (plug == null) { return; }
-            try
-            {
-                Assembly asem = (Assembly)plug["assembly"];
-                Type t = (Type)plug["type"];
-                object instance = (object)plug["instance"];
-
-                MethodInfo m = t.GetMethod("PlaySound");
-                Debug.WriteLine("m.Invoke(instance, new object[] { url });");
-                m.Invoke(instance, new object[] { url });
-            }
-            catch (Exception) { }
+            Program.PlaySound(url);
         }
 
-        private static void ExecuteCommand(Execute exe, JToken ob2) {
+        private static void ExecuteCommand(JToken ob2) {
             string executable = "";
             try { executable = ob2["executable"].Value<string>(); } catch (Exception) { }
             if (executable.StartsWith(".\\") == true) { executable.Replace(".\\", AppDomain.CurrentDomain.BaseDirectory); }
@@ -145,7 +131,7 @@ namespace Server
             string eparams = "";
             try { eparams = ob2["params"].Value<string>(); } catch (Exception) { }
             //Console.WriteLine("params = " + eparams);
-            exe.ExecuteCommandAsync(executable, eparams);
+            Execute.ExecuteCommandAsync(executable, eparams);
         }
         
         private static void ExecuteKeyboardInput(JToken ob2) {

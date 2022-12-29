@@ -12,9 +12,9 @@ namespace Server
 {
     class Execute
     {
-        public List<int> procs = new List<int>();
-        private bool unload = false;
-        public void ExecuteCommandSync(object command)
+        static public List<int> procs = new List<int>();
+        static private bool unload = false;
+        static public void ExecuteCommandSync(object command)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace Server
             }
         }
 
-        public void ExecuteCommandAsync(string command, string options)
+        static public void ExecuteCommandAsync(string command, string options)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Server
             catch (Exception) { }
         }
 
-        public void KillAll() {
+        static public void KillAll() {
             unload = true;
             foreach (int id in procs) { ExecuteCommandSync("taskkill<<>>/PID " + id + " /F"); }
         }

@@ -1,21 +1,87 @@
-﻿using System;
+﻿using Accord.Audio;
+using Accord.DirectSound;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Loader;
+using System.IO;
 using System.Text;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Net;
+using Newtonsoft.Json;
 using System.Net.Sockets;
+using System.Net;
+using System.Reflection;
 
 namespace Server
 {
     public partial class Program
     {
+        private static Dictionary<string, FileInfo> SoundList = new Dictionary<string, FileInfo>();
+        private static NetCoreAudio.Player player = null;
+        private static bool playerPlayFinished = true;
+
+        private static AudioCaptureDevice audioSource = null;
+        private static Accord.Video.MJPEGStream videoSource = null;
+
+
+        public static void PlaySound(string filePath)
+        {
+            try
+            {
+                Console.WriteLine("PlaySound(string '" + filePath + "')");
+                Debug.WriteLine("PlaySound(string '" + filePath + "')");
+                if (player == null)
+                {
+                    player = new NetCoreAudio.Player();
+                    player.PlaybackFinished += Player_PlaybackFinished;
+                }
+                if (playerPlayFinished == false) { player.Stop(); }
+                playerPlayFinished = false;
+                player.Play(filePath);
+            }
+            catch (Exception er)
+            {
+                Debug.WriteLine("Extention_WinAudio error: " + er.Message);
+                Console.WriteLine("Extention_WinAudio error: " + er.Message);
+            }
+        }
+
+        private static void Player_PlaybackFinished(object sender, EventArgs e)
+        {
+            playerPlayFinished = true;
+        }
+
+        public static void SoundRecordStart()
+        {
+            // Create default capture device
+            audioSource = new AudioCaptureDevice();
+            Accord.Video.MJPEGStream videoSource = new Accord.Video.MJPEGStream();
+
+            // Specify capturing options
+            audioSource.DesiredFrameSize = 4096;
+            audioSource.SampleRate = 22050;
+            audioSource.Format = SampleFormat.Format128BitComplex;
+
+            // Specify the callback function which will be
+            // called once a sample is completely available
+            audioSource.NewFrame += audioSource_NewFrame;
+
+            // Start capturing
+            audioSource.Start();
+
+        }
+
+        // The callback function should determine what
+        // should be done with the samples being caught
+        private static void audioSource_NewFrame(object sender, Accord.Audio.NewFrameEventArgs eventArgs)
+        {
+            // Read current frame...
+            Signal s = eventArgs.Signal;
+            byte[] tab = s.RawData;
+
+
+            // Process/play/record it
+            // ...
+        }
 
         private static JObject GetSoundInfo()
         {
@@ -36,7 +102,7 @@ namespace Server
             return obf;
         }
 
-        public static void ParseSoundInfo(string function, ref UdpClient newsock, IPEndPoint sender, JToken ob)
+        public static void ParseSoundInfo(string function, WebSocketService service, JToken ob)
         {
             Assembly asem = null;
             Type t = null;
@@ -84,10 +150,7 @@ namespace Server
                 else { u.Invoke(instance, new object[] { curVol - step }); }
             }
 
-            byte[] data = new byte[51200];
-            data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(GetSoundInfo()));
-            newsock.Send(data, data.Length, sender);
+            service.SendMessage(JsonConvert.SerializeObject(GetSoundInfo()));
         }
-
     }
 }

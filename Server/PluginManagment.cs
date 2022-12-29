@@ -95,6 +95,7 @@ namespace Server
                 obj["type"] = asem.GetType(bb.Current.Namespace + "." + bb.Current.Name);
                 obj["instance"] = asem.CreateInstance(bb.Current.Namespace + "." + bb.Current.Name);
                 extentionsInfosList.Add(bb.Current.Name, obj);
+                Console.WriteLine(bb.Current.Name);
             }
             catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
         }
