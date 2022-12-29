@@ -21,17 +21,17 @@ namespace Server
     {        
         public static void Run(JObject MacroList, string CalledMacro, string CalledSound, WebSocketService service) {
             Console.WriteLine("MacrosProcessing.Run: " + CalledMacro + " x " + CalledSound);
-            Debug.WriteLine("MacrosProcessing.Run: " + CalledMacro + " x " + CalledSound);
+            Console.WriteLine("MacrosProcessing.Run: " + CalledMacro + " x " + CalledSound);
             if (CalledMacro != "")
             {
-                Debug.WriteLine("IN MACRO");
+                Console.WriteLine("IN MACRO");
                 string[] tabGivenMacro = CalledMacro.Split('/');
                 foreach (JToken section in MacroList["sections"].ToList<JToken>())
                 {
-                    //Debug.WriteLine("section Compare: " + tabGivenMacro[0] + " " + section["name"].Value<string>());
+                    //Console.WriteLine("section Compare: " + tabGivenMacro[0] + " " + section["name"].Value<string>());
                     if (section["name"].Value<string>() == tabGivenMacro[0])
                     {
-                        //Debug.WriteLine("section data = " + JsonConvert.SerializeObject(section));
+                        //Console.WriteLine("section data = " + JsonConvert.SerializeObject(section));
                         if (section["macros"].Value<JObject>().ContainsKey(tabGivenMacro[1]) == true)
                         {
                             JObject ob2 = section["macros"][tabGivenMacro[1]].Value<JObject>();
@@ -40,7 +40,7 @@ namespace Server
                                 ob2["sound"] = Program.soundDir + CalledSound;
                             }
                             string st = JsonConvert.SerializeObject(ob2);
-                            //Debug.WriteLine("macro data = " + st);
+                            //Console.WriteLine("macro data = " + st);
                             Dictionary<string, object> options = new Dictionary<string, object>() {
                             { "macro", ob2 },
                             { "service", service }
@@ -72,14 +72,14 @@ namespace Server
                     options["url"] = Program.soundDir + CalledSound;
 
                     Console.WriteLine("Play sound: " + CalledSound);
-                    Debug.WriteLine("Play sound: " + CalledSound);
+                    Console.WriteLine("Play sound: " + CalledSound);
                     PlaySound(options);
                 }
             }
         }
 
         private static void RunPart2(object tab) {
-            Debug.WriteLine("RunPart2()");
+            Console.WriteLine("RunPart2()");
             Dictionary<string, object> values = (Dictionary<string, object>)tab;
             JObject Macro = (JObject)values["macro"];
             WebSocketService service = (WebSocketService)values["service"];
@@ -88,7 +88,7 @@ namespace Server
             {
                 string sound = Macro["sound"].Value<string>();
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == true) { sound = sound.Replace("/", "\\"); }
-                Debug.WriteLine("sound = "+sound);
+                Console.WriteLine("sound = "+sound);
                 if (sound != "") {
                     JObject a = new JObject();
                     a["url"] = sound;
@@ -100,7 +100,7 @@ namespace Server
             List<JToken> actions = Macro["actions"].ToList<JToken>();
             foreach (JToken action in actions)
             {
-                Debug.WriteLine(JsonConvert.SerializeObject(Macro));
+                Console.WriteLine(JsonConvert.SerializeObject(Macro));
                 string type = "";
                 try { type = action["type"].Value<string>(); } catch (Exception) { }
                 Console.WriteLine("type = " + type);

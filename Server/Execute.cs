@@ -38,9 +38,9 @@ namespace Server
             }
             catch (Exception objException)
             {
-                Debug.WriteLine(objException.Message);
-                Debug.WriteLine(objException.Source);
-                Debug.WriteLine(objException.Data);
+                Console.WriteLine(objException.Message);
+                Console.WriteLine(objException.Source);
+                Console.WriteLine(objException.Data);
             }
         }
 

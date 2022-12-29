@@ -119,14 +119,14 @@ namespace Server
 
             if (type == "encoded")
             {
-                //Debug.WriteLine("ENCODED FRAME");
+                //Console.WriteLine("ENCODED FRAME");
                 try
                 {
                     string decoded = Crytography.Decrypt(ob["data"].Value<string>());
-                    Debug.WriteLine("encoded data = " + decoded);
+                    Console.WriteLine("encoded data = " + decoded);
                     ob = JObject.Parse(decoded);
                 }
-                catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
+                catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
             }
             string macro = null;
             string sound = null;
@@ -234,7 +234,7 @@ namespace Server
                             Console.WriteLine(encoded);
                         }
                     }
-                    catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+                    catch (Exception err) { Console.WriteLine(JsonConvert.SerializeObject(err)); }
                     return;
                 }
                 this.Send(datas);

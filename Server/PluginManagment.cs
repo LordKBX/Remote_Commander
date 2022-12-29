@@ -39,7 +39,7 @@ namespace Server
                 foreach (FileInfo file in Files) { PluginLoad(file); }
 
             }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
+            catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
         }
 
         public static bool PluginLoadFromFile(string folder, string stringfile)
@@ -68,7 +68,7 @@ namespace Server
                 PluginLoad(Files[0]);
                 return true; ;
             }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); return false; }
+            catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); return false; }
         }
 
         public static Dictionary<string, object> PluginGet(string AssemblyName)
@@ -97,7 +97,7 @@ namespace Server
                 extentionsInfosList.Add(bb.Current.Name, obj);
                 Console.WriteLine(bb.Current.Name);
             }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
+            catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
         }
 
         private static void PluginDisposeAll()
@@ -110,7 +110,7 @@ namespace Server
                 }
                 extentionsInfosList.Clear();
             }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
+            catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
         }
 
         public static void PluginDispose(string AssemblyName)
@@ -122,7 +122,7 @@ namespace Server
                 plug["instance"] = null;
                 extentionsInfosList.Remove(AssemblyName);
             }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
+            catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
         }
 
     }

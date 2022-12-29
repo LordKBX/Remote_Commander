@@ -31,7 +31,20 @@ namespace Server
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 {
                     WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-                    if (pricipal.IsInRole(WindowsBuiltInRole.Administrator) == false) { Environment.Exit(0); }
+                    if (pricipal.IsInRole(WindowsBuiltInRole.Administrator) == false)
+                    {
+                        // Environment.Exit(0); 
+                    }
+                    else {
+                        Dictionary<string, object> plug = PluginGet("TrayIcon");
+                        if (plug == null) { return; }
+                        Assembly asem = (Assembly)plug["assembly"];
+                        Type t = (Type)plug["type"];
+                        object instance = (object)plug["instance"];
+
+                        MethodInfo m = t.GetMethod("HideConsole");
+                        m.Invoke(instance, new object[] { });
+                    }
                 }
             }
         }
@@ -46,7 +59,7 @@ namespace Server
                 object instance = (object)plug["instance"];
 
                 MethodInfo m = t.GetMethod("HideConsole");
-                Debug.WriteLine("m.Invoke(instance, new object[] {});");
+                Console.WriteLine("m.Invoke(instance, new object[] {});");
                 m.Invoke(instance, new object[] { });
             }
             catch (Exception) { }
@@ -62,7 +75,7 @@ namespace Server
                 object instance = (object)plug["instance"];
 
                 MethodInfo m = t.GetMethod("ShowConsole");
-                Debug.WriteLine("m.Invoke(instance, new object[] {});");
+                Console.WriteLine("m.Invoke(instance, new object[] {});");
                 m.Invoke(instance, new object[] { });
             }
             catch (Exception) { }

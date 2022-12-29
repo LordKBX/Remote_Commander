@@ -133,9 +133,39 @@ app =
 	init_P2: function ()
 	{
 		console.log("init_P2");
+		
+		listDir(cordova.file.cacheDirectory, function(tab){
+			if(tab == false){ return; }
+			window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function success(fileEntry) {
+				console.log('cdvfile URI: ' + fileEntry.toInternalURL());
+				console.log('tab: ', tab);
+				dir = fileEntry.toInternalURL();
+				var ins = Date.now();
+				for(var i=0; i<tab.length; i++){
+					if(tab[i].search('.jpg') != -1 || tab[i].search('.png') != -1){
+						app.listImages.push({
+							name: tab[i],
+							data: fileEntry.toInternalURL()+tab[i],
+							last_update: ins
+						});
+						app.listImagesObjects.push(new Image());
+						app.listImagesObjects[app.listImagesObjects.length - 1].onload = function(){ 
+							console.log("img loaded");
+							try{
+								//$('.control-grid-button[image="' + app.purgeFileName(tab[i]) + '"]')[0].style.backgroundImage="url('" + this.src + "')";
+								}
+							catch(err){ console.error(err); console.log(this.src); }
+							
+							}
+						app.listImagesObjects[app.listImagesObjects.length - 1].src = fileEntry.toInternalURL()+tab[i];
+						}
+					}
+			});
+		});
+		
 		try{ Crytography.Init(); } catch(err){ console.error(err); }
 		app.Serverkey = null;
-		app.timerImages = setInterval(app.getImages, 100);
+		//app.timerImages = setInterval(app.getImages, 100);
 		$('#side_menu').bind('click', function(e){
 			$('#side_menu').css('left','-250px');
 		});
@@ -156,7 +186,6 @@ app =
 						"password": app.servPass
 					};
 					app.SendToServerEncoded(JSON.stringify(obl));
-					app.PasswordDialog.dialog( "close" );
 				}
 			},
 			close: function() {
@@ -168,32 +197,6 @@ app =
 		//$('#PannelHomeIP').val(app.servAddr);
 		//$('#PannelHomePORT').val(app.servPort);
 		app.listServers();
-		app.db.transaction(
-			function (tx)
-			{
-				tx.executeSql("SELECT 'NAME','VALUE','LAST_UPDATE' FROM 'CACHE'", [], function (tx, res)
-				{
-					if (res.rows.length !== 0)
-					{
-						var reftime = Date.now() - 3600000;
-						for (i = 0; i < res.rows.length; i++)
-						{
-							if(reftime < res.rows.item(i).LAST_UPDATE){
-								app.listImages.push({
-									name: unescape(res.rows.item(i).NAME),
-									data: res.rows.item(i).VALUE,
-									last_update: res.rows.item(i).LAST_UPDATE
-								});
-							}
-						}
-						console.log(res.rows);
-						//tx.executeSql("DELETE FROM 'CACHE' WHERE LAST_UPDATE < ?", [reftime]);
-						//tx.executeSql("DELETE FROM 'CACHE'", []);
-					}
-				}
-				);
-			}
-		);
 		$("#toolbar_icon").bind('click', 
 			function (e)
 			{
@@ -227,7 +230,7 @@ app =
 							p = document.createElement('p');
 							p.innerHTML = st;
 							btn = document.createElement('button');
-							btn.setAttribute('onclick', "app.TestServer('" + res.rows.item(i).IP + "'," + res.rows.item(i).PORT + ", '"+res.rows.item(i).PASS+"');");
+							btn.setAttribute('onclick', "app.TestServer('" + res.rows.item(i).IP + "'," + res.rows.item(i).PORT + ", '"+res.rows.item(i).PASS+"', "+((parseInt(res.rows.item(i).SAVEDPASS) == 1)?'true':'false')+");");
 							btn.innerHTML = "Connect";
 							doc.appendChild(p);
 							doc.appendChild(btn);
@@ -244,10 +247,10 @@ app =
 		try
 		{
 			if(event.data == ''){return;}
-			console.log(event);
+			//console.log(event);
 			data = event.data;
 			to = event.origin.split('/')[2].split(':');
-			console.log(to);
+			//console.log(to);
 			host = to[0];
 			port = to[1];
 			tdata = JSON.parse(data);
@@ -307,7 +310,7 @@ app =
 										}
 										else
 										{
-											tx.executeSql("INSERT INTO SERVERSv2(NAME,IP,PORT,REC_TIME,LAST_USE,PASS, SAVEDPASS) VALUES(?,?,?,?,?,?,?)", [name, host, port, 0, 0, app.servPass, (app.servPassSaved)?1:0], function (tx, res)  { app.listServers(); });
+											tx.executeSql("INSERT INTO SERVERSv2(NAME,IP,PORT,REC_TIME,LAST_USE,PASS, SAVEDPASS) VALUES(?,?,?,?,?,?,?)", [name, host, port, 0, 0, (app.servPassSaved)?app.servPass:'', (app.servPassSaved)?1:0], function (tx, res)  { app.listServers(); });
 										}
 									}
 									);
@@ -320,15 +323,37 @@ app =
 						app.servPort = port;
 						app.servAddr = host;
 						app.lastPing = Date.now();
+						if(app.servPassSaved && app.servPass != ""){
+							obl =
+								{
+									"function": "Login",
+									"password": app.servPass
+								};
+							app.SendToServerEncoded(JSON.stringify(obl));
+							}
+						else{
+							$('#password').val(app.servPass);
+							app.PasswordDialog.dialog( "open" );
+							}
 						
-						$('#password').val(app.servPass);
-						app.PasswordDialog.dialog( "open" );
 					}
 				}
 				if (tdata["function"] == "Login")
 				{
-					if(tdata["status"] == "OK"){ console.log("Session OK"); app.gotoControls(); }
-					else{ alert("invalid login"); }
+					if(tdata["status"] == "OK"){ 
+						console.log("Session OK"); 
+						app.gotoControls(); 
+						app.db.transaction(function (tx){ tx.executeSql("UPDATE SERVERSv2 SET PASS=?, SAVEDPASS=? WHERE IP = ? AND PORT = ?", [(app.servPassSaved)?app.servPass:'',(app.servPassSaved)?1:0,app.servAddr, app.servPort], function (tx, res){}); });
+						app.PasswordDialog.dialog( "close" );
+						}
+					else{ 
+						if(app.servPassSaved){
+							app.db.transaction(function (tx){ tx.executeSql("UPDATE SERVERSv2 SET PASS=?, SAVEDPASS=? WHERE IP = ? AND PORT = ?", ['',0,app.servAddr, app.servPort], function (tx, res){}); });
+							}
+						alert("invalid login"); 
+						$('#password').val("");
+						app.PasswordDialog.dialog( "open" );
+						}
 				}
 				if (tdata["function"] == "Pong")
 				{
@@ -380,6 +405,11 @@ app =
 								console.error(error);
 								}
 						}
+						else{
+							window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + fpath, function success(fileEntry) {
+								$('.control-grid-button[image="' + fpath + '"]')[0].style.backgroundImage="url('" + this.src + "')";
+								});
+							}
 					}
 				}
 			}
@@ -407,11 +437,13 @@ app =
 		port = $('#PannelHomePORT').val();
 		app.GetServerInfos(addr, port);
 	},
-	TestServer: function (addr, port)
+	TestServer: function (addr, port, pass, passSaved)
 	{
 		console.log(">> TestServer");
 		app.waitLog = true;
 		app.waitRegister = false;
+		app.servPass = pass;
+		app.servPassSaved = passSaved;
 		app.GetServerInfos(addr, port);
 	},
 	GetServerInfos: function (addr, port)
@@ -440,14 +472,15 @@ app =
 	sockectOnClose: function(event){
 		console.log("Connection ended");
 		app.reconnectTry = app.reconnectTry + 1;
-		if(app.manualyClosed == false && app.reconnectTry <= 3){
 			app.socket = null;
+		if(app.manualyClosed == false && app.reconnectTry <= 3){
 			app.socket = new WebSocket("wss://"+app.lastHost+':'+app.lastPort);
 			app.socket.onopen = app.sockectOnOpen;
 			app.socket.onmessage = app.sockectOnMessage;
 			app.socket.onclose = app.sockectOnClose;
 			app.socket.onerror = app.sockectOnError;
 		}
+		else{ app.gotoHome(); }
 	},
 	sockectOnError: function(error) {
 		console.log(`[error]`, error);
@@ -554,8 +587,15 @@ app =
 					button.setAttribute('onclick', 'app.executeMacro("' + tdata[index]["buttons"][indexB]["macro"] + '", "' + tdata[index]["buttons"][indexB]["sound"] + '");');
 					if (tdata[index]["buttons"][indexB]["icon"] != "")
 					{
-						button.setAttribute('image', app.purgeFileName(tdata[index]["buttons"][indexB]["icon"]));
-						app.getImageUpdateList(tdata[index]["buttons"][indexB]["icon"]);
+						hh = app.purgeFileName(tdata[index]["buttons"][indexB]["icon"]);
+						button.setAttribute('image', hh);
+						imgp = app.getCachedImg(hh);
+						if(imgp == null){ app.getImageUpdateList(tdata[index]["buttons"][indexB]["icon"]); }
+						else{ 
+							bcostyle = bcostyle + "background-image:"+"url('" + imgp.data + "')"+";";
+							//$('.control-grid-button[image="' + hh + '"]').css('background-image',"url('" + imgp.data + "')"); 
+							}
+						
 						bcostyle = bcostyle + "background-repeat: no-repeat; background-size: 95%; background-position: center;";
 					}
 
@@ -595,6 +635,7 @@ app =
 		{
 			console.log(error);
 		}
+		app.getImages();
 	},
 	executeMacro: function (name, sname)
 	{

@@ -47,14 +47,17 @@ namespace Server
 
         public static void Main(string[] args)
         {
+            Console.WriteLine("Start");
             isDebugF();
+            Console.WriteLine("isDebugF");
             IsAdmin();
+            Console.WriteLine("IsAdmin");
             updateBaseDir();
 
-            Debug.WriteLine("baseDir = " + baseDir);
-            Debug.WriteLine("extentionsDir = " + extentionsDir);
-            Debug.WriteLine("imagesDir = " + imagesDir);
-            Debug.WriteLine("soundDir = " + soundDir);
+            Console.WriteLine("baseDir = " + baseDir);
+            Console.WriteLine("extentionsDir = " + extentionsDir);
+            Console.WriteLine("imagesDir = " + imagesDir);
+            Console.WriteLine("soundDir = " + soundDir);
 
             Crytography.Init();
 
@@ -83,19 +86,19 @@ namespace Server
                 proc.Start();
                 string result = proc.StandardOutput.ReadToEnd();
 
-                //Debug.WriteLine(result);
+                //Console.WriteLine(result);
                 string[] rezs = result.Split("\r");
                 foreach (string line in rezs)
                 {
                     if(line.Contains("0.0.0.0:" + listhendPort) == true) {
                         string ml = line;
-                        Debug.WriteLine(line);
+                        Console.WriteLine(line);
                         while (ml.Contains("  ")) {
                             ml = ml.Replace("  ", " ");
                         }
-                        Debug.WriteLine(ml);
+                        Console.WriteLine(ml);
                         string[] tab = ml.Split(" ");
-                        Debug.WriteLine(JsonConvert.SerializeObject(tab));
+                        Console.WriteLine(JsonConvert.SerializeObject(tab));
 
                         procStartInfo = new System.Diagnostics.ProcessStartInfo("taskkill", "/PID "+ tab[tab.Length - 1] + " /F");
                         procStartInfo.RedirectStandardOutput = true;

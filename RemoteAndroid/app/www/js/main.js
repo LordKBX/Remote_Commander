@@ -351,6 +351,8 @@ app =
 							app.db.transaction(function (tx){ tx.executeSql("UPDATE SERVERSv2 SET PASS=?, SAVEDPASS=? WHERE IP = ? AND PORT = ?", ['',0,app.servAddr, app.servPort], function (tx, res){}); });
 							}
 						alert("invalid login"); 
+						$('#password').val("");
+						app.PasswordDialog.dialog( "open" );
 						}
 				}
 				if (tdata["function"] == "Pong")

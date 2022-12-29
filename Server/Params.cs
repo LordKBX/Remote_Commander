@@ -19,7 +19,7 @@ namespace Server
             DirectoryInfo[] ldir = dir.GetDirectories();
             foreach (DirectoryInfo di in ldir)
             {
-                Debug.WriteLine(di.Name);
+                Console.WriteLine(di.Name);
             }
             if (Directory.Exists(dir.FullName + osSep + "Extentions") == true)
             {
@@ -46,7 +46,7 @@ namespace Server
                             soundDir = baseDir + osSep + "Sounds" + osSep;
                             return;
                         }
-                        Debug.WriteLine(di.Name);
+                        Console.WriteLine(di.Name);
                     }
                 }
             }

@@ -4,3 +4,5 @@
 */RemoteAndroid/**
 /RemoteAndroid/app/*
 /RemoteAndroid/services/*
+*.apk
+/Output/*.exe

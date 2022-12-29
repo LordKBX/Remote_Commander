@@ -28,7 +28,7 @@ namespace Server
             try
             {
                 Console.WriteLine("PlaySound(string '" + filePath + "')");
-                Debug.WriteLine("PlaySound(string '" + filePath + "')");
+                Console.WriteLine("PlaySound(string '" + filePath + "')");
                 if (player == null)
                 {
                     player = new NetCoreAudio.Player();
@@ -40,7 +40,7 @@ namespace Server
             }
             catch (Exception er)
             {
-                Debug.WriteLine("Extention_WinAudio error: " + er.Message);
+                Console.WriteLine("Extention_WinAudio error: " + er.Message);
                 Console.WriteLine("Extention_WinAudio error: " + er.Message);
             }
         }

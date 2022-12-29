@@ -5,7 +5,7 @@
 #define MyAppNameService "Remote Commander Service" 
 #define MyAppPublisher "LordKBX Workshop"
 #define MyAppExeName "RemoteCommanderServer.exe"
-#define MyAppVersion "1.1.0.0"
+#define MyAppVersion "1.0.0.0"
 #define MyAppVerName "Chilly Ant"
 
 [Setup]
@@ -36,21 +36,15 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 6.1; Check: not IsAdminInstallMode
 
 [Files]                                                                                                  
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.exe"; DestDir: "{app}"; DestName: "RemoteCommanderServer.exe"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\hostfxr.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\hostpolicy.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.runtimeconfig.dev.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\bin\Release\netcoreapp2.1\win-x64\Server.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\grids_default.json"; DestDir: "{app}"; DestName: "grids.json"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\macros.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Images\*"; DestDir: "{app}\Images"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Sounds\*"; DestDir: "{app}\Sounds"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Server\Extentions\*"; DestDir: "{app}\Extentions"; Flags: ignoreversion recursesubdirs createallsubdirs   
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Configurator_Win\bin\Release\*"; DestDir: "{app}\Configurator"; Flags: ignoreversion recursesubdirs createallsubdirs     
-Source: "C:\Users\KevBo\source\repos\RemoteCommander\Configurator_Win\html\*"; DestDir: "{app}\Configurator\html"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\CODES\VS\RemoteCommander\Server\bin\Release\netcoreapp3.1\Server.exe"; DestDir: "{app}"; DestName: "RemoteCommanderServer.exe"; Flags: ignoreversion
+Source: "D:\CODES\VS\RemoteCommander\Server\bin\Release\netcoreapp3.1\*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\CODES\VS\RemoteCommander\Server\grids_default.json"; DestDir: "{app}"; DestName: "grids.json"; Flags: ignoreversion
+Source: "D:\CODES\VS\RemoteCommander\Server\macros.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\CODES\VS\RemoteCommander\Server\Images\*"; DestDir: "{app}\Images"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\CODES\VS\RemoteCommander\Server\Sounds\*"; DestDir: "{app}\Sounds"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\CODES\VS\RemoteCommander\Server\Extentions\*"; DestDir: "{app}\Extentions"; Flags: ignoreversion recursesubdirs createallsubdirs   
+Source: "D:\CODES\VS\RemoteCommander\Configurator_Win\bin\Release\*"; DestDir: "{app}\Configurator"; Flags: ignoreversion recursesubdirs createallsubdirs     
+Source: "D:\CODES\VS\RemoteCommander\Configurator_Win\html\*"; DestDir: "{app}\Configurator\html"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Registry]
 Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: String; ValueName: "{app}\RemoteCommanderServer.exe"; ValueData: "RUNASADMIN"; Flags: uninsdeletekeyifempty uninsdeletevalue; MinVersion: 0,6.1

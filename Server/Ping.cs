@@ -40,8 +40,8 @@ namespace Server
                     data = Encoding.UTF8.GetBytes("{\"function\":\"beep\"}");
                     newsock.Send(data, data.Length, "192.168.1.255", 48000); 
                 }
-                catch (System.NullReferenceException) { Console.Beep(); Debug.WriteLine("Beep error"); }
-                catch (Exception) { Console.Beep(); Debug.WriteLine("Beep error"); }
+                catch (System.NullReferenceException) { Console.Beep(); Console.WriteLine("Beep error"); }
+                catch (Exception) { Console.Beep(); Console.WriteLine("Beep error"); }
 
                 purgeList.Clear();
                 foreach (KeyValuePair<string, JObject> ob in listSocket) { if (ob.Value["last"].Value<int>() + 30.0 < currentTime) { purgeList.Add(ob.Key); } }
