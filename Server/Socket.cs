@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Text;
 using System.Drawing.Imaging;
+using System.Timers;
 
 namespace Server
 {
@@ -25,6 +26,8 @@ namespace Server
         private static ILoggerFactory _loggerFactory;
         private static WebSocketServer socket;
         private static Dictionary<string, Dictionary<string, string>> sessionsData;
+        public static string lastSoundInfo = "";
+        private static System.Timers.Timer aTimer;
 
         private static void InitWebsocket() { 
             sessionsData = new Dictionary<string, Dictionary<string, string>>();
@@ -76,15 +79,37 @@ namespace Server
     public class WebSocketService : WebSocketBehavior
     {
         private string _suffix;
+        private System.Timers.Timer aTimer;
+        private double lastTime = 0;
+        private int tick = 0;
 
         public WebSocketService() : this(null)
         {
             this.EmitOnPing = true;
+            aTimer = new System.Timers.Timer(1000);
+            aTimer.Elapsed += this.OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
 
         public WebSocketService(string suffix)
         {
             _suffix = suffix ?? String.Empty;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            double rez = Program.getUnixTimeStamp() - lastTime;
+            //Console.WriteLine("tick = " + tick);
+            if (Program.getUnixTimeStamp() - lastTime >= 15) {//if last ping >= 15 secondes then kill socket
+                Console.WriteLine("Session Expired");
+                aTimer.Close();
+                this.Context.WebSocket.Close();
+                Sessions.CloseSession(ID);
+                return; 
+            }
+            this.Send(JsonConvert.SerializeObject(Program.GetSoundInfo((tick == 5)?true:false)));
+            tick = (tick >= 5) ? 0 : tick + 1;
         }
 
         public void SendMessage(string message) { this.Send(message); }
@@ -97,8 +122,7 @@ namespace Server
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            Console.WriteLine("-----------------------------------------------------");
-            Console.WriteLine("Message received {0}", e.Data);
+            //Console.WriteLine("-----------------------------------------------------");
             JObject ob = JObject.Parse(e.Data);
             string type = "";
             string function = "";
@@ -123,16 +147,21 @@ namespace Server
                 try
                 {
                     string decoded = Crytography.Decrypt(ob["data"].Value<string>());
-                    Console.WriteLine("encoded data = " + decoded);
+                    //Console.WriteLine("encoded data = " + decoded);
                     ob = JObject.Parse(decoded);
                 }
                 catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
             }
             string macro = null;
             string sound = null;
-            try { macro = ob.GetValue("macro").Value<string>(); } catch (Exception er) { Console.WriteLine(er.Message); }
-            try { sound = ob.GetValue("sound").Value<string>(); } catch (Exception er) { Console.WriteLine(er.Message); }
+            try { macro = ob.GetValue("macro").Value<string>(); } catch (Exception er) { /*Console.WriteLine(er.Message);*/ }
+            try { sound = ob.GetValue("sound").Value<string>(); } catch (Exception er) { /*Console.WriteLine(er.Message);*/ }
             try { function = ob.GetValue("function").Value<string>(); } catch (Exception) { }
+
+            if (function != "Ping" && function != "Pong")
+            {
+                Console.WriteLine("Message received {0}", ob.ToString());
+            }
 
             if (function != "")
             {
@@ -163,10 +192,12 @@ namespace Server
                     }
                     DoEncoding = true;
                     datas = Program.GetInfo();
+                    lastTime = Program.getUnixTimeStamp();
                 }
 
                 if (function == "Ping")
                 {
+                    lastTime = Program.getUnixTimeStamp();
                     if (Program.HasSession(this.ID))
                     {
                         Program.SetSessionData(this.ID, "last", "" + Program.getUnixTimeStamp(false));
@@ -231,7 +262,7 @@ namespace Server
                             if (function == "GetInfo") { key = ob.GetValue("keyPU").Value<string>(); }
                             string encoded = "{\"type\":\"encoded\", \"data\":\"" + Crytography.Encrypt(datas, key) + "\"}";
                             this.Send(encoded);
-                            Console.WriteLine(encoded);
+                            //Console.WriteLine(encoded);
                         }
                     }
                     catch (Exception err) { Console.WriteLine(JsonConvert.SerializeObject(err)); }

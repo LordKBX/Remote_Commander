@@ -32,17 +32,29 @@ namespace Configurator_Win
             catch (Exception error) { }
         }
 
-        public void UpdateBouttonInfo(string id)
+        public bool IsLegacyGrid(JToken tabsG) {
+            var dic = tabsG.ToObject<Dictionary<string, object>>();
+            object jj = null;
+            dic.TryGetValue("buttons", out jj);
+            if (dic.ContainsKey("buttons") && jj != null) { return true; }
+            return false;
+        }
+
+        public void UpdateBlockInfo(string id)
         {
             JToken tabsT = GridsList.GetValue("grids");
             List<JToken> tabs = tabsT.ToList<JToken>();
-            List<JToken> btns = tabs[tabControler.SelectedIndex]["buttons"].ToList<JToken>();
+            var dic = tabs[tabControler.SelectedIndex].ToObject<Dictionary<string, object>>();
+            List<JToken> btns = null;
+            
+            btns = tabs[tabControler.SelectedIndex]["blocks"].ToList<JToken>();
             foreach (JToken btn in btns)
             {
                 if (btn["id"].Value<string>() == id)
                 {
-                    ShowInfoButton();
+                    ShowInfoBlock();
                     RG09_box.Text = id;
+                    RG09_2_comboBox.SelectedIndex = ((btn["type"].Value<string>() == "module")?1:0);
                     RG10_box.Text = btn["name"].Value<string>();
                     RG11_Num1.Value = btn["width"].Value<int>();
                     RG11_Num2.Value = btn["height"].Value<int>();
@@ -54,39 +66,42 @@ namespace Configurator_Win
             }
         }
 
-        public void AddBouttonInfo(string data)
+        public void AddBlockInfo(string data)
         {
-            Debug.WriteLine("AddBouttonInfo >> " + data);
+            Debug.WriteLine("AddBlockInfo >> " + data);
             JObject obj = JObject.Parse(data);
             JToken tabsT = GridsList.GetValue("grids");
-            ((JToken)(GridsList["grids"][tabControler.SelectedIndex]["buttons"])).Children().Last<JToken>().AddAfterSelf(obj);
+            ((JToken)(GridsList["grids"][tabControler.SelectedIndex]["blocks"])).Children().Last<JToken>().AddAfterSelf(obj);
         }
 
-        public void UpdateButtonsOrder(string data)
+        public void WriteLine(string data) { Console.WriteLine(data); }
+
+        public void UpdateBlocksOrder(string data)
         {
             Debug.WriteLine("NewOrder >> " + data);
             string[] list = data.Split(';');
             JToken[] tokl = new JToken[list.Length];
-            
+
 
             for (int i = 0; i < list.Length; i++) {
-                JToken rez = getObjectButton(list[i]);
+                JToken rez = getObjectBlock(list[i]);
                 if (rez != null) { tokl[i] = rez; }
             }
             if (tokl.Length > 0) {
                 string re = JsonConvert.SerializeObject(tokl);
                 Debug.WriteLine("NewOrder >> " + re);
-                GridsList["grids"][tabControler.SelectedIndex]["buttons"] = JToken.FromObject(tokl);
+                GridsList["grids"][tabControler.SelectedIndex]["blocks"] = JToken.FromObject(tokl);
             }
             /*
-            Debug.WriteLine("AddBouttonInfo >> " + data);
+            Debug.WriteLine("AddBlockInfo >> " + data);
             JObject obj = JObject.Parse(data);
             JToken tabsT = GridsList.GetValue("grids");
             ((JToken)(GridsList["grids"][tabControler.SelectedIndex]["buttons"])).Children().Last<JToken>().AddAfterSelf(obj);
             */
         }
-        private JToken getObjectButton(string id) {
-            foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["buttons"].ToList<JToken>())
+        private JToken getObjectBlock(string id)
+        {
+            foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["blocks"].ToList<JToken>())
             {
                 if (tok["id"].Value<string>() == id)
                 {

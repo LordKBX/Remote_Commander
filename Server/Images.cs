@@ -11,7 +11,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Reflection;
 using HeyRed.Mime;
-using System.Drawing;
+using System.DrawingCore;
 
 namespace Server
 {

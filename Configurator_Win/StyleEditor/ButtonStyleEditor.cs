@@ -15,13 +15,13 @@ using Alba.CsCss.Style;
 
 namespace Configurator_Win.StyleEditor
 {
-    public partial class ButtonStyleEditor : Form
+    public partial class BlockStyleEditor : Form
     {
         private Form1 parent;
         private string pageRef;
         private string[] borderStyleMatch = new string[] { "groove", "ridge", "dotted", "dashed", "solid", "double", "inset", "outset"};
         private bool InUpdate = false;
-        public ButtonStyleEditor(Form1 parent, string pageRef)
+        public BlockStyleEditor(Form1 parent, string pageRef)
         {
             this.parent = parent;
             this.pageRef = pageRef;
@@ -41,7 +41,7 @@ namespace Configurator_Win.StyleEditor
         {
             InUpdate = true;
             string source = parent.GetGridStyle();
-            string source2 = parent.GetButtonStyle();
+            string source2 = parent.GetBlockStyle();
             Debug.WriteLine(source);
             GR05_comboBox.Items.Clear();
             foreach (string st in borderStyleMatch) { GR05_comboBox.Items.Add(st); }
@@ -56,7 +56,7 @@ namespace Configurator_Win.StyleEditor
             CssStyleSheet css = new CssLoader().ParseSheet(source, new Uri(pageRef), new Uri(pageRef));
             foreach (CssStyleRule rule in css.StyleRules)
             {
-                if (rule.SelectorGroups.First().Selectors.Single().Classes.Last() == "control-grid-button")
+                if (rule.SelectorGroups.First().Selectors.Single().Classes.Last() == "control-grid-block")
                 {
                     foreach (CssPropertyValue val in rule.Declaration.AllData) { if (val.Property == CssProperty.BorderTopLeftRadius) { GR04_numbox.Value = Convert.ToDecimal(val.Value.Float); break; } }
                     try
@@ -102,7 +102,7 @@ namespace Configurator_Win.StyleEditor
             if (GR05_comboBox.Text == "") { endstyle += "border-style:" + borderStyleMatch[4] + ";"; }
             else { endstyle += "border-style:" + GR05_comboBox.Text + ";"; }
             Debug.WriteLine(endstyle);
-            parent.SetButtonStyle(endstyle);
+            parent.SetBlockStyle(endstyle);
         }
 
         private void GR_btnColor_Click(object sender, EventArgs e)

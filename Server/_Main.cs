@@ -50,8 +50,6 @@ namespace Server
             Console.WriteLine("Start");
             isDebugF();
             Console.WriteLine("isDebugF");
-            IsAdmin();
-            Console.WriteLine("IsAdmin");
             updateBaseDir();
 
             Console.WriteLine("baseDir = " + baseDir);
@@ -63,15 +61,17 @@ namespace Server
 
             PluginLoadAll();
 
+            IsAdmin();
+            Console.WriteLine("IsAdmin");
             if (IsDebug == false) { HideWindow(); }
-            
+            ShowWindow();
+
+
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             listSocket = new Dictionary<string, JObject>();
             LoadRemoteParams();
             SetParamWatcher();
             SetCleanUpTimer();
-            InitWebsocket();
-            //SetPingTimer();
 
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, listhendPort);
             try { newsock = new UdpClient(ipep); newsock.Close(); }
@@ -112,7 +112,9 @@ namespace Server
                     }
                 }
             }
-            
+
+            InitWebsocket();
+
             while (unload == false)
             {
                 Thread.Sleep(500);

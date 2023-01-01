@@ -1,4 +1,3 @@
-
 {
 	"grids": [
 		{
@@ -7,9 +6,10 @@
 			"width": 4,
 			"icon": "",
 			"style": ".control-tab{}\n.control-tab-style{square}\n.control-grid{background-color:Maroon;}\n.control-grid-button{background-color:#0080C0;color:#004080;border-radius:10px;border-style:outset;}",
-			"buttons": [
+			"blocks": [
 				{
 					"id": "B",
+					"type": "button",
 					"name": "",
 					"width": 2.0,
 					"height": 2.0,
@@ -20,6 +20,7 @@
 				},
 				{
 					"id": "K",
+					"type": "button",
 					"name": "",
 					"width": 2.0,
 					"height": 2.0,
@@ -30,6 +31,7 @@
 				},
 				{
 					"id": "D",
+					"type": "button",
 					"name": "",
 					"width": 1.0,
 					"height": 1.0,
@@ -40,6 +42,7 @@
 				},
 				{
 					"id": "C",
+					"type": "button",
 					"name": "",
 					"width": 1,
 					"height": 1,
@@ -50,6 +53,7 @@
 				},
 				{
 					"id": "L",
+					"type": "button",
 					"name": "",
 					"width": 1.0,
 					"height": 1.0,
@@ -60,6 +64,7 @@
 				},
 				{
 					"id": "M",
+					"type": "button",
 					"name": "",
 					"width": 1.0,
 					"height": 1.0,
@@ -70,6 +75,7 @@
 				},
 				{
 					"id": "J",
+					"type": "button",
 					"name": "",
 					"width": 1,
 					"height": 1,
@@ -80,6 +86,7 @@
 				},
 				{
 					"id": "H",
+					"type": "button",
 					"name": "",
 					"width": 1,
 					"height": 1,

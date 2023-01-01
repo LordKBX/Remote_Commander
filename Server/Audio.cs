@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -83,7 +84,7 @@ namespace Server
             // ...
         }
 
-        private static JObject GetSoundInfo()
+        public static JObject GetSoundInfo(bool full=true)
         {
             Dictionary<string, object> plug = PluginGet("VolControl");
             if (plug == null) { return null; }
@@ -93,12 +94,17 @@ namespace Server
 
             MethodInfo m = t.GetMethod("IsMute");
             MethodInfo u = t.GetMethod("GetVolume");
+            MethodInfo d1 = t.GetMethod("TryGetMediaInfo");
+            MethodInfo d2 = t.GetMethod("TryGetMediaInfoFull");
             bool state = (bool)(m.Invoke(instance, new object[] { }));
             float curVol = (float)(u.Invoke(instance, new object[] { }));
+            Task<string> mediaInfo = (full)?(Task<string>)(d2.Invoke(instance, new object[] { })): (Task<string>)(d1.Invoke(instance, new object[] { }));
+            mediaInfo.Wait();
             JObject obf = new JObject();
             obf["function"] = "GetSoundInfo";
             obf["mute"] = state;
             obf["vol"] = curVol;
+            obf["mediaInfo"] = mediaInfo.Result;
             return obf;
         }
 
@@ -150,7 +156,8 @@ namespace Server
                 else { u.Invoke(instance, new object[] { curVol - step }); }
             }
 
-            service.SendMessage(JsonConvert.SerializeObject(GetSoundInfo()));
+            string soundInfo = JsonConvert.SerializeObject(GetSoundInfo());
+            service.SendMessage(soundInfo);
         }
     }
 }

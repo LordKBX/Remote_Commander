@@ -16,6 +16,7 @@ using System.Diagnostics;
 using Newtonsoft;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Configurator_Win
 {
@@ -31,13 +32,22 @@ namespace Configurator_Win
             JToken tabsT = GridsList.GetValue("grids");
             List<JToken> tabs = tabsT.ToList<JToken>();
             int index = 0;
-            foreach (JToken tab in tabs)
+            for (int i = 0; i < tabs.Count; i++)
             {
-                setTabContent(tab);
-                index++;
+                if (IsLegacyGrid(tabs[i]))// Conversion old file format to new format
+                {
+                    GridsList["grids"][i]["blocks"] = GridsList["grids"][i]["buttons"].DeepClone();
+                    GridsList["grids"][i]["buttons"] = null;
+                    List<JToken> tabs2 = GridsList["grids"][i]["blocks"].ToList<JToken>();
+                    for (int j = 0; j < tabs2.Count; j++)
+                    {
+                        GridsList["grids"][i]["blocks"][j]["type"] = "button";
+                    }
+                }
+                setTabContent(GridsList["grids"][i]);
             }
             UpdateTabInfo(0);
-            HideInfoButton();
+            HideInfoBlock();
         }
 
         private void setTabContent(JToken tab) {
@@ -83,10 +93,12 @@ namespace Configurator_Win
             List<JToken> tabs = tabsT.ToList<JToken>();
             string end = "";
             int index = 0;
-            foreach (JToken tab in tabs)
+            for (int i = 0; i < tabs.Count; i++)
             {
-                if (tab["id"].Value<string>() == tag) { end = JsonConvert.SerializeObject(tab); }
-                index++;
+                if (tabs[i]["id"].Value<string>() == tag)
+                {
+                    end = JsonConvert.SerializeObject(tabs[i]);
+                }
             }
             try { web.Document.InvokeScript("injectData", new[] { end, (Program.configDirectory + "\\Images\\").Replace("\\", "/") }); } catch (Exception error) { }
         }
@@ -100,7 +112,7 @@ namespace Configurator_Win
             RG03_box.Text = tabs[index]["icon"].Value<string>();
             RG04_box.Text = tabs[index]["style"].Value<string>();
             RG05_num.Value = tabs[index]["width"].Value<int>();
-            HideInfoButton();
+            HideInfoBlock();
             for (int i = 0; i < tabControler.Controls.Count; i++)
             {
                 try { ((WebBrowser)tabControler.Controls[i].Controls[0]).Document.InvokeScript("UnselectAll"); } catch (Exception error) { }

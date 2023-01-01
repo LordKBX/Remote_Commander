@@ -136,7 +136,7 @@ namespace Configurator_Win.StyleEditor
                     catch (Exception Error) { }
                 }
 
-                if (rule.SelectorGroups.First().Selectors.Single().Classes.Last() == "control-grid-button")
+                if (rule.SelectorGroups.First().Selectors.Single().Classes.Last() == "control-grid-block")
                 {
                     foreach (CssPropertyValue val in rule.Declaration.AllData) { if (val.Property == CssProperty.BorderTopLeftRadius) { GR13_numbox.Value = Convert.ToDecimal(val.Value.Float); break; } }
                     try
@@ -172,7 +172,7 @@ namespace Configurator_Win.StyleEditor
             endstyle += ".control-grid{";
             if (GR08_box.Text != "D") { endstyle += "background-color:" + ColorTranslator.ToHtml(GR08_box.BackColor) + ";"; }
             endstyle += "}\n";
-            endstyle += ".control-grid-button{";
+            endstyle += ".control-grid-block{";
             if (GR11_box.Text != "D") { endstyle += "background-color:" + ColorTranslator.ToHtml(GR11_box.BackColor) + ";"; }
             if (GR12_box.Text != "D") { endstyle += "color:" + ColorTranslator.ToHtml(GR12_box.BackColor) + ";"; }
             endstyle += "border-radius:" + GR13_numbox.Value + "px;";

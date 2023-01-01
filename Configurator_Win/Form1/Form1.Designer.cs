@@ -53,12 +53,14 @@
             this.RG05 = new System.Windows.Forms.TableLayoutPanel();
             this.RG05_label = new System.Windows.Forms.Label();
             this.RG05_num = new System.Windows.Forms.NumericUpDown();
-            this.RG06 = new System.Windows.Forms.Button();
             this.RG07 = new System.Windows.Forms.Label();
             this.RG08 = new System.Windows.Forms.Label();
             this.RG09 = new System.Windows.Forms.TableLayoutPanel();
             this.RG09_label = new System.Windows.Forms.Label();
             this.RG09_box = new System.Windows.Forms.TextBox();
+            this.RG09_2 = new System.Windows.Forms.TableLayoutPanel();
+            this.RG09_2_label = new System.Windows.Forms.Label();
+            this.RG09_2_comboBox = new System.Windows.Forms.ComboBox();
             this.RG10 = new System.Windows.Forms.TableLayoutPanel();
             this.RG10_label = new System.Windows.Forms.Label();
             this.RG10_box = new System.Windows.Forms.TextBox();
@@ -88,6 +90,9 @@
             this.RG15_btn = new System.Windows.Forms.Button();
             this.RG15_clear = new System.Windows.Forms.Button();
             this.RG16 = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.RG06 = new System.Windows.Forms.Button();
+            this.RG06_2 = new System.Windows.Forms.Button();
             this.gestionImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -111,6 +116,7 @@
             this.RG05.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RG05_num)).BeginInit();
             this.RG09.SuspendLayout();
+            this.RG09_2.SuspendLayout();
             this.RG10.SuspendLayout();
             this.RG11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RG11_Num1)).BeginInit();
@@ -119,6 +125,7 @@
             this.RG13.SuspendLayout();
             this.RG14.SuspendLayout();
             this.RG15.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -138,7 +145,7 @@
             this.GRID_MAIN.Name = "GRID_MAIN";
             this.GRID_MAIN.RowCount = 1;
             this.GRID_MAIN.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.GRID_MAIN.Size = new System.Drawing.Size(578, 480);
+            this.GRID_MAIN.Size = new System.Drawing.Size(620, 587);
             this.GRID_MAIN.TabIndex = 0;
             // 
             // tabControler
@@ -150,7 +157,7 @@
             this.tabControler.Name = "tabControler";
             this.tabControler.Padding = new System.Drawing.Point(0, 0);
             this.tabControler.SelectedIndex = 0;
-            this.tabControler.Size = new System.Drawing.Size(328, 480);
+            this.tabControler.Size = new System.Drawing.Size(370, 587);
             this.tabControler.TabIndex = 0;
             // 
             // tabPage1
@@ -159,7 +166,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(320, 454);
+            this.tabPage1.Size = new System.Drawing.Size(362, 561);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -171,7 +178,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(320, 454);
+            this.webBrowser1.Size = new System.Drawing.Size(362, 561);
             this.webBrowser1.TabIndex = 0;
             this.webBrowser1.Url = new System.Uri("https://www.google.com", System.UriKind.Absolute);
             // 
@@ -186,22 +193,23 @@
             this.GRID_RG.Controls.Add(this.RG03, 0, 2);
             this.GRID_RG.Controls.Add(this.RG04, 0, 3);
             this.GRID_RG.Controls.Add(this.RG05, 0, 4);
-            this.GRID_RG.Controls.Add(this.RG06, 0, 5);
             this.GRID_RG.Controls.Add(this.RG07, 0, 6);
             this.GRID_RG.Controls.Add(this.RG08, 0, 7);
             this.GRID_RG.Controls.Add(this.RG09, 0, 8);
-            this.GRID_RG.Controls.Add(this.RG10, 0, 9);
-            this.GRID_RG.Controls.Add(this.RG11, 0, 10);
-            this.GRID_RG.Controls.Add(this.RG12, 0, 11);
-            this.GRID_RG.Controls.Add(this.RG13, 0, 12);
-            this.GRID_RG.Controls.Add(this.RG14, 0, 13);
-            this.GRID_RG.Controls.Add(this.RG15, 0, 14);
-            this.GRID_RG.Controls.Add(this.RG16, 0, 15);
+            this.GRID_RG.Controls.Add(this.RG09_2, 0, 9);
+            this.GRID_RG.Controls.Add(this.RG10, 0, 10);
+            this.GRID_RG.Controls.Add(this.RG11, 0, 11);
+            this.GRID_RG.Controls.Add(this.RG12, 0, 12);
+            this.GRID_RG.Controls.Add(this.RG13, 0, 13);
+            this.GRID_RG.Controls.Add(this.RG14, 0, 14);
+            this.GRID_RG.Controls.Add(this.RG15, 0, 15);
+            this.GRID_RG.Controls.Add(this.RG16, 0, 16);
+            this.GRID_RG.Controls.Add(this.tableLayoutPanel2, 0, 5);
             this.GRID_RG.Dock = System.Windows.Forms.DockStyle.Right;
-            this.GRID_RG.Location = new System.Drawing.Point(331, 3);
+            this.GRID_RG.Location = new System.Drawing.Point(373, 3);
             this.GRID_RG.MinimumSize = new System.Drawing.Size(0, 455);
             this.GRID_RG.Name = "GRID_RG";
-            this.GRID_RG.RowCount = 18;
+            this.GRID_RG.RowCount = 19;
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -217,10 +225,11 @@
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.GRID_RG.Size = new System.Drawing.Size(244, 474);
+            this.GRID_RG.Size = new System.Drawing.Size(244, 581);
             this.GRID_RG.TabIndex = 1;
             // 
             // RG01
@@ -507,17 +516,6 @@
             0,
             0});
             // 
-            // RG06
-            // 
-            this.RG06.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG06.Location = new System.Drawing.Point(3, 153);
-            this.RG06.Name = "RG06";
-            this.RG06.Size = new System.Drawing.Size(238, 34);
-            this.RG06.TabIndex = 5;
-            this.RG06.Text = "Ajouter bouton";
-            this.RG06.UseVisualStyleBackColor = true;
-            this.RG06.Click += new System.EventHandler(this.RG6_Click);
-            // 
             // RG07
             // 
             this.RG07.AutoSize = true;
@@ -537,7 +535,7 @@
             this.RG08.Name = "RG08";
             this.RG08.Size = new System.Drawing.Size(238, 30);
             this.RG08.TabIndex = 7;
-            this.RG08.Text = "Propriétées du bouton";
+            this.RG08.Text = "Propriétées du block";
             // 
             // RG09
             // 
@@ -576,6 +574,49 @@
             this.RG09_box.Size = new System.Drawing.Size(152, 20);
             this.RG09_box.TabIndex = 1;
             // 
+            // RG09_2
+            // 
+            this.RG09_2.ColumnCount = 3;
+            this.RG09_2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.RG09_2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.RG09_2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.RG09_2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.RG09_2.Controls.Add(this.RG09_2_label, 0, 0);
+            this.RG09_2.Controls.Add(this.RG09_2_comboBox, 1, 0);
+            this.RG09_2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RG09_2.Location = new System.Drawing.Point(3, 268);
+            this.RG09_2.Name = "RG09_2";
+            this.RG09_2.RowCount = 1;
+            this.RG09_2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.RG09_2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.RG09_2.Size = new System.Drawing.Size(238, 24);
+            this.RG09_2.TabIndex = 16;
+            // 
+            // RG09_2_label
+            // 
+            this.RG09_2_label.AutoSize = true;
+            this.RG09_2_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RG09_2_label.Location = new System.Drawing.Point(3, 0);
+            this.RG09_2_label.Name = "RG09_2_label";
+            this.RG09_2_label.Size = new System.Drawing.Size(44, 24);
+            this.RG09_2_label.TabIndex = 0;
+            this.RG09_2_label.Text = "Type";
+            this.RG09_2_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // RG09_2_comboBox
+            // 
+            this.RG09_2_comboBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "Block",
+            "Module"});
+            this.RG09_2_comboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RG09_2_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RG09_2_comboBox.FormattingEnabled = true;
+            this.RG09_2_comboBox.Location = new System.Drawing.Point(53, 3);
+            this.RG09_2_comboBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.RG09_2_comboBox.Name = "RG09_2_comboBox";
+            this.RG09_2_comboBox.Size = new System.Drawing.Size(152, 21);
+            this.RG09_2_comboBox.TabIndex = 1;
+            // 
             // RG10
             // 
             this.RG10.ColumnCount = 3;
@@ -586,7 +627,7 @@
             this.RG10.Controls.Add(this.RG10_label, 0, 0);
             this.RG10.Controls.Add(this.RG10_box, 1, 0);
             this.RG10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG10.Location = new System.Drawing.Point(3, 268);
+            this.RG10.Location = new System.Drawing.Point(3, 298);
             this.RG10.Name = "RG10";
             this.RG10.RowCount = 1;
             this.RG10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -625,7 +666,7 @@
             this.RG11.Controls.Add(this.RG11_Num2, 0, 0);
             this.RG11.Controls.Add(this.RG11_label2, 0, 0);
             this.RG11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG11.Location = new System.Drawing.Point(3, 298);
+            this.RG11.Location = new System.Drawing.Point(3, 328);
             this.RG11.Name = "RG11";
             this.RG11.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RG11.RowCount = 1;
@@ -715,7 +756,7 @@
             this.RG12.Controls.Add(this.RG12_btn, 3, 0);
             this.RG12.Controls.Add(this.RG12_clear, 2, 0);
             this.RG12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG12.Location = new System.Drawing.Point(3, 328);
+            this.RG12.Location = new System.Drawing.Point(3, 358);
             this.RG12.Name = "RG12";
             this.RG12.RowCount = 1;
             this.RG12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -782,7 +823,7 @@
             this.RG13.Controls.Add(this.RG13_btn, 3, 0);
             this.RG13.Controls.Add(this.RG13_clear, 2, 0);
             this.RG13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG13.Location = new System.Drawing.Point(3, 358);
+            this.RG13.Location = new System.Drawing.Point(3, 388);
             this.RG13.Name = "RG13";
             this.RG13.RowCount = 1;
             this.RG13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -849,7 +890,7 @@
             this.RG14.Controls.Add(this.RG14_btn, 3, 0);
             this.RG14.Controls.Add(this.RG14_clear, 2, 0);
             this.RG14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG14.Location = new System.Drawing.Point(3, 388);
+            this.RG14.Location = new System.Drawing.Point(3, 418);
             this.RG14.Name = "RG14";
             this.RG14.RowCount = 1;
             this.RG14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -916,7 +957,7 @@
             this.RG15.Controls.Add(this.RG15_btn, 3, 0);
             this.RG15.Controls.Add(this.RG15_clear, 2, 0);
             this.RG15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG15.Location = new System.Drawing.Point(3, 418);
+            this.RG15.Location = new System.Drawing.Point(3, 448);
             this.RG15.Name = "RG15";
             this.RG15.RowCount = 1;
             this.RG15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -974,13 +1015,51 @@
             // RG16
             // 
             this.RG16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG16.Location = new System.Drawing.Point(3, 448);
+            this.RG16.Location = new System.Drawing.Point(3, 478);
             this.RG16.Name = "RG16";
             this.RG16.Size = new System.Drawing.Size(238, 34);
             this.RG16.TabIndex = 15;
             this.RG16.Text = "Supprimer bouton";
             this.RG16.UseVisualStyleBackColor = true;
             this.RG16.Click += new System.EventHandler(this.RG16_Click);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.RG06, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.RG06_2, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 153);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(238, 34);
+            this.tableLayoutPanel2.TabIndex = 17;
+            // 
+            // RG06
+            // 
+            this.RG06.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RG06.Location = new System.Drawing.Point(3, 3);
+            this.RG06.Name = "RG06";
+            this.RG06.Size = new System.Drawing.Size(113, 28);
+            this.RG06.TabIndex = 6;
+            this.RG06.Text = "Ajouter bouton";
+            this.RG06.UseVisualStyleBackColor = true;
+            this.RG06.Click += new System.EventHandler(this.RG6_Click);
+            // 
+            // RG06_2
+            // 
+            this.RG06_2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RG06_2.Location = new System.Drawing.Point(122, 3);
+            this.RG06_2.Name = "RG06_2";
+            this.RG06_2.Size = new System.Drawing.Size(113, 28);
+            this.RG06_2.TabIndex = 7;
+            this.RG06_2.Text = "Ajouter Module";
+            this.RG06_2.UseVisualStyleBackColor = true;
+            this.RG06_2.Click += new System.EventHandler(this.RG06_2_Click);
             // 
             // gestionImagesToolStripMenuItem
             // 
@@ -1004,7 +1083,7 @@
             this.modifierMotDePasseToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(584, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(626, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1077,7 +1156,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(584, 511);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(626, 618);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // Form1
@@ -1086,7 +1165,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(584, 511);
+            this.ClientSize = new System.Drawing.Size(626, 618);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1117,6 +1196,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.RG05_num)).EndInit();
             this.RG09.ResumeLayout(false);
             this.RG09.PerformLayout();
+            this.RG09_2.ResumeLayout(false);
+            this.RG09_2.PerformLayout();
             this.RG10.ResumeLayout(false);
             this.RG10.PerformLayout();
             this.RG11.ResumeLayout(false);
@@ -1131,6 +1212,7 @@
             this.RG14.PerformLayout();
             this.RG15.ResumeLayout(false);
             this.RG15.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -1156,7 +1238,6 @@
         private System.Windows.Forms.Button RG03_btn;
         private System.Windows.Forms.TableLayoutPanel RG05;
         private System.Windows.Forms.Label RG05_label;
-        private System.Windows.Forms.Button RG06;
         private System.Windows.Forms.TableLayoutPanel RG10;
         private System.Windows.Forms.Label RG10_label;
         private System.Windows.Forms.TextBox RG10_box;
@@ -1186,10 +1267,6 @@
         private System.Windows.Forms.Button RG01_btnAdd;
         private System.Windows.Forms.Button RG01_btnDel;
         private System.Windows.Forms.NumericUpDown RG05_num;
-        private System.Windows.Forms.TableLayoutPanel RG15;
-        private System.Windows.Forms.Label RG15_label;
-        private System.Windows.Forms.TextBox RG15_box;
-        private System.Windows.Forms.Button RG15_btn;
         private System.Windows.Forms.Button RG16;
         private System.Windows.Forms.NumericUpDown RG11_Num1;
         private System.Windows.Forms.Label RG11_label1;
@@ -1211,8 +1288,18 @@
         private System.Windows.Forms.Button RG12_clear;
         private System.Windows.Forms.Button RG13_clear;
         private System.Windows.Forms.Button RG14_clear;
-        private System.Windows.Forms.Button RG15_clear;
         private System.Windows.Forms.ToolStripMenuItem modifierMotDePasseToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel RG15;
+        private System.Windows.Forms.Label RG15_label;
+        private System.Windows.Forms.TextBox RG15_box;
+        private System.Windows.Forms.Button RG15_clear;
+        private System.Windows.Forms.Button RG15_btn;
+        private System.Windows.Forms.TableLayoutPanel RG09_2;
+        private System.Windows.Forms.Label RG09_2_label;
+        private System.Windows.Forms.ComboBox RG09_2_comboBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button RG06;
+        private System.Windows.Forms.Button RG06_2;
     }
 }
 

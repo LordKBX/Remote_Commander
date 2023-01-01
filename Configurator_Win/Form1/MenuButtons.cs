@@ -25,7 +25,7 @@ namespace Configurator_Win
         {
             try
             {
-                System.IO.File.WriteAllText(Program.configDirectory + "\\grids.json", JsonConvert.SerializeObject(GridsList));
+                System.IO.File.WriteAllText(Program.configDirectory + "\\grids.json", JsonConvert.SerializeObject(GridsList).Replace("\"buttons\":null,", ""));
                 MessageBox.Show("Le Fichier des Grilles à été enregistré avec succès", "Information");
             }
             catch (Exception error) { MessageBox.Show("Le Fichier des Grilles na pas été enregistré Correctement ou à complètement échoué", "Erreur"); }

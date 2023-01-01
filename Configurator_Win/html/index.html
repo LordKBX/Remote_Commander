@@ -26,7 +26,7 @@
             padding: 2px;
         }
 
-        .control-grid-button {
+        .control-grid-block {
             overflow-x: hidden;
             margin: 2px;
             border-width: 2px;
@@ -41,11 +41,11 @@
             background-repeat: no-repeat;
         }
 
-            .control-grid-button.sel {
+            .control-grid-block.sel {
                 margin: 0px;
                 border: #ff0000 2px solid;
             }
-        .control-grid-button span {
+        .control-grid-block span {
             display: inline-block;
             vertical-align: middle;
             line-height: normal;
@@ -81,6 +81,7 @@
         });
 
         function injectData(data, base) {
+            window.external.WriteLine('[[[[RET]]]]; '+data);
             imageBase = base;
             try
             {
@@ -106,8 +107,9 @@
                     var styleLines = tab.style.split("\n");
                     for (index in styleLines) { addNewStyle(styleLines[index]); }
                 }
-                for (index in tab.buttons) {
-                    addButton(tab.buttons[index]);
+                if (tab.blocks === undefined) { tab.blocks = tab.buttons; delete tab.buttons; }
+                for (index in tab.blocks) {
+                    addBlock(tab.blocks[index]);
                 }
                 $('#receiver').sortable({
                     stop: function (event, ui) {
@@ -121,7 +123,7 @@
                             catch(error){
                             }
                         }
-                        window.external.UpdateButtonsOrder(newOrder.join(';'));
+                        window.external.UpdateBlocksOrder(newOrder.join(';'));
                     }
                 });
             }
@@ -130,10 +132,10 @@
             }
         }
         function displayInfosBtn(id) {
-            window.external.UpdateBouttonInfo(id);
+            window.external.UpdateBlockInfo(id);
         }
         function UnselectAll() {
-            $('#receiver .control-grid-button').removeClass('sel');
+            $('#receiver .control-grid-block').removeClass('sel');
         }
         function updateParam(param, value) {
             tab[param] = value;
@@ -141,43 +143,44 @@
             if (param == "width") { loadGrid(); }
             if (param == "style") { loadGrid(); }
         }
-        function updateButton(id, param, value) {
-            window.external.notify("updateButton >> " + id + " >> " + param + " >> " + value);
-            for (index in tab.buttons) {
-                if (tab.buttons[index].id == id) {
-                    tab.buttons[index][param] = value;
+        function updateBlock(id, param, value) {
+            window.external.notify("updateBlock >> " + id + " >> " + param + " >> " + value);
+            for (index in tab.blocks) {
+                if (tab.blocks[index].id == id) {
+                    tab.blocks[index][param] = value;
                 }
             }
             loadGrid();
         }
-        function addButton(button) {
+        function addBlock(block) {
             var cols = parseInt(tab.width, 10);
             var casew = (($(window).width() - 4) / cols) - 8;
-            if ((casew * (tab.buttons.length / cols)) + casew > parseInt($(window).height())) { casew = casew - 8 - ((cols == 5)?30:0); }
+            if ((casew * (tab.blocks.length / cols)) + casew > parseInt($(window).height())) { casew = casew - 8 - ((cols == 5)?30:0); }
             var btn = document.createElement('div');
-            btn.setAttribute('index', button.id);
-            btn.className = "control-grid-button";
+            btn.setAttribute('type', block.type);
+            btn.setAttribute('index', block.id);
+            btn.className = "control-grid-block";
             btn.onclick = function (ev) {
                 //window.external.notify("click >> " + this.getAttribute('index'));
                 displayInfosBtn(this.getAttribute('index'));
                 UnselectAll();
                 $(this).addClass('sel');
             };
-            var w = parseInt(button.width, 10) * casew; w = w + (4 * (parseInt(button.width, 10) - 1)) + (4*(parseInt(button.width, 10) - 1));
-            var h = parseInt(button.height, 10) * casew; h = h + (4 * (parseInt(button.height, 10) - 1)) + (4*(parseInt(button.height, 10) - 1));
+            var w = parseInt(block.width, 10) * casew; w = w + (4 * (parseInt(block.width, 10) - 1)) + (4*(parseInt(block.width, 10) - 1));
+            var h = parseInt(block.height, 10) * casew; h = h + (4 * (parseInt(block.height, 10) - 1)) + (4*(parseInt(block.height, 10) - 1));
             btn.style.width = w + "px";
             //window.external.notify(w + "px");
             btn.style.minWidth = w + "px";
             btn.style.height = h + "px";
             btn.style.minHeight = h + "px";
             btn.style.lineHeight = h + "px";
-            if (button.icon != "") {
-                window.external.notify(imageBase + button.icon);
-                btn.style.backgroundImage = "url('" + imageBase + button.icon + "')";
+            if (block.icon != "") {
+                window.external.notify(imageBase + block.icon);
+                btn.style.backgroundImage = "url('" + imageBase + block.icon + "')";
                 //btn.style.backgroundSize = "auto 100%";
             }
-            if (button.style != "") {
-                var tab1 = button.style.split(';');
+            if (block.style != "") {
+                var tab1 = block.style.split(';');
                 for (i = 0; i < tab1.length; i++) {
                     var tab2 = tab1[i].split(':');
                     try {
@@ -190,14 +193,15 @@
                 }
             }
             var span = document.createElement('span');
-            span.innerText = button.name;
+            span.innerText = block.name;
             btn.appendChild(span);
             document.getElementById('receiver').appendChild(btn);
         }
-        function newButton() {
+        function newBlock() {
             neo = {
                 "id": Date.now(),
-                "name": "New Button",
+                "name": "New Block",
+                "type": "button",
                 "width": 1,
                 "height": 1,
                 "icon": "",
@@ -205,16 +209,16 @@
                 "style": "",
                 "macro": ""
             };
-            tab.buttons.push(neo);
-            addButton(neo);
-            window.external.AddBouttonInfo(JSON.stringify(neo));
+            tab.blocks.push(neo);
+            addBlock(neo);
+            window.external.AddBlockInfo(JSON.stringify(neo));
         }
 
-        function delButton(id) {
-            for (index in tab.buttons) {
-                if (tab.buttons[index].id == id) {
-                    tab.buttons.splice(index, 1);
-                    $('.control-grid-button[index="' + id + '"]').remove();
+        function delBlock(id) {
+            for (index in tab.blocks) {
+                if (tab.blocks[index].id == id) {
+                    tab.blocks.splice(index, 1);
+                    $('.control-grid-block[index="' + id + '"]').remove();
                     break;
                 }
             }

@@ -70,7 +70,7 @@ namespace Configurator_Win
                 }
                 else
                 {
-                    if (styleButton != null) { styleButton.UpdatePane(); }
+                    if (styleBlock != null) { styleBlock.UpdatePane(); }
                 }
             }
         }
@@ -104,11 +104,11 @@ namespace Configurator_Win
                 if (((System.Windows.Forms.TextBox)sender).Name == "RG14_box") { param = "sound"; }
                 if (((System.Windows.Forms.TextBox)sender).Name == "RG15_box") { param = "macro"; }
                 int index = 0;
-                foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["buttons"].ToList<JToken>())
+                foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["blocks"].ToList<JToken>())
                 {
                     if (tok["id"].Value<string>() == id)
                     {
-                        GridsList["grids"][tabControler.SelectedIndex]["buttons"][index][param] = ((System.Windows.Forms.TextBox)sender).Text;
+                        GridsList["grids"][tabControler.SelectedIndex]["blocks"][index][param] = ((System.Windows.Forms.TextBox)sender).Text;
                         break;
                     }
                     index += 1;
@@ -116,10 +116,10 @@ namespace Configurator_Win
                 try
                 {
                     ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document
-                        .InvokeScript("updateButton", new[] { RG09_box.Text, param, ((System.Windows.Forms.TextBox)sender).Text });
+                        .InvokeScript("updateBlock", new[] { RG09_box.Text, param, ((System.Windows.Forms.TextBox)sender).Text });
                 } catch (Exception error) { }
 
-                if (styleButton != null) { styleButton.UpdatePane(); }
+                if (styleBlock != null) { styleBlock.UpdatePane(); }
             }
         }
 
@@ -132,18 +132,18 @@ namespace Configurator_Win
                 if (((System.Windows.Forms.NumericUpDown)sender).Name == "RG11_Num1") { param = "width"; }
                 if (((System.Windows.Forms.NumericUpDown)sender).Name == "RG11_Num2") { param = "height"; }
                 int index = 0;
-                foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["buttons"].ToList<JToken>())
+                foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["blocks"].ToList<JToken>())
                 {
                     if (tok["id"].Value<string>() == id)
                     {
-                        GridsList["grids"][tabControler.SelectedIndex]["buttons"][index][param] = ((System.Windows.Forms.NumericUpDown)sender).Value;
+                        GridsList["grids"][tabControler.SelectedIndex]["blocks"][index][param] = ((System.Windows.Forms.NumericUpDown)sender).Value;
                         break;
                     }
                     index += 1;
                 }
                 try {
                     ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document
-                  .InvokeScript("updateButton", new[] { id, param, ((System.Windows.Forms.NumericUpDown)sender).Value.ToString() });
+                  .InvokeScript("updateBlock", new[] { id, param, ((System.Windows.Forms.NumericUpDown)sender).Value.ToString() });
                 } catch (Exception error) { }
             }
         }
@@ -171,11 +171,28 @@ namespace Configurator_Win
 
         private void RG01_btnAdd_Click(object sender, EventArgs e)
         {
-            JObject tab = JObject.Parse("{\"id\":\""+Program.getUnixTimeStamp(true)+"\",\"name\":\"NEW TAB\"," +
+            //JObject tab = new JObject();
+            //JObject tab2 = new JObject();
+            //tab["id"] = "" + Program.getUnixTimeStamp(true);
+            //tab["name"] = "NEW TAB";
+            //tab["width"] = 4;
+            //tab["icon"] = "";
+            //tab["blocks"] = "";
+            //tab2["id"] = Guid.NewGuid().ToString();
+            //tab2["type"] = "button";
+            //tab2["name"] = "New Block";
+            //tab2["width"] = 1;
+            //tab2["height"] = 1;
+            //tab2["icon"] = "";
+            //tab2["style"] = "";
+            //tab2["sound"] = "";
+            //tab2["macro"] = "";
+
+            JObject tab = JObject.Parse("{\"id\":\""+Program.getUnixTimeStamp(true)+"\",\"name\":\"c\"," +
                 "\"width\":4," +
                 "\"icon\":\"\"," +
                 "\"style\":\"\"," +
-                "\"buttons\":[{\"id\":\"A\",\"name\":\"New Button\",\"width\":1,\"height\":1,\"icon\":\"\",\"style\":\"\",\"sound\":\"\",\"macro\":\"PlaySword\"}]" +
+                "\"blocks\":[{\"id\":\""+ Guid.NewGuid().ToString() + "\",\"type\":\"button\",\"name\":\"New Block\",\"width\":1,\"height\":1,\"icon\":\"\",\"style\":\"\",\"sound\":\"\",\"macro\":\"PlaySword\"}]" +
                 "}");
             GridsList["grids"].Last.AddAfterSelf(tab);
             setTabContent(tab);
@@ -195,7 +212,7 @@ namespace Configurator_Win
             styleGlobal.FormClosed += StyleGlobal_FormClosed;
             Point pos = new Point();
             pos.Y = this.Location.Y;
-            if (styleButton != null) { pos.X = styleButton.Location.X + styleButton.Width - 10; }
+            if (styleBlock != null) { pos.X = styleBlock.Location.X + styleBlock.Width - 10; }
             else { pos.X = this.Location.X + this.Width - 10; }
             styleGlobal.StartPosition = FormStartPosition.Manual;
             styleGlobal.Location = pos;
@@ -207,19 +224,24 @@ namespace Configurator_Win
         private void StyleGlobal_FormClosed(object sender, FormClosedEventArgs e) {
             styleGlobal = null; styleOrder.Remove("general");
             this.Show();
-            if (styleButton != null)
+            if (styleBlock != null)
             {
                 Point pos = new Point();
                 pos.Y = this.Location.Y;
                 pos.X = this.Location.X + this.Width - 10;
-                styleButton.Location = pos;
-                styleButton.Show();
+                styleBlock.Location = pos;
+                styleBlock.Show();
             }
         }
 
         private void RG6_Click(object sender, EventArgs e)
         {
-            try { ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document.InvokeScript("newButton"); } catch (Exception error) { }
+            try { ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document.InvokeScript("newBlock"); } catch (Exception error) { }
+        }
+
+        private void RG06_2_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void RG12_btn_Click(object sender, EventArgs e)
@@ -231,22 +253,22 @@ namespace Configurator_Win
 
         private void RG13_btn_Click(object sender, EventArgs e)
         {
-            if (styleButton != null) { return; }
-            styleButton = new StyleEditor.ButtonStyleEditor(this, "file:///" + (Program.baseDirectory.Replace("\\", "/") + "/html/index.html").Replace("//", "/"));
-            styleButton.FormClosed += StyleButton_FormClosed;
+            if (styleBlock != null) { return; }
+            styleBlock = new StyleEditor.BlockStyleEditor(this, "file:///" + (Program.baseDirectory.Replace("\\", "/") + "/html/index.html").Replace("//", "/"));
+            styleBlock.FormClosed += StyleBlock_FormClosed;
             Point pos = new Point();
             pos.Y = this.Location.Y;
             if (styleGlobal != null) { pos.X = styleGlobal.Location.X + styleGlobal.Width - 10; }
             else { pos.X = this.Location.X + this.Width - 10; }
-            styleButton.StartPosition = FormStartPosition.Manual;
-            styleButton.Location = pos;
-            styleButton.Owner = this;
-            styleButton.Show();
-            styleOrder.Add("button");
+            styleBlock.StartPosition = FormStartPosition.Manual;
+            styleBlock.Location = pos;
+            styleBlock.Owner = this;
+            styleBlock.Show();
+            styleOrder.Add("block");
         }
 
-        private void StyleButton_FormClosed(object sender, FormClosedEventArgs e) {
-            styleButton = null; styleOrder.Remove("button");
+        private void StyleBlock_FormClosed(object sender, FormClosedEventArgs e) {
+            styleBlock = null; styleOrder.Remove("block");
             this.Show();
             if (styleGlobal != null) {
                 Point pos = new Point();
@@ -274,16 +296,16 @@ namespace Configurator_Win
         private void RG16_Click(object sender, EventArgs e)
         {
             string id = RG09_box.Text;
-            try { ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document.InvokeScript("delButton", new[] { id }); } catch (Exception error) { }
+            try { ((WebBrowser)tabControler.GetControl(tabControler.SelectedIndex).Controls[0]).Document.InvokeScript("delBlock", new[] { id }); } catch (Exception error) { }
             int index = 0;
-            foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["buttons"].ToList<JToken>()) {
+            foreach (JToken tok in GridsList["grids"][tabControler.SelectedIndex]["blocks"].ToList<JToken>()) {
                 if (tok["id"].Value<string>() == id) {
-                    GridsList["grids"][tabControler.SelectedIndex]["buttons"][index].Remove();
+                    GridsList["grids"][tabControler.SelectedIndex]["blocks"][index].Remove();
                     break;
                 }
                 index += 1;
             }
-            HideInfoButton();
+            HideInfoBlock();
             Program.CleanMemery();
         }
 

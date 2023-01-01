@@ -1,6 +1,6 @@
 ﻿namespace Configurator_Win.StyleEditor
 {
-    partial class ButtonStyleEditor
+    partial class BlockStyleEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -259,7 +259,7 @@
             this.GR05_label.Text = "Style de bordure";
             this.GR05_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // ButtonStyleEditor
+            // BlockStyleEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -270,10 +270,10 @@
             this.MaximumSize = new System.Drawing.Size(200, 200);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(200, 200);
-            this.Name = "ButtonStyleEditor";
+            this.Name = "BlockStyleEditor";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Button Style";
+            this.Text = "Block Style";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.GR02.ResumeLayout(false);

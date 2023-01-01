@@ -26,6 +26,7 @@ namespace Server
         }
 
         private static void IsAdmin() {
+            return;
             if (IsDebug == false) // si non mode debug, non admin fermée
             {
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))

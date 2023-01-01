@@ -155,7 +155,7 @@ namespace Configurator_Win.ImagesManager
             string loc = (img.ImageLocation.Replace(Program.configDirectory + "\\Images\\", "").Replace("\\", "/")).Replace("//", "/");
             if (parent != null) {
                 if (focus == "grid") { parent.SetGridIcon(loc); }
-                if (focus == "button") { parent.SetButtonIcon(loc); }
+                if (focus == "button") { parent.SetBlockIcon(loc); }
             }
             this.Close();
         }
