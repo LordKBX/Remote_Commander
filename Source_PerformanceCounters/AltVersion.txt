@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+namespace Source_PerformanceCounters
+{
+    public class ExtType { 
+        public static readonly string Type = "Source";
+        public static readonly string Name = "PerformanceCounters";
+        //return type json = json stringified
+        public static readonly Dictionary<string, string> Interfaces = new Dictionary<string, string>() { 
+            { "Init", "void" }, 
+            { "GetCpu", "double" }, 
+            { "Memory", "json" } 
+        };
+
+    }
+
+    public class Source
+    {
+        public static void Init()
+        {
+        }
+
+        public static double GetCpu()
+        {
+            try
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = "powershell";
+                proc.StartInfo.Arguments = "-Command \"Get-CimInstance -Query \\\"select PercentProcessorTime from Win32_PerfFormattedData_PerfOS_Processor WHERE Name = '_Total'\\\" | Select PercentProcessorTime\"";
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                proc.WaitForExit();
+                string data = proc.StandardOutput.ReadToEnd().Replace("\r", "");
+                string[] tdata = data.Split('\n');
+                return (float)Convert.ToDouble(tdata[3].Trim());
+            }
+            catch (Exception err) {
+                Debug.WriteLine(err.Message);
+                Debug.WriteLine(err.StackTrace);
+            }
+            return 0;
+        }
+
+        public static string Memory()
+        {
+            double memAvaillable = 0;
+            double memUsed = 0;
+            double memTotal = 0;
+            try
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = "powershell";
+                proc.StartInfo.Arguments = "-Command \"Get-CIMInstance Win32_OperatingSystem | Select FreePhysicalMemory, FreeVirtualMemory, TotalVisibleMemorySize, TotalVirtualMemorySize";
+                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                proc.WaitForExit();
+                string data = proc.StandardOutput.ReadToEnd().Replace("\r", "");
+                string[] tdata = data.Split('\n');
+                string line = tdata[3].Trim();
+                while (line.Contains("  ")) { line = line.Replace("  ", " "); }
+                string[] tdata2 = line.Split(' ');
+
+                memAvaillable = Convert.ToDouble(tdata2[1]);
+                memTotal = Convert.ToDouble(tdata2[3]);
+                memUsed = memTotal - memAvaillable;
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                Console.WriteLine(err.StackTrace);
+            }
+            return "{\"free\":"+ memAvaillable + ", \"used\":" + memUsed + ", \"total\":" + memTotal + ", \"unit\": \"MBytes\" }";
+        }
+    }
+}

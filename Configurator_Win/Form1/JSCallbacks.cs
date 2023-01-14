@@ -25,11 +25,6 @@ namespace Configurator_Win
         public void notify(string data)
         {
             Debug.WriteLine("JSNotify >> " + data);
-            try
-            {
-                JObject obj = JObject.Parse(data);
-            }
-            catch (Exception error) { }
         }
 
         public bool IsLegacyGrid(JToken tabsG) {

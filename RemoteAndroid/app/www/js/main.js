@@ -20,6 +20,40 @@ function clone(src)
 	return target;
 }
 
+// CSS TOOLS
+function addNewStyle(newStyle,dest) {
+	if(dest === undefined){dest = 'styles_js';}
+	if(!document.getElementById(dest)){sc = document.createElement('style');sc.setAttribute('id',dest);document.getElementsByTagName('head')[0].appendChild(sc);}
+    var styleElement = document.getElementById(dest);
+    styleElement.appendChild(document.createTextNode(newStyle));
+}
+function rmStyle(StyleName,dest) {
+	if(dest === undefined){dest = 'styles_js';}
+    var styleElement = document.getElementById(dest);
+    if (!styleElement) {return;}
+	list = styleElement.childNodes;
+	idrm = -1;
+	for(var i=0; i< list.length; i++){
+		if(list[i].data.indexOf(StyleName+'{') != -1 || list[i].data.indexOf(StyleName+' {') != -1){idrm = i;break;}
+		}
+	console.log('idrm = '+idrm);
+	if(idrm == -1){return false;}
+	else{
+		styleElement.removeChild(styleElement.childNodes[idrm]);
+		return true;
+	}
+}
+function rmAllStyle(dest) {
+	if(dest === undefined){dest = 'styles_js';}
+    var styleElement = document.getElementById(dest);
+    if (!styleElement) {return;}
+	list = styleElement.childNodes;
+	idrm = -1;
+	for(var i=list.length-1; i>0; i--){
+		styleElement.removeChild(styleElement.childNodes[i]);
+		}
+}
+
 app =
 {
 	Params: {},
@@ -34,13 +68,18 @@ app =
 	waitLog: false,
 	lastPing: 0,
 	timerPing: null,
+	timerCheckPing: null,
 	storedGrids: null,
+	storedMods: [],
+	sockets: [],
+	socketIndex: 0,
 	storedActiveGrid: 1,
 	listImages: [],
 	listImagesObjects: [],
 	listImagesToGet: [],
 	arrayBlobs: {},
 	arrayBlobsURL: {},
+	modsVars: {},
 	PasswordDialog: null,
 	purgeFileName(path){ return path.replace(new RegExp('\\/', 'g'), '__').replace(new RegExp('\\\\', 'g'), '__').replace(new RegExp(' ', 'g'), '-');},
 	isCachedImg(ref){
@@ -53,6 +92,9 @@ app =
 		},
 	init: function ()
 	{
+		app.timerCheckPing = setInterval(app.loopDetectDisconnected, 1000);
+		app.timerPing = setInterval(app.ping, 3000);
+		screen.orientation.lock('portrait');
 		var options = { name: 'config.db', location: 'default' };
 		if (device.platform == "Android") { 
 			options.androidDatabaseProvider = 'system'; 
@@ -211,7 +253,6 @@ app =
 		);
 		app.gotoHome();
 
-		app.timerPing = setInterval(app.loopDetectDisconnected, 5000);
 	},
 	listServers: function(){
 		$('#PannelHomeList').html('');
@@ -276,8 +317,10 @@ app =
 					//if(tdata["cause"] == "not_loged"){ alert("Invalid session"); }
 				}
 			}
-			if (tdata["function"] !== undefined)
+			if (tdata["function"] !== undefined && tdata["function"] !== null)
 			{
+				tdata["function"] = tdata["function"].trim();
+				//console.log(tdata["function"]);
 				if (tdata["function"] == "GetInfo")
 				{
 					console.log("TEST OK !");
@@ -360,13 +403,24 @@ app =
 				if (tdata["function"] == "Pong")
 				{
 					app.lastPing = Date.now();
-					app.SendToServerEncoded('{"function":"Pong"}');
+					//app.SendToServerEncoded('{"function":"Pong"}');
 				}
 				if (tdata["function"] == "SendGrids")
 				{
+					app.orientation = tdata["orientation"];
+					screen.orientation.lock((app.orientation == "horizontal")?'landscape':'portrait');
+					
 					app.storedGrids = tdata["grids"];
+					
+					app.storedMods = [];
+					parser = new DOMParser();
+					for(index in tdata["mods"]){
+						app.storedMods.push({id: index, data: parser.parseFromString(tdata["mods"][index], "text/xml")});
+						console.log(app.storedMods[app.storedMods.length - 1]);
+						}
+					
 					app.storedActiveGrid = 1;
-					app.drawGrids();
+					setTimeout("app.drawGrids();", 100);
 				}
 				if (tdata["function"] == "RetGetImage")
 				{
@@ -393,10 +447,9 @@ app =
 										$('.control-grid-button[image="' + retSave + '"]').css('background-image',"url('" + fileEntry.toInternalURL() + "')");
 										
 										img = new Image();
-										txtev = "function(){\
-										try{ $('.control-grid-button[image=\"" + retSave + "\"]').css('background-image',\"url('" + fileEntry.toInternalURL() + "')\"); }\
-											catch(err){ console.error(err); console.log(this.src); }\
-										}";
+										txtev = "function(){"
+										+"try{ $('.control-grid-button[image=\"" + retSave + "\"]').css('background-image',\"url('" + fileEntry.toInternalURL() + "')\"); }"
+										+"catch(err){ console.error(err); console.log(this.src); }}";
 										console.log(txtev);
 										img.onload = eval(txtev);
 										app.listImagesObjects.push(img);
@@ -415,43 +468,57 @@ app =
 							}
 					}
 				}
-				if (tdata["function"] == "GetSoundInfo")
-				{
-					//console.log('mute', tdata["mute"]?'true':'false');
-					//console.log('vol', ''+(tdata["vol"] * 100)+'%');
-					//console.log('mediaInfo', tdata["mediaInfo"]);
-					if($('div[type="MediaInfo"]').length > 0){
-						mediaInfo = JSON.parse(tdata["mediaInfo"]);
-						tid = mediaInfo["Title"] + '-' + mediaInfo["AlbumTitle"] + '-' + mediaInfo["Artist"];
+				if(tdata["function"].search('.') != -1){
+					var ModData = tdata["data"];
+					if(tdata["data"] == null){}
+					else if(typeof(tdata["data"]) == "string"){ 
+						if(tdata["data"].search('{') != -1 || tdata["data"].search('\\[') != -1){ ModData = JSON.parse(tdata["data"]+" "); }
+						}
+					
+					for(index=0; index < app.storedMods.length; index++){
+						var module = app.storedMods[index].data;
+						var scripts = module.getElementsByTagName("Scriptxs")[0].childNodes;
 						
-						if(app.arrayBlobs[tid] === undefined){
-							if(mediaInfo["Thumbnail"] != null){
-								console.log("GOT Thumbnail!");
-								app.arrayBlobs[tid] = b64toBlob(mediaInfo["Thumbnail"], "image/jpeg");
-								app.arrayBlobsURL[tid] = URL.createObjectURL(app.arrayBlobs[tid]);
-								console.log(app.arrayBlobsURL[tid]);
-								$('div[type="MediaInfo"] img').attr('src', app.arrayBlobsURL[tid]);
+						for(var nodei=0; nodei < scripts.length; nodei++){
+							if(scripts[nodei].nodeName == "Scriptx"){
+								try{ 
+									var sources = scripts[nodei].getAttribute('sources').split('|');
+									for(var j=0; j< sources.length; j++){ sources[j] = sources[j].trim(); }
+									if(sources.indexOf(tdata["function"]) != -1){
+										// Execution script pour module
+										//eval(scripts[nodei].childNodes[0].nodeValue);
+										var sc = scripts[nodei].childNodes[0].nodeValue;
+										sc = sc.replace(new RegExp('%mid%', 'g'), app.storedMods[index].id);
+										try{
+											var vars = {};
+											var varsNodes = module.getElementsByTagName("Vars")[0].childNodes;
+											for(var nodev=0; nodev< varsNodes.length; nodev++){
+												if(varsNodes[nodev].nodeName == "Var"){
+													var vn = varsNodes[nodev].getAttribute('name');
+													var isEval = false;
+													try{ var val = varsNodes[nodev].getAttribute('eval'); if(val == "true"){ isEval = true; } } catch(erv2){ }
+													if(!isEval){ vars[vn] = varsNodes[nodev].childNodes[0].nodeValue; }
+													else{ try{ vars[vn] = eval(varsNodes[nodev].childNodes[0].nodeValue); } catch(erv3){ vars[vn] = ''; } }
+													}
+												}
+											}
+										catch(erv){ console.log(erv); }
+										eval(sc);
+										}
+									} 
+								catch(errr){ 
+									console.log(errr);
+									}
 								}
-							else{ $('div[type="MediaInfo"] img').attr('src', ''); }
 							}
-						else{ $('div[type="MediaInfo"] img').attr('src', app.arrayBlobsURL[tid]); }
-						
-						$('div[type="MediaInfo"] .Title').text(mediaInfo["Title"]);
-						$('div[type="MediaInfo"] .AlbumTitle').text(mediaInfo["AlbumTitle"]);
-						$('div[type="MediaInfo"] .Artist').text(mediaInfo["Artist"]);
-						$('div[type="MediaInfo"] .Genres').text(mediaInfo["Genres"]);
-						$('div[type="MediaInfo"] .Tracks').text(""+mediaInfo["TrackNumber"]+" / "+mediaInfo["AlbumTrackCount"]);
-						if(mediaInfo["Title"] == null || mediaInfo["Title"].trim() == ""){ $('div[type="MediaInfo"] .LineTitle').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineTitle').css('display', 'block'); }
-						if(mediaInfo["AlbumTitle"] == null || mediaInfo["AlbumTitle"].trim() == ""){ $('div[type="MediaInfo"] .LineAlbumTitle').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineAlbumTitle').css('display', 'block'); }
-						if(mediaInfo["Artist"] == null || mediaInfo["Artist"].trim() == ""){ $('div[type="MediaInfo"] .LineArtist').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineArtist').css('display', 'block'); }
-						if(mediaInfo["Genres"] == null || mediaInfo["Genres"].trim() == ""){ $('div[type="MediaInfo"] .LineGenres').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineGenres').css('display', 'block'); }
-					}
+						//console.log(app.storedMods[index].data.getElementsByTagName("Id")[0].childNodes[0].nodeValue); 
+						}
 				}
 			}
 		}
 		catch (err)
 		{
-			console.log(data.slice(0, 100)+"...");
+			console.log((data.length>100)?data.slice(0, 100)+"...":"'"+data+"'");
 			console.log(event.target);
 			console.error(err);
 		}
@@ -486,36 +553,56 @@ app =
 		app.lastHost = addr;
 		app.lastPort = port;
 		app.reconnectTry = 0;
-		app.socket = new WebSocket("wss://"+addr+":"+port+"/Service");
-		app.socket.onopen = app.sockectOnOpen;
-		app.socket.onmessage = app.sockectOnMessage;
-		app.socket.onclose = app.sockectOnClose;
+		app.socketOpen(addr, port);
 	},
+	socketReOpen: function(){
+		if (window.confirm("Session disconnected, retry ?")) { 
+			app.TestServer(app.lastHost,app.lastPort, app.servPass, app.servPassSaved); 
+			}
+		else{  app.gotoHome(); }
+		
+		},
+	socketSend: function(input){
+		if(app.sockets[app.socketIndex].readyState != 1){ return false; }
+		try{ app.sockets[app.socketIndex].send(input); return true; } catch(err){ return false; }
+		},
+	socketOpen: function(host, port){
+		//app.sockets.forEach(function(socki){ socki.close(); });
+		var sock = new WebSocket("wss://"+host+":"+port+"/Service");
+		sock.onopen = app.sockectOnOpen;
+		sock.onmessage = app.sockectOnMessage;
+		sock.onclose = app.sockectOnClose;
+		sock.onerror = app.sockectOnError;
+		app.sockets.push(sock);
+		},
 	sockectOnOpen: function(e){
+		console.log(e);
+		console.log(app.sockets.indexOf(e.target));
+		app.socketIndex = app.sockets.indexOf(e.target);
 		app.manualyClosed = false;
 		console.log("Connection established"); 
 		console.log(">> GetServerInfos");
 		app.reconnectTry = 0;
+		app.manualyClosed = false;
 		obl =
 		{
 			"function": "GetInfo",
 			"keyPU": Crytography.GetPublicKeyString(),
 			"time": Date.now
 		};
-		app.socket.send(JSON.stringify(obl));
+		e.target.send(JSON.stringify(obl));
 	},
 	sockectOnClose: function(event){
 		console.log("Connection ended");
 		app.reconnectTry = app.reconnectTry + 1;
-			app.socket = null;
-		if(app.manualyClosed == false && app.reconnectTry <= 3){
-			app.socket = new WebSocket("wss://"+app.lastHost+':'+app.lastPort);
-			app.socket.onopen = app.sockectOnOpen;
-			app.socket.onmessage = app.sockectOnMessage;
-			app.socket.onclose = app.sockectOnClose;
-			app.socket.onerror = app.sockectOnError;
+		if(app.manualyClosed == false && app.reconnectTry <= 5){
+			setTimeout("app.TestServer(app.lastHost,app.lastPort, app.servPass, app.servPassSaved);", 1000);
 		}
-		else{ app.gotoHome(); }
+		else{ 
+			app.gotoHome();
+		}
+		//setTimeout(app.socketReOpen, 1000);
+		app.sockets[app.socketIndex] = null;
 	},
 	sockectOnError: function(error) {
 		console.log(`[error]`, error);
@@ -529,7 +616,7 @@ app =
 			type: "encoded",
 			data: Crytography.Encrypt(st, app.Serverkey)
 		};
-		app.socket.send(JSON.stringify(mob));
+		app.socketSend(JSON.stringify(mob));
 	},
 	gotoHome: function ()
 	{
@@ -539,6 +626,7 @@ app =
 		$("#PannelControl").css("display", "none");
 		$("#PannelHome").css("display", "block");
 		$("#toolbar_text").text("HOME");
+		screen.orientation.lock('portrait');
 	},
 	gotoControls: function ()
 	{
@@ -547,12 +635,22 @@ app =
 		$("#toolbar_text").text("CONTROLS");
 		app.SendToServerEncoded("{\"function\":\"GetGrids\"}");
 	},
+	ping: function ()
+	{
+		try{
+			console.log("ping: "+((app.socketSend('{"function":"Ping"}'))?"OK":"NOK")); 
+			} 
+		catch(err){}
+	},
 	loopDetectDisconnected: function ()
 	{
-		try{ app.SendToServerEncoded('{"function":"Ping"}'); } catch(err){}
-		if (app.lastPing + 25000 <= Date.now())
+		if (app.lastPing + 25000 < Date.now())
 		{
-			app.gotoHome();
+			try{
+				app.manualyClosed = false;
+				app.socket.close();
+			} 
+			catch(err){}
 		}
 	},
 	drawGrids: function ()
@@ -561,6 +659,7 @@ app =
 		$("#ControlsListTabs").html('');
 		$("#ControlsListGrids").html('');
 		ww = window.innerWidth - 4;
+		console.log(app.storedGrids);
 		tdata = clone(app.storedGrids);
 		app.storedActiveGrid = 1;
 
@@ -670,33 +769,63 @@ app =
 						grid.appendChild(button);
 					}
 					else if(tdata[index]["blocks"][indexB]["type"] == "module"){
-						bcostyle = '';
-						var w = parseInt(tdata[index]["blocks"][indexB]["width"], 10) * caseWidth; 
-						w = w + (4 * (parseInt(tdata[index]["blocks"][indexB]["width"], 10) - 1)) + (4*(parseInt(tdata[index]["blocks"][indexB]["width"], 10) - 1));
-						var h = parseInt(tdata[index]["blocks"][indexB]["height"], 10) * caseWidth; 
-						h = h + (4 * (parseInt(tdata[index]["blocks"][indexB]["height"], 10) - 1)) + (4*(parseInt(tdata[index]["blocks"][indexB]["height"], 10) - 1));
+						var module = null;
+						var moduleId = null;
+						var moduleIdx = null;
+						for(indexM=0; indexM<app.storedMods.length; indexM++){
+							if(app.storedMods[indexM].id == tdata[index]["blocks"][indexB]["macro"]){
+								module = app.storedMods[indexM].data;
+								moduleId = tdata[index]["blocks"][indexB]["id"];
+								moduleIdx = app.storedMods[indexM].id;
+								break;
+								}
+						}
+						if(module == null){ continue; }
+						//if(app.storedMods[tdata[index]["blocks"][indexB]["macro"]] === undefined){ continue; }
+						//console.log(app.storedMods[tdata[index]["blocks"][indexB]["macro"]]);
+						
+						var cw = parseInt(tdata[index]["blocks"][indexB]["width"], 10);
+						var ch = parseInt(tdata[index]["blocks"][indexB]["height"], 10);
+						var ModWidth = cw * caseWidth + (4 * (cw - 1)) + (4*(cw - 1));
+						var ModHeight = ch * caseWidth + (4 * (ch - 1)) + (4*(ch - 1));
 						block = document.createElement('div');
 						block.setAttribute('class', 'control-grid-module');
 						block.setAttribute('type', tdata[index]["blocks"][indexB]["macro"]);
 						block.setAttribute('style', bs +
-							'width:' + w + 'px;' +
-							'height:' + h + 'px;' +
-							'line-height:' + (h + (tdata[index]["blocks"][indexB]["height"] * 12)) + 'px;' +
-							tdata[index]["blocks"][indexB]["style"] + bcostyle);
-						if(tdata[index]["blocks"][indexB]["macro"] == "MediaInfo"){
-							block.innerHTML = '<table><tbody>\
-								<tr>\
-									<td style="width:'+(w*0.3 + 8)+'px;" rowspan="5"><img class="Thumbnail" style="width:'+(w * 0.3)+'px;height:'+(w * 0.3)+'px;"/></td>\
-									<td>\
-										<p class="LineTitle">Title: <span class="Title"></span></p>\
-										<p class="LineAlbumTitle">Album: <span class="AlbumTitle"></span></p>\
-										<p class="LineArtist">Artist: <span class="Artist"></span></p>\
-										<p class="LineGenres">Genres: <span class="Genres"></span></p>\
-										<p class="LineTracks">Tracks: <span class="Tracks"></span></p>\
-									</td>\
-								</tr>\
-							</tbody></table>';
+							'width:' + ModWidth + 'px;' +
+							'height:' + ModHeight + 'px;' +
+							'line-height:' + (ModHeight + (tdata[index]["blocks"][indexB]["height"] * 12)) + 'px;' +
+							tdata[index]["blocks"][indexB]["style"]);
+						
+						var styleId = "style__"+moduleId;
+						if(document.getElementById(styleId) != null){ document.getElementById(styleId).parentNode.removeChild(document.getElementById(styleId)); }
+						var sty = module.getElementsByTagName("Style")[0].childNodes[0].nodeValue;
+						var htm = module.getElementsByTagName("Template")[0].childNodes[0].nodeValue;
+						htm = htm.replace(new RegExp('%bmid%', 'g'), moduleId);
+						sty = sty.replace(new RegExp('%bmid%', 'g'), moduleId);
+						htm = htm.replace(new RegExp('%mid%', 'g'), moduleIdx);
+						sty = sty.replace(new RegExp('%mid%', 'g'), moduleIdx);
+						try{
+							var vars = module.getElementsByTagName("Vars")[0].childNodes;
+							var declares = module.getElementsByTagName("Declares")[0].childNodes;
+							for(var nodei=0; nodei< vars.length; nodei++){
+								if(vars[nodei].nodeName == "Var"){
+									var isEval = false;
+									try{ var val = vars[nodei].getAttribute('eval'); if(val == "true"){ isEval = true; } } catch(errr){ }
+									htm = htm.replace(new RegExp('%'+vars[nodei].getAttribute('name')+'%', 'g'), (isEval)?eval(vars[nodei].childNodes[0].nodeValue):vars[nodei].childNodes[0].nodeValue);
+									sty = sty.replace(new RegExp('%'+vars[nodei].getAttribute('name')+'%', 'g'), (isEval)?eval(vars[nodei].childNodes[0].nodeValue):vars[nodei].childNodes[0].nodeValue);
+									}
+								}
+							for(var nodei=0; nodei< declares.length; nodei++){
+								if(declares[nodei].nodeName == "Declare"){
+									app.modsVars[moduleIdx+declares[nodei].childNodes[0].nodeValue] = '';
+									}
+								}
 							}
+						catch(erv){ console.log(erv); }
+						block.innerHTML = htm;
+						//console.log(sty);
+						addNewStyle(sty, styleId);
 						grid.appendChild(block);
 						}
 					else{}
@@ -717,7 +846,7 @@ app =
 			macro: name,
 			sound: sname
 		};
-		app.socket.send(JSON.stringify(ob));
+		app.socketSend(JSON.stringify(ob));
 	},
 	ExchangeTab: function (tid)
 	{
@@ -747,7 +876,7 @@ app =
 			else{  $('.control-grid-button[image="' + list[id] + '"]')[0].style.backgroundImage="url('" + imgp.data + "')"; }
 			}
 		if(list3.length > 0) { 
-			//app.socket.send('{"function":"GetImages","references":' + JSON.stringify(list3) + '}'); 
+			//app.socketSend('{"function":"GetImages","references":' + JSON.stringify(list3) + '}'); 
 			app.SendToServerEncoded('{"function":"GetImages","references":' + JSON.stringify(list3) + '}'); 
 			}
 	}

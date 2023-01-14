@@ -122,6 +122,7 @@ ion-title{margin-top:0px !important;    padding-left: 5px;}
 .control-grid{
 position:fixed;top:72px;left:0px;right:0px;bottom:0px;padding:2px;
 background: #808080;
+overflow-x:hidden; overflow-y:scroll;
 }
 .control-grid[activ="0"]{display:none;}
 .control-grid[activ="1"]{display:block;}
@@ -146,12 +147,3 @@ background: #808080;
 }
 
 .control-grid-module{ display: inline-block; float: left; margin: 2px; border: #ffffff 2px solid; }
-.control-grid-module[type="MediaInfo"] { line-height:20px !important; }
-.control-grid-module[type="MediaInfo"] table{ width:100%; height:100%; }
-.control-grid-module[type="MediaInfo"] table tbody{ width:100%; }
-.control-grid-module[type="MediaInfo"] table tbody tr{ width:100%; }
-.control-grid-module[type="MediaInfo"] table tbody tr td{ width:100%; vertical-align: middle; }
-.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(1){ width:30%; }
-.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(2){ padding-left:5px; }
-.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(2) p{ border-bottom:#000 1px solid; }
-.control-grid-module[type="MediaInfo"] img{ background-color:#000; }

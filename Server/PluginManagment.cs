@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         public static void PluginLoadAll()
         {
@@ -23,7 +23,7 @@ namespace Server
                 FileInfo[] Files = null;
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 {
-                    Files = d.GetFiles("*.dll"); //Getting dll files
+                    Files = d.GetFiles("*_*.dll"); //Getting dll files
                 }
 
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
@@ -78,24 +78,73 @@ namespace Server
             return plug;
         }
 
+        public static Dictionary<string, object> SourceGet(string AssemblyName)
+        {
+            Dictionary<string, object> plug = null;
+            Server.Program.sourcesInfosList.TryGetValue(AssemblyName, out plug);
+            return plug;
+        }
 
+        public static object PluginGetValue(this MemberInfo memberInfo)
+        {
+            object obj = null;
+            switch (memberInfo.MemberType)
+            {
+                case MemberTypes.Field:
+                    return ((FieldInfo)memberInfo).GetValue(obj);
+                case MemberTypes.Property:
+                    return ((PropertyInfo)memberInfo).GetValue(obj);
+                default:
+                    return obj;
+            }
+        }
 
         private static void PluginLoad(FileInfo file)
         {
             try
             {
+                bool IsSource = false;
+                string name = null;
+                Dictionary<string, string> interfaces = null;
+                Console.WriteLine("load plugin : "+ extentionsDir + file.Name);
                 Assembly asem = AssemblyLoadContext.Default.LoadFromAssemblyPath(extentionsDir + file.Name);
                 IEnumerator<Type> bb = asem.ExportedTypes.GetEnumerator();
                 bb.MoveNext();
+                if (bb.Current.Name == "ExtType")
+                {
+                    var instance = asem.CreateInstance(bb.Current.Namespace + "." + bb.Current.Name);
+                    Type mType = asem.GetType(bb.Current.Namespace + "." + bb.Current.Name);
+                    string stype = (string)PluginGetValue(mType.GetMember("Type")[0]);
+                    if (stype == "Source")
+                    {
+                        IsSource = true;
+                        name = (string)PluginGetValue(mType.GetMember("Name")[0]);
+                        interfaces = (Dictionary<string, string>)PluginGetValue(mType.GetMember("Interfaces")[0]);
+                    }
+                    bb.MoveNext();
+                }
                 Type myType = asem.GetType(bb.Current.Namespace + "." + bb.Current.Name);
                 Dictionary<string, object> obj = new Dictionary<string, object>();
                 obj["assembly"] = asem;
                 obj["assemblyName"] = bb.Current.Namespace + "." + bb.Current.Name;
                 obj["path"] = extentionsDir + file.Name;
-                obj["type"] = asem.GetType(bb.Current.Namespace + "." + bb.Current.Name);
+                obj["type"] = myType;
                 obj["instance"] = asem.CreateInstance(bb.Current.Namespace + "." + bb.Current.Name);
-                extentionsInfosList.Add(bb.Current.Name, obj);
-                Console.WriteLine(bb.Current.Name);
+                obj["interfaces"] = interfaces;
+                if (IsSource == false) { 
+                    extentionsInfosList.Add(bb.Current.Name, obj);
+                    Console.WriteLine("Extention " + bb.Current.Name + " is OK");
+                }
+                else { 
+                    if(interfaces.ContainsKey("Init"))
+                    {
+                        Type t = (Type)obj["type"];
+                        MethodInfo m = t.GetMethod("Init");
+                        m.Invoke(obj["instance"], new object[] { });
+                    }
+                    sourcesInfosList.Add((IsSource) ? name : bb.Current.Name, obj);
+                    Console.WriteLine("Source " + bb.Current.Name + " is OK");
+                }
             }
             catch (Exception error) { Console.WriteLine(JsonConvert.SerializeObject(error)); }
         }

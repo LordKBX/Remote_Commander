@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Module SYSTEM "../Module.dtd">
+<Module>
+	<Id>MediaInfo</Id>
+	<MinWidth>3</MinWidth>
+  <MinHeight>2</MinHeight>
+	<Template><![CDATA[<table>
+	<tbody>
+		<tr>
+			<td style="width:%ww%px;" rowspan="5">
+				<img class="Thumbnail" style="width:%ww%px;height:%ww%px;" src="%cover%"/>
+			</td>
+			<td>
+				<p class="LineTitle">Title: <span class="Title">xxx</span></p>
+				<p class="LineAlbumTitle">Album: <span class="AlbumTitle">xxx</span></p>
+				<p class="LineArtist">Artist: <span class="Artist">xxx</span></p>
+				<p class="LineGenres">Genres: <span class="Genres">xxx</span></p>
+				<p class="LineTracks">Tracks: <span class="Tracks">x / y</span></p>
+			</td>
+		</tr>
+	</tbody>
+	</table>]]></Template>
+	<Style><![CDATA[.control-grid-module[type="MediaInfo"] { line-height:20px !important; }
+		.control-grid-module[type="MediaInfo"] table{ width:100%; height:100%; }
+		.control-grid-module[type="MediaInfo"] table tbody{ width:100%; }
+		.control-grid-module[type="MediaInfo"] table tbody tr{ width:100%; }
+		.control-grid-module[type="MediaInfo"] table tbody tr td{ width:100%; vertical-align: middle; }
+		.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(1){ width:30%; }
+		.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(2){ padding-left:5px; }
+		.control-grid-module[type="MediaInfo"] table tbody tr td:nth-child(2) p{ border-bottom:#000 1px solid; }
+		.control-grid-module[type="MediaInfo"] img{ background-color:#000; }]]> </Style>
+	<Vars>
+    <Var name="ww" eval="true"><![CDATA[ModWidth*0.3 + 8]]></Var><!--! eval ModWidth only for template-->
+    <Var name="cover"><![CDATA[data:image/png;base64,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]]></Var>
+	</Vars>
+  <Declares>
+    <!--<Declare><![CDATA[%mid%lastVol]]></Declare>-->
+  </Declares>
+	<Scriptxs><!-- for access mod vars use object vars.varname -->
+		<Scriptx sources="MediaInfo.GetMediaInfo|MediaInfo.GetMediaInfoWithThumbnail"><![CDATA[if(ModData != null && $('div[type="MediaInfo"]').length > 0){
+			tid = (ModData["AlbumTitle"] != null && ModData["AlbumTitle"].trim() != "")?ModData["AlbumTitle"]:ModData["Title"] + '-' + ModData["Artist"];
+			if(app.arrayBlobs === undefined){ app.arrayBlobs = {}; }
+			if(app.arrayBlobs[tid] === undefined){
+				if(ModData["Thumbnail"] != null){
+					console.log("GOT Thumbnail!");
+					app.arrayBlobs[tid] = b64toBlob(ModData["Thumbnail"], "image/jpeg");
+					app.arrayBlobsURL[tid] = URL.createObjectURL(app.arrayBlobs[tid]);
+					console.log(app.arrayBlobsURL[tid]);
+					$('div[type="MediaInfo"] img').attr('src', app.arrayBlobsURL[tid]);
+					}
+				else{ 
+					try{ $('div[type="MediaInfo"] img').attr('src', vars.cover); } catch(ex){}
+					if (tdata["function"] == "MediaInfo.GetMediaInfo"){
+						app.SendToServerEncoded('{"function":"Source", "module":"MediaInfo", "method":"GetMediaInfoWithThumbnail"}');
+						}
+					}
+				}
+			else{ $('div[type="MediaInfo"] img').attr('src', app.arrayBlobsURL[tid]); }
+			
+			$('div[type="MediaInfo"] .Title').text(ModData["Title"]);
+			$('div[type="MediaInfo"] .AlbumTitle').text(ModData["AlbumTitle"]);
+			$('div[type="MediaInfo"] .Artist').text(ModData["Artist"]);
+			$('div[type="MediaInfo"] .Genres').text(ModData["Genres"]);
+			$('div[type="MediaInfo"] .Tracks').text(""+ModData["TrackNumber"]+" / "+ModData["AlbumTrackCount"]);
+			if(ModData["Title"] == null || ModData["Title"].trim() == ""){ $('div[type="MediaInfo"] .LineTitle').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineTitle').css('display', 'block'); }
+			if(ModData["AlbumTitle"] == null || ModData["AlbumTitle"].trim() == ""){ $('div[type="MediaInfo"] .LineAlbumTitle').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineAlbumTitle').css('display', 'block'); }
+			if(ModData["Artist"] == null || ModData["Artist"].trim() == ""){ $('div[type="MediaInfo"] .LineArtist').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineArtist').css('display', 'block'); }
+			if(ModData["Genres"] == null || ModData["Genres"].trim() == ""){ $('div[type="MediaInfo"] .LineGenres').css('display', 'none'); } else { $('div[type="MediaInfo"] .LineGenres').css('display', 'block'); }
+			}]]></Scriptx>
+	</Scriptxs>
+</Module>

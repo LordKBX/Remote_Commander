@@ -87,12 +87,12 @@
     "is_top_level": false,
     "variables": {}
   },
-  "cordova-plugin-datagram4": {
+  "cordova-plugin-badge": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-datagram4"
+      "id": "cordova-plugin-badge@>=0.8.5"
     },
-    "is_top_level": true,
+    "is_top_level": false,
     "variables": {}
   }
 }

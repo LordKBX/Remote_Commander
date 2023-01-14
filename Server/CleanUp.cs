@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         private static void SetCleanUpTimer()
         {

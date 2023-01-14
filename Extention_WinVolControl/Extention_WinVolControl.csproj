@@ -10,9 +10,4 @@
     <Exec Command="xcopy /Y $(ProjectDir)$(OutDir)Extention_WinVolControl.dll $(SolutionDir)Server\Extentions\" />
   </Target>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.755" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-  </ItemGroup>
-
 </Project>

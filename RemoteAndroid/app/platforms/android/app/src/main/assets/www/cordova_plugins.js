@@ -1,9 +1,12 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
-      "id": "cordova-plugin-datagram4.datagram",
-      "file": "plugins/cordova-plugin-datagram4/www/datagram.js",
-      "pluginId": "cordova-plugin-datagram4"
+      "id": "cordova-plugin-badge.Badge",
+      "file": "plugins/cordova-plugin-badge/www/badge.js",
+      "pluginId": "cordova-plugin-badge",
+      "clobbers": [
+        "cordova.plugins.notification.badge"
+      ]
     },
     {
       "id": "cordova-plugin-device.device",
@@ -211,6 +214,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "runs": true
     },
     {
+      "id": "cordova-plugin-local-notification-fixed.LocalNotification",
+      "file": "plugins/cordova-plugin-local-notification-fixed/www/local-notification.js",
+      "pluginId": "cordova-plugin-local-notification-fixed",
+      "clobbers": [
+        "cordova.plugins.notification.local"
+      ]
+    },
+    {
       "id": "cordova-plugin-nativestorage.mainHandle",
       "file": "plugins/cordova-plugin-nativestorage/www/mainHandle.js",
       "pluginId": "cordova-plugin-nativestorage",
@@ -268,11 +279,12 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     }
   ];
   module.exports.metadata = {
+    "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-console": "1.1.0",
-    "cordova-plugin-datagram4": "1.0.2",
     "cordova-plugin-device": "2.1.0",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "7.0.0",
+    "cordova-plugin-local-notification-fixed": "0.11.0",
     "cordova-plugin-nativestorage": "2.3.2",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-screen-orientation": "3.0.2",

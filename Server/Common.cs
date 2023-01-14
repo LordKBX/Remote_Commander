@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         public static Double getUnixTimeStamp(bool InMilliseconds = false)
         {
@@ -27,6 +27,7 @@ namespace Server
 
         private static void IsAdmin() {
             return;
+#pragma warning disable CS0162 // Code inaccessible détecté
             if (IsDebug == false) // si non mode debug, non admin fermée
             {
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
@@ -48,6 +49,7 @@ namespace Server
                     }
                 }
             }
+#pragma warning restore CS0162 // Code inaccessible détecté
         }
 
         private static void HideWindow() {

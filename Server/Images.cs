@@ -15,11 +15,13 @@ using System.DrawingCore;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         public static void GetImage(string reference, WebSocketService service)
         {
+#pragma warning disable CS0219 // La variable 'data' est assignée, mais sa valeur n'est jamais utilisée
             byte[] data = null;
+#pragma warning restore CS0219 // La variable 'data' est assignée, mais sa valeur n'est jamais utilisée
             string datas = "";
             string filePath = imagesDir + reference;
             bool error = false;

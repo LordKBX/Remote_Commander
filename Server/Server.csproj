@@ -18,15 +18,13 @@
     <PackageReference Include="MimeTypesMap" Version="1.0.8" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Pluralsight.Crypto" Version="1.1.0" />
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
     <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="cert.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Extentions\Extention_WinKeyboard.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -67,5 +65,9 @@
   <ItemGroup>
     <None Remove="C:\Users\KevBo\.nuget\packages\accord.video.ffmpeg.x64\3.8.0\build\avutil-55.dll" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /Y $(SolutionDir)Server\*.dll $(ProjectDir)$(OutDir)" />
+  </Target>
 
 </Project>

@@ -6,3 +6,4 @@
 /RemoteAndroid/services/*
 *.apk
 /Output/*.exe
+/packages/*

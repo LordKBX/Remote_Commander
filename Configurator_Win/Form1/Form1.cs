@@ -28,10 +28,16 @@ namespace Configurator_Win
         private StyleEditor.GlobalStyleEditor styleGlobal = null;
         private StyleEditor.BlockStyleEditor styleBlock = null;
         private List<string> styleOrder = new List<string>();
+        public bool IsVertical = true;
         
         public Form1()
         {
             InitializeComponent();
+            RG09_2_comboBox.Enabled= false;
+            OrientationComboBox.Items.Clear();
+            OrientationComboBox.Items.Add("vertical");
+            OrientationComboBox.Items.Add("horizontal");
+            OrientationComboBox.SelectedIndexChanged += OrientationComboBox_SelectedIndexChanged;
             RG09_2_comboBox.Items.Clear();
             RG09_2_comboBox.Items.Add("button");
             RG09_2_comboBox.Items.Add("module");
@@ -40,6 +46,12 @@ namespace Configurator_Win
             DeclareEvents();
             this.Resize += Form1_Resize;
             initialized = true;
+        }
+
+        private void OrientationComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (OrientationComboBox.SelectedIndex == 1) { GridsList["orientation"] = "horizontal"; IsVertical = false; this.Width = 1024; }
+            else { GridsList["orientation"] = "vertical"; IsVertical = true; this.Width = 642; }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -153,6 +165,12 @@ namespace Configurator_Win
             {
                 GridsList["password"] = rez;
             }
+        }
+
+        private void gestionModulesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModsManager.ModsManager mng = new ModsManager.ModsManager(this);
+            mng.ShowDialog(this);
         }
     }
 

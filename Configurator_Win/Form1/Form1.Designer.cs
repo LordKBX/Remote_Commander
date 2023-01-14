@@ -33,6 +33,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.GRID_RG = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.OrientationComboBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.RG01 = new System.Windows.Forms.TableLayoutPanel();
             this.RG01_label = new System.Windows.Forms.Label();
             this.RG01_btnAdd = new System.Windows.Forms.Button();
@@ -103,12 +106,14 @@
             this.gestionImagestoolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionSondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gestionMacrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gestionModulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifierMotDePasseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.GRID_MAIN.SuspendLayout();
             this.tabControler.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.GRID_RG.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.RG01.SuspendLayout();
             this.RG02.SuspendLayout();
             this.RG03.SuspendLayout();
@@ -145,7 +150,7 @@
             this.GRID_MAIN.Name = "GRID_MAIN";
             this.GRID_MAIN.RowCount = 1;
             this.GRID_MAIN.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.GRID_MAIN.Size = new System.Drawing.Size(620, 587);
+            this.GRID_MAIN.Size = new System.Drawing.Size(620, 600);
             this.GRID_MAIN.TabIndex = 0;
             // 
             // tabControler
@@ -157,7 +162,7 @@
             this.tabControler.Name = "tabControler";
             this.tabControler.Padding = new System.Drawing.Point(0, 0);
             this.tabControler.SelectedIndex = 0;
-            this.tabControler.Size = new System.Drawing.Size(370, 587);
+            this.tabControler.Size = new System.Drawing.Size(370, 600);
             this.tabControler.TabIndex = 0;
             // 
             // tabPage1
@@ -166,7 +171,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(362, 561);
+            this.tabPage1.Size = new System.Drawing.Size(362, 574);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -178,7 +183,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(362, 561);
+            this.webBrowser1.Size = new System.Drawing.Size(362, 574);
             this.webBrowser1.TabIndex = 0;
             this.webBrowser1.Url = new System.Uri("https://www.google.com", System.UriKind.Absolute);
             // 
@@ -188,28 +193,30 @@
             this.GRID_RG.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GRID_RG.ColumnCount = 1;
             this.GRID_RG.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.GRID_RG.Controls.Add(this.RG01, 0, 0);
-            this.GRID_RG.Controls.Add(this.RG02, 0, 1);
-            this.GRID_RG.Controls.Add(this.RG03, 0, 2);
-            this.GRID_RG.Controls.Add(this.RG04, 0, 3);
-            this.GRID_RG.Controls.Add(this.RG05, 0, 4);
-            this.GRID_RG.Controls.Add(this.RG07, 0, 6);
-            this.GRID_RG.Controls.Add(this.RG08, 0, 7);
-            this.GRID_RG.Controls.Add(this.RG09, 0, 8);
-            this.GRID_RG.Controls.Add(this.RG09_2, 0, 9);
-            this.GRID_RG.Controls.Add(this.RG10, 0, 10);
-            this.GRID_RG.Controls.Add(this.RG11, 0, 11);
-            this.GRID_RG.Controls.Add(this.RG12, 0, 12);
-            this.GRID_RG.Controls.Add(this.RG13, 0, 13);
-            this.GRID_RG.Controls.Add(this.RG14, 0, 14);
-            this.GRID_RG.Controls.Add(this.RG15, 0, 15);
-            this.GRID_RG.Controls.Add(this.RG16, 0, 16);
-            this.GRID_RG.Controls.Add(this.tableLayoutPanel2, 0, 5);
+            this.GRID_RG.Controls.Add(this.tableLayoutPanel3, 0, 0);
+            this.GRID_RG.Controls.Add(this.RG01, 0, 1);
+            this.GRID_RG.Controls.Add(this.RG02, 0, 2);
+            this.GRID_RG.Controls.Add(this.RG03, 0, 3);
+            this.GRID_RG.Controls.Add(this.RG04, 0, 4);
+            this.GRID_RG.Controls.Add(this.RG05, 0, 5);
+            this.GRID_RG.Controls.Add(this.RG07, 0, 7);
+            this.GRID_RG.Controls.Add(this.RG08, 0, 8);
+            this.GRID_RG.Controls.Add(this.RG09, 0, 9);
+            this.GRID_RG.Controls.Add(this.RG09_2, 0, 10);
+            this.GRID_RG.Controls.Add(this.RG10, 0, 11);
+            this.GRID_RG.Controls.Add(this.RG11, 0, 12);
+            this.GRID_RG.Controls.Add(this.RG12, 0, 13);
+            this.GRID_RG.Controls.Add(this.RG13, 0, 14);
+            this.GRID_RG.Controls.Add(this.RG14, 0, 15);
+            this.GRID_RG.Controls.Add(this.RG15, 0, 16);
+            this.GRID_RG.Controls.Add(this.RG16, 0, 17);
+            this.GRID_RG.Controls.Add(this.tableLayoutPanel2, 0, 6);
             this.GRID_RG.Dock = System.Windows.Forms.DockStyle.Right;
             this.GRID_RG.Location = new System.Drawing.Point(373, 3);
             this.GRID_RG.MinimumSize = new System.Drawing.Size(0, 455);
             this.GRID_RG.Name = "GRID_RG";
-            this.GRID_RG.RowCount = 19;
+            this.GRID_RG.RowCount = 20;
+            this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -229,8 +236,48 @@
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.GRID_RG.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.GRID_RG.Size = new System.Drawing.Size(244, 581);
+            this.GRID_RG.Size = new System.Drawing.Size(244, 594);
             this.GRID_RG.TabIndex = 1;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.OrientationComboBox, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(238, 24);
+            this.tableLayoutPanel3.TabIndex = 20;
+            // 
+            // OrientationComboBox
+            // 
+            this.OrientationComboBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "Block",
+            "Module"});
+            this.OrientationComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OrientationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.OrientationComboBox.FormattingEnabled = true;
+            this.OrientationComboBox.Location = new System.Drawing.Point(83, 3);
+            this.OrientationComboBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.OrientationComboBox.Name = "OrientationComboBox";
+            this.OrientationComboBox.Size = new System.Drawing.Size(152, 21);
+            this.OrientationComboBox.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 24);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Orientation";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // RG01
             // 
@@ -244,7 +291,7 @@
             this.RG01.Controls.Add(this.RG01_btnDel, 1, 0);
             this.RG01.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RG01.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RG01.Location = new System.Drawing.Point(3, 3);
+            this.RG01.Location = new System.Drawing.Point(3, 33);
             this.RG01.Name = "RG01";
             this.RG01.RowCount = 1;
             this.RG01.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -307,7 +354,7 @@
             this.RG02.Controls.Add(this.RG02_label, 0, 0);
             this.RG02.Controls.Add(this.RG02_box, 1, 0);
             this.RG02.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG02.Location = new System.Drawing.Point(3, 33);
+            this.RG02.Location = new System.Drawing.Point(3, 63);
             this.RG02.Name = "RG02";
             this.RG02.RowCount = 1;
             this.RG02.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -345,7 +392,7 @@
             this.RG03.Controls.Add(this.RG03_btn, 3, 0);
             this.RG03.Controls.Add(this.RG03_clear, 2, 0);
             this.RG03.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG03.Location = new System.Drawing.Point(3, 63);
+            this.RG03.Location = new System.Drawing.Point(3, 93);
             this.RG03.Name = "RG03";
             this.RG03.RowCount = 1;
             this.RG03.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -412,7 +459,7 @@
             this.RG04.Controls.Add(this.RG04_btn, 3, 0);
             this.RG04.Controls.Add(this.RG04_clear, 2, 0);
             this.RG04.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG04.Location = new System.Drawing.Point(3, 93);
+            this.RG04.Location = new System.Drawing.Point(3, 123);
             this.RG04.Name = "RG04";
             this.RG04.RowCount = 1;
             this.RG04.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -476,7 +523,7 @@
             this.RG05.Controls.Add(this.RG05_label, 0, 0);
             this.RG05.Controls.Add(this.RG05_num, 1, 0);
             this.RG05.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG05.Location = new System.Drawing.Point(3, 123);
+            this.RG05.Location = new System.Drawing.Point(3, 153);
             this.RG05.Name = "RG05";
             this.RG05.RowCount = 1;
             this.RG05.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -521,7 +568,7 @@
             this.RG07.AutoSize = true;
             this.RG07.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RG07.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RG07.Location = new System.Drawing.Point(3, 190);
+            this.RG07.Location = new System.Drawing.Point(3, 220);
             this.RG07.Name = "RG07";
             this.RG07.Size = new System.Drawing.Size(238, 15);
             this.RG07.TabIndex = 6;
@@ -531,7 +578,7 @@
             this.RG08.AutoSize = true;
             this.RG08.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RG08.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RG08.Location = new System.Drawing.Point(3, 205);
+            this.RG08.Location = new System.Drawing.Point(3, 235);
             this.RG08.Name = "RG08";
             this.RG08.Size = new System.Drawing.Size(238, 30);
             this.RG08.TabIndex = 7;
@@ -547,7 +594,7 @@
             this.RG09.Controls.Add(this.RG09_label, 0, 0);
             this.RG09.Controls.Add(this.RG09_box, 1, 0);
             this.RG09.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG09.Location = new System.Drawing.Point(3, 238);
+            this.RG09.Location = new System.Drawing.Point(3, 268);
             this.RG09.Name = "RG09";
             this.RG09.RowCount = 1;
             this.RG09.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -584,7 +631,7 @@
             this.RG09_2.Controls.Add(this.RG09_2_label, 0, 0);
             this.RG09_2.Controls.Add(this.RG09_2_comboBox, 1, 0);
             this.RG09_2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG09_2.Location = new System.Drawing.Point(3, 268);
+            this.RG09_2.Location = new System.Drawing.Point(3, 298);
             this.RG09_2.Name = "RG09_2";
             this.RG09_2.RowCount = 1;
             this.RG09_2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -627,7 +674,7 @@
             this.RG10.Controls.Add(this.RG10_label, 0, 0);
             this.RG10.Controls.Add(this.RG10_box, 1, 0);
             this.RG10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG10.Location = new System.Drawing.Point(3, 298);
+            this.RG10.Location = new System.Drawing.Point(3, 328);
             this.RG10.Name = "RG10";
             this.RG10.RowCount = 1;
             this.RG10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -666,7 +713,7 @@
             this.RG11.Controls.Add(this.RG11_Num2, 0, 0);
             this.RG11.Controls.Add(this.RG11_label2, 0, 0);
             this.RG11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG11.Location = new System.Drawing.Point(3, 328);
+            this.RG11.Location = new System.Drawing.Point(3, 358);
             this.RG11.Name = "RG11";
             this.RG11.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RG11.RowCount = 1;
@@ -756,7 +803,7 @@
             this.RG12.Controls.Add(this.RG12_btn, 3, 0);
             this.RG12.Controls.Add(this.RG12_clear, 2, 0);
             this.RG12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG12.Location = new System.Drawing.Point(3, 358);
+            this.RG12.Location = new System.Drawing.Point(3, 388);
             this.RG12.Name = "RG12";
             this.RG12.RowCount = 1;
             this.RG12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -823,7 +870,7 @@
             this.RG13.Controls.Add(this.RG13_btn, 3, 0);
             this.RG13.Controls.Add(this.RG13_clear, 2, 0);
             this.RG13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG13.Location = new System.Drawing.Point(3, 388);
+            this.RG13.Location = new System.Drawing.Point(3, 418);
             this.RG13.Name = "RG13";
             this.RG13.RowCount = 1;
             this.RG13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -890,7 +937,7 @@
             this.RG14.Controls.Add(this.RG14_btn, 3, 0);
             this.RG14.Controls.Add(this.RG14_clear, 2, 0);
             this.RG14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG14.Location = new System.Drawing.Point(3, 418);
+            this.RG14.Location = new System.Drawing.Point(3, 448);
             this.RG14.Name = "RG14";
             this.RG14.RowCount = 1;
             this.RG14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -957,7 +1004,7 @@
             this.RG15.Controls.Add(this.RG15_btn, 3, 0);
             this.RG15.Controls.Add(this.RG15_clear, 2, 0);
             this.RG15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG15.Location = new System.Drawing.Point(3, 448);
+            this.RG15.Location = new System.Drawing.Point(3, 478);
             this.RG15.Name = "RG15";
             this.RG15.RowCount = 1;
             this.RG15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1015,7 +1062,7 @@
             // RG16
             // 
             this.RG16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RG16.Location = new System.Drawing.Point(3, 478);
+            this.RG16.Location = new System.Drawing.Point(3, 508);
             this.RG16.Name = "RG16";
             this.RG16.Size = new System.Drawing.Size(238, 34);
             this.RG16.TabIndex = 15;
@@ -1032,7 +1079,7 @@
             this.tableLayoutPanel2.Controls.Add(this.RG06, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.RG06_2, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 153);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 183);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1080,6 +1127,7 @@
             this.gestionImagestoolStripMenuItem2,
             this.gestionSondsToolStripMenuItem,
             this.gestionMacrosToolStripMenuItem,
+            this.gestionModulesToolStripMenuItem,
             this.modifierMotDePasseToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -1137,6 +1185,13 @@
             this.gestionMacrosToolStripMenuItem.Text = "Gestion &Macros";
             this.gestionMacrosToolStripMenuItem.Click += new System.EventHandler(this.gestionMacrosToolStripMenuItem_Click);
             // 
+            // gestionModulesToolStripMenuItem
+            // 
+            this.gestionModulesToolStripMenuItem.Name = "gestionModulesToolStripMenuItem";
+            this.gestionModulesToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
+            this.gestionModulesToolStripMenuItem.Text = "Gestion M&odules";
+            this.gestionModulesToolStripMenuItem.Click += new System.EventHandler(this.gestionModulesToolStripMenuItem_Click);
+            // 
             // modifierMotDePasseToolStripMenuItem
             // 
             this.modifierMotDePasseToolStripMenuItem.Name = "modifierMotDePasseToolStripMenuItem";
@@ -1152,11 +1207,12 @@
             this.tableLayoutPanel1.Controls.Add(this.GRID_MAIN, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.MinimumSize = new System.Drawing.Size(626, 618);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(626, 618);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(626, 631);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // Form1
@@ -1165,15 +1221,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(626, 618);
+            this.ClientSize = new System.Drawing.Size(626, 631);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 800);
-            this.MinimumSize = new System.Drawing.Size(600, 550);
+            this.MaximumSize = new System.Drawing.Size(1024, 800);
+            this.MinimumSize = new System.Drawing.Size(642, 670);
             this.Name = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Remote Commander Configurator";
             this.Move += new System.EventHandler(this.Form1_Move);
@@ -1183,6 +1240,8 @@
             this.tabPage1.ResumeLayout(false);
             this.GRID_RG.ResumeLayout(false);
             this.GRID_RG.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.RG01.ResumeLayout(false);
             this.RG01.PerformLayout();
             this.RG02.ResumeLayout(false);
@@ -1300,6 +1359,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button RG06;
         private System.Windows.Forms.Button RG06_2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.ComboBox OrientationComboBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem gestionModulesToolStripMenuItem;
     }
 }
 

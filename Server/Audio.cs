@@ -14,14 +14,16 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         private static Dictionary<string, FileInfo> SoundList = new Dictionary<string, FileInfo>();
         private static NetCoreAudio.Player player = null;
         private static bool playerPlayFinished = true;
 
         private static AudioCaptureDevice audioSource = null;
+#pragma warning disable CS0414 // Le champ 'Program.videoSource' est assigné, mais sa valeur n'est jamais utilisée
         private static Accord.Video.MJPEGStream videoSource = null;
+#pragma warning restore CS0414 // Le champ 'Program.videoSource' est assigné, mais sa valeur n'est jamais utilisée
 
 
         public static void PlaySound(string filePath)
@@ -94,17 +96,12 @@ namespace Server
 
             MethodInfo m = t.GetMethod("IsMute");
             MethodInfo u = t.GetMethod("GetVolume");
-            MethodInfo d1 = t.GetMethod("TryGetMediaInfo");
-            MethodInfo d2 = t.GetMethod("TryGetMediaInfoFull");
             bool state = (bool)(m.Invoke(instance, new object[] { }));
             float curVol = (float)(u.Invoke(instance, new object[] { }));
-            Task<string> mediaInfo = (full)?(Task<string>)(d2.Invoke(instance, new object[] { })): (Task<string>)(d1.Invoke(instance, new object[] { }));
-            mediaInfo.Wait();
             JObject obf = new JObject();
             obf["function"] = "GetSoundInfo";
             obf["mute"] = state;
             obf["vol"] = curVol;
-            obf["mediaInfo"] = mediaInfo.Result;
             return obf;
         }
 

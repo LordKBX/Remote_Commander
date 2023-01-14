@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Timers;
+using System.Runtime;
+using System.Diagnostics;
 
 namespace Configurator_Win
 {
     static class Program
     {
         public static string configDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory; 
+        public static string osSep = "/";
         private static System.Timers.Timer aTimer;
         /// <summary>
         /// Point d'entrée principal de l'application.
@@ -19,6 +22,8 @@ namespace Configurator_Win
         [STAThread]
         static void Main()
         {
+            string version = System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion();
+            if (System.Runtime.InteropServices.RuntimeEnvironment.SystemConfigurationFile.Contains(":\\")) { Program.osSep = "\\"; }//windows detected
             UpdateBaseDir();
             aTimer = new System.Timers.Timer(5000);
             aTimer.Elapsed += OnTimedEvent;

@@ -42,7 +42,6 @@
         }
 
             .control-grid-block.sel {
-                margin: 0px;
                 border: #ff0000 2px solid;
             }
         .control-grid-block span {
@@ -112,6 +111,20 @@
                     addBlock(tab.blocks[index]);
                 }
                 $('#receiver').sortable({
+                    start: function (event, ui) {
+                        window.external.notify("Start Sort");
+                        target = ui.item[0];
+                        var text = "";
+                        for (var i = 0; i < target.attributes.length; i++) {
+                            text += target.attributes[i].name + " = " + target.attributes[i].value + "<br>";
+                        }
+                        window.external.notify(text);
+                        id = target.getAttribute('index');
+                        window.external.notify("id = " + id);
+                        $('#receiver .control-grid-block').removeClass('sel', 10, function (e) {
+                            $(".control-grid-block[index=\"" + id + "\"]").addClass('sel');
+                        });
+                    },
                     stop: function (event, ui) {
                         //window.external.notify("SORT STOP EVENT");
                         list = document.getElementById('receiver').childNodes;
@@ -131,12 +144,6 @@
                 document.getElementById('receiver').innerText = JSON.stringify(error);
             }
         }
-        function displayInfosBtn(id) {
-            window.external.UpdateBlockInfo(id);
-        }
-        function UnselectAll() {
-            $('#receiver .control-grid-block').removeClass('sel');
-        }
         function updateParam(param, value) {
             tab[param] = value;
             //window.external.notify("param >> " + param + ", value >> " + value);
@@ -144,7 +151,7 @@
             if (param == "style") { loadGrid(); }
         }
         function updateBlock(id, param, value) {
-            window.external.notify("updateBlock >> " + id + " >> " + param + " >> " + value);
+            //window.external.notify("updateBlock >> " + id + " >> " + param + " >> " + value);
             for (index in tab.blocks) {
                 if (tab.blocks[index].id == id) {
                     tab.blocks[index][param] = value;
@@ -161,10 +168,11 @@
             btn.setAttribute('index', block.id);
             btn.className = "control-grid-block";
             btn.onclick = function (ev) {
-                //window.external.notify("click >> " + this.getAttribute('index'));
-                displayInfosBtn(this.getAttribute('index'));
-                UnselectAll();
-                $(this).addClass('sel');
+                window.external.UpdateBlockInfo(this.getAttribute('index'));
+                id = this.getAttribute('index');
+                $('#receiver .control-grid-block').removeClass('sel', 10, function(e){
+                    $(".control-grid-block[index=\""+id+"\"]").addClass('sel');
+                });
             };
             var w = parseInt(block.width, 10) * casew; w = w + (4 * (parseInt(block.width, 10) - 1)) + (4*(parseInt(block.width, 10) - 1));
             var h = parseInt(block.height, 10) * casew; h = h + (4 * (parseInt(block.height, 10) - 1)) + (4*(parseInt(block.height, 10) - 1));
@@ -175,7 +183,7 @@
             btn.style.minHeight = h + "px";
             btn.style.lineHeight = h + "px";
             if (block.icon != "") {
-                window.external.notify(imageBase + block.icon);
+                //window.external.notify(imageBase + block.icon);
                 btn.style.backgroundImage = "url('" + imageBase + block.icon + "')";
                 //btn.style.backgroundSize = "auto 100%";
             }

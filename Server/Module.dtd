@@ -1,0 +1,18 @@
+<!-- * = 0 or more -->
+<!-- + = 1 or more -->
+<!-- ? = optional -->
+<!ELEMENT Module (Id, MinWidth, MinHeight, Template, Style, Vars, Declares, Scriptxs)>
+<!ELEMENT Id (#PCDATA)>
+<!ELEMENT MinWidth (#PCDATA)>
+<!ELEMENT MinHeight (#PCDATA)>
+<!ELEMENT Template (#PCDATA)>
+<!ELEMENT Style (#PCDATA)>
+<!ELEMENT Vars (Var*)>
+<!ELEMENT Var (#PCDATA)>
+<!ATTLIST Var name CDATA #REQUIRED>
+<!ATTLIST Var eval CDATA #IMPLIED>
+<!ELEMENT Declares (Declare*)>
+<!ELEMENT Declare (#PCDATA)>
+<!ELEMENT Scriptxs (Scriptx*)>
+<!ELEMENT Scriptx (#PCDATA)>
+<!ATTLIST Scriptx sources CDATA #REQUIRED>

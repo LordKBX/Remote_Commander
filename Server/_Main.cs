@@ -22,7 +22,7 @@ using System.Security.Principal;
 
 namespace Server
 {
-    public partial class Program
+    public static partial class Program
     {
         public static string osSep = "/";
         private static bool unload = false;
@@ -32,13 +32,17 @@ namespace Server
         private static string extentionsDir = AppDomain.CurrentDomain.BaseDirectory+"\\Extentions\\";
         private static string imagesDir = AppDomain.CurrentDomain.BaseDirectory+ "\\Images\\";
         public static string soundDir = AppDomain.CurrentDomain.BaseDirectory+ "\\Sounds\\";
+        public static string modsDir = AppDomain.CurrentDomain.BaseDirectory+ "\\Mods\\";
         private static Dictionary<string, Dictionary<string, object>> extentionsInfosList = new Dictionary<string, Dictionary<string, object>>();
+        private static Dictionary<string, Dictionary<string, object>> sourcesInfosList = new Dictionary<string, Dictionary<string, object>>();
         private static Dictionary<string, Dictionary<string, object>> ImagesList = new Dictionary<string, Dictionary<string, object>>();
+        public static Dictionary<string, string> ModsList = new Dictionary<string, string>();
 
         private static Dictionary<string, JObject> listSocket;
         private static RSACryptoServiceProvider RSAProvider = new RSACryptoServiceProvider(1024);
 
         private static FileSystemWatcher watcher;
+        private static FileSystemWatcher watcherMods;
         public static JObject MacroList;
         public static JObject GridsList;
         private static int lastUpdate;
